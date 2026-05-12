@@ -328,7 +328,7 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
       <div class="smart-text"><div class="smart-title">S.M.A.R.T</div><div class="smart-sub">Solutions</div></div>
     </div>
     <div class="login-logo">Corsi <span>IMAT</span></div>
-    <div class="login-sub">Gestione Corsi e Sessioni — CIN / Moby</div>
+    <div class="login-sub">Gestione Corsi</div>
     <div class="lbl">Seleziona il tuo nome</div>
     <div class="user-grid" id="user-grid"></div>
     <div class="admin-section-lbl" style="margin-top:.4rem">Accesso amministratore</div>
@@ -341,7 +341,7 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
       <button class="btn btn-primary btn-full" onclick="doLogin()">Accedi</button>
     </div>
     <div id="login-err"></div>
-    <div style="margin-top:1.8rem;font-size:.68rem;color:var(--muted)">Gestione Corsi IMAT — v1 · 2025</div>
+    <div style="margin-top:1.8rem;font-size:.68rem;color:var(--muted)">Gestione Corsi IMAT — v23 · 2026</div>
     <div style="margin-top:.4rem;font-size:.62rem;color:var(--muted);opacity:.7">© 2025 S.M.A.R.T Solutions</div>
   </div>
 </div>
@@ -368,7 +368,7 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
   <button class="nav-tab active" onclick="showPage('sessioni',this)">Sessioni</button>
   <button class="nav-tab" onclick="showPage('riepilogo',this)">Riepilogo</button>
   <button class="nav-tab" onclick="showPage('certificati',this)">Certificati</button>
-  <button class="nav-tab" onclick="showPage('config-email',this)">✉️ Email</button>
+  <button class="nav-tab admin-only" style="display:none" onclick="showPage('config-email',this)">✉️ Email</button>
   <button class="nav-tab admin-only" style="display:none" onclick="showPage('admin',this)">Admin</button>
 </nav>
 
@@ -517,10 +517,6 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
         <div class="cfg-label">📋 Indirizzi CC fissi — Coperta / Macchina</div>
         <div class="cfg-hint">Separare con <code>;</code></div>
         <input type="text" id="cfg-cc-copmac" class="cfg-textarea" style="resize:none;height:auto;padding:.6rem .9rem;font-family:monospace;font-size:.82rem" placeholder="es. anna.verdi@cin.it;paolo.neri@cin.it">
-      </div>
-      <div class="card-section">
-        <div class="cfg-label">✍️ La tua firma</div>
-        <textarea id="cfg-firma" class="cfg-textarea" rows="3"></textarea>
       </div>
       <div style="display:flex;gap:10px;justify-content:flex-end">
         <button class="btn btn-ghost" onclick="resetCfgEmail()">↺ Ripristina</button>
@@ -2019,14 +2015,33 @@ async function importaCsv(){
   await loadCertificati();
 }
 
-const CFG_EMAIL_BASE=`Buongiorno [NOME],\n\nLa convochiamo per il corso [CORSO] che si terrà presso [CENTRO] in data [DATA].\n\nSi prega di presentarsi puntualmente con i documenti originali.\n\n>>> SI RICHIEDE CONFERMA RICEZIONE MAIL. <<<\n\nCordiali saluti,\n\n[FIRMA]`;
+const CFG_EMAIL_BASE=`Buongiorno [NOME],\nLa convochiamo per i seguenti corsi che si terranno presso [CENTRO] :\n[CORSO]\nSi prega di presentarsi puntualmente con i documenti originali, libretto e documento d'identità.\nVI RICORDIAMO CHE SVOLGENDO I CORSI SOTTO MALATTIA E' PROIBITO !!!\n>>> SI RICHIEDE CONFERMA RICEZIONE MAIL. <<<\nCordiali saluti,\n\n[FIRMA]`;
 function getCfgKey(f){return'corsi_imat_'+(currentUser||'default')+'_'+f;}
-function loadCfgEmail(){document.getElementById('cfg-body').value=localStorage.getItem(getCfgKey('body'))||CFG_EMAIL_BASE;document.getElementById('cfg-cc-hotel').value=localStorage.getItem(getCfgKey('cc_hotel'))||'';document.getElementById('cfg-cc-copmac').value=localStorage.getItem(getCfgKey('cc_copmac'))||'';document.getElementById('cfg-firma').value=localStorage.getItem(getCfgKey('firma'))||currentUser||'';}
-function salvaCfgEmail(){localStorage.setItem(getCfgKey('body'),document.getElementById('cfg-body').value);localStorage.setItem(getCfgKey('cc_hotel'),document.getElementById('cfg-cc-hotel').value);localStorage.setItem(getCfgKey('cc_copmac'),document.getElementById('cfg-cc-copmac').value);localStorage.setItem(getCfgKey('firma'),document.getElementById('cfg-firma').value);toast('✅ Configurazione email salvata');}
+function loadCfgEmail(){
+  document.getElementById('cfg-body').value=_emailDest['body']||CFG_EMAIL_BASE;
+  document.getElementById('cfg-cc-hotel').value=_emailDest['cc_hotel']||'';
+  document.getElementById('cfg-cc-copmac').value=_emailDest['cc_copmac']||'';
+}
+async function salvaCfgEmail(){
+  const body=document.getElementById('cfg-body').value;
+  const ccHotel=document.getElementById('cfg-cc-hotel').value.trim();
+  const ccCopmac=document.getElementById('cfg-cc-copmac').value.trim();
+  try{
+    for(const [tipo,valore] of [['body',body],['cc_hotel',ccHotel],['cc_copmac',ccCopmac]]){
+      await fetch(`${SB_URL}/rest/v1/corsi_email_dest?on_conflict=tipo`,{method:'POST',headers:{...HDR,'Prefer':'resolution=merge-duplicates,return=representation'},body:JSON.stringify({tipo,valore})});
+      _emailDest[tipo]=valore;
+    }
+    toast('✅ Configurazione email salvata');
+  }catch(e){toast('Errore salvataggio: '+e.message,'error');}
+}
 function resetCfgEmail(){if(!confirm('Ripristinare il testo base?'))return;document.getElementById('cfg-body').value=CFG_EMAIL_BASE;salvaCfgEmail();}
 
 async function caricaEmailDest(){
-  try{const rows=await sbGet('corsi_email_dest','order=tipo');rows.forEach(r=>{_emailDest[r.tipo]=r.email||'';});['mar_to','mar_cc','imat_to','imat_cc'].forEach(k=>{const el=document.getElementById('email-'+k.replace('_','-'));if(el)el.value=_emailDest[k]||'';});}catch(e){}
+  try{
+    const rows=await sbGet('corsi_email_dest','order=tipo');
+    rows.forEach(r=>{_emailDest[r.tipo]=r.valore||r.email||'';});
+    ['mar_to','mar_cc','imat_to','imat_cc'].forEach(k=>{const el=document.getElementById('email-'+k.replace('_','-'));if(el)el.value=_emailDest[k]||'';});
+  }catch(e){}
 }
 async function salvaEmailDest(tipo){
   const el=document.getElementById('email-'+tipo.replace('_','-'));if(!el)return;
@@ -2079,7 +2094,7 @@ document.getElementById('modal-premail-overlay').addEventListener('click',functi
 async function confermaPremailInvia(){
   const i=_iscrizioni.find(x=>x.id===_premailId);if(!i||!i.email_marittimo)return;
   const tutteIscrizioni=_iscrizioni.filter(x=>x.matricola_aziendale===i.matricola_aziendale);
-  const firma=localStorage.getItem(getCfgKey('firma'))||currentUser||'';
+  const firma=currentUser||'';
   const nomeFormattato=(i.cognome_nome||'').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
   // Costruisce lista corsi per email
   const righeCorsi=tutteIscrizioni.filter(isc=>{
@@ -2092,7 +2107,7 @@ async function confermaPremailInvia(){
     const dateStr=s.data_fine&&s.data_fine!==s.data_inizio?`${fmtEstesa(s.data_inizio)} – ${fmtBreve(s.data_fine)}`:fmtEstesa(s.data_inizio);
     return`- ${nomeCorso}: ${dateStr}`;
   }).filter(Boolean).join('\n');
-  const template=localStorage.getItem(getCfgKey('body'))||CFG_EMAIL_BASE;
+  const template=_emailDest['body']||CFG_EMAIL_BASE;
   // Usa il primo corso come riferimento per [CORSO] [DATA] [CENTRO]
   const s0=_sessioni.find(x=>x.id===i.sessione_id);
   const nomeCorso0=s0?.nota||s0?.corsi_tipologie?.nome||'—';
@@ -2108,7 +2123,7 @@ async function confermaPremailInvia(){
   const isHotel=reparto==='camera'||reparto==='cucina';
   const ccKey=isHotel?'cc_hotel':'cc_copmac';
   const dbCcKey=isHotel?'mar_cc_hotel':'mar_cc_copmac';
-  const ccRaw=localStorage.getItem(getCfgKey(ccKey))||_emailDest[dbCcKey]||'';
+  const ccRaw=_emailDest[ccKey]||_emailDest[dbCcKey]||'';
   const cc=ccRaw.split(/[;,]+/).map(s=>s.trim()).filter(Boolean);
   const subject=tutteIscrizioni.length>1?`Convocazione corsi IMAT`:`Convocazione corso ${nomeCorso0}`;
   const ccParams=cc.length?'cc='+cc.map(s=>encodeURIComponent(s)).join('%3B'):'';
@@ -2200,7 +2215,7 @@ async function invioEmailImat(){
     doc.save(`IMAT_${nomeCorso.replace(/\s/g,'_')}_${s.data_inizio}.pdf`);
     toast('📄 PDF scaricato — allegalo alla email in Outlook');
   }catch(e){toast('⚠️ Errore PDF: '+e.message,'error');}
-  const firma=localStorage.getItem(getCfgKey('firma'))||currentUser||'';
+  const firma=currentUser||'';
   const listaCorpo=righe.map(r=>`${r[1]} — Matr.${r[0]}`).join('\n');
   const corpoEmail=`Buongiorno,\n\nVi inviamo quanto in oggetto.\n\nCorso: ${nomeCorso}\nDate: ${dateStr}\nCentro: ${nomeCentro}\nIscritti: ${nIscritti}\n\n${listaCorpo}\n\n(Elenco completo in allegato PDF)\n\nCordiali saluti,\n\n${firma}`;
   const to=_emailDest.imat_to||'';const cc=_emailDest.imat_cc||'';
