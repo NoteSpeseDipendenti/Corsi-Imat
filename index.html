@@ -318,6 +318,32 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
 .cert-tag-x{cursor:pointer;opacity:.7;font-size:.65rem;}
 .modal-overlay.open .modal-csv{transform:translateY(0) scale(1);}
 @media(max-width:680px){main{padding:1rem;}header,nav{padding:0 1rem;}.edit-grid{grid-template-columns:1fr 1fr;}.matricola-row{flex-direction:column;}.stat-cards{grid-template-columns:1fr 1fr;}}
+
+.er-schede-switch{display:inline-flex;background:var(--surface2);border-radius:10px;padding:3px;gap:2px;margin-bottom:1.2rem;}
+.er-scheda-btn{padding:6px 20px;font-size:.8rem;font-weight:600;border:none;border-radius:8px;cursor:pointer;background:transparent;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;}
+.er-scheda-btn.active{background:var(--bg);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1);}
+.er-tab{padding:7px 16px;font-size:.78rem;font-weight:600;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+.er-tab.active{color:var(--orange);border-bottom-color:var(--orange);}
+.er-table-wrap{border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+.er-table{width:100%;border-collapse:collapse;font-size:.8rem;}
+.er-table th{text-align:left;padding:6px 10px;font-size:.72rem;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);background:var(--surface2);}
+.er-table td{padding:8px 10px;border-bottom:1px solid var(--surface2);color:var(--text);vertical-align:top;background:#ffffff;}
+.er-table tr:last-child td{border-bottom:none;}
+.er-table tr.er-modified td{background:#FFF5F0;}
+.er-kpi{background:var(--surface2);border-radius:10px;padding:.7rem 1rem;}
+.er-kpi-n{font-size:1.3rem;font-weight:700;color:var(--text);}
+.er-kpi-l{font-size:.72rem;color:var(--muted);margin-top:2px;}
+.er-pill{display:inline-flex;align-items:center;gap:3px;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+.er-pill-green{background:#d4edda;color:#1a5c2e;}
+.er-pill-amber{background:#fff3cd;color:#7d4e00;}
+.er-pill-red{background:#fde8e0;color:#7a2b13;}
+.er-tag{display:inline-block;background:var(--surface2);border:1px solid var(--border);border-radius:4px;font-size:.68rem;padding:1px 5px;margin:2px 2px 0 0;color:var(--text);}
+.er-ts{font-size:.68rem;color:var(--muted);margin-top:2px;}
+.er-ts-warn{font-size:.68rem;color:#7a2b13;margin-top:1px;}
+.er-act-btn{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:.85rem;}
+.er-act-btn.send{color:#185FA5;border-color:#B5D4F4;background:#E6F1FB;}
+.er-act-btn.resend{color:var(--muted);border-color:var(--border);}
+.er-act-btn.warn{color:#7a2b13;border-color:#F0997B;background:#fde8e0;}
 </style>
 </head>
 <body>
@@ -368,6 +394,7 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
   <button class="nav-tab active" onclick="showPage('sessioni',this)">Sessioni</button>
   <button class="nav-tab" onclick="showPage('riepilogo',this)">Riepilogo</button>
   <button class="nav-tab" onclick="showPage('certificati',this)">Certificati</button>
+    <button class="nav-tab" onclick="showPage('email-riepilogo',this)">Riepilogo Email</button>
   <button class="nav-tab admin-only" style="display:none" onclick="showPage('config-email',this)">✉️ Email</button>
   <button class="nav-tab admin-only" style="display:none" onclick="showPage('admin',this)">Admin</button>
 </nav>
@@ -495,6 +522,44 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
         <thead><tr><th>Marittimo</th><th>Qualifica</th><th>Corso</th><th>Data rilascio</th><th>Data scadenza</th><th>Stato</th></tr></thead>
         <tbody id="cert-tbody"><tr class="empty-row"><td colspan="6"><span class="spinner"></span></td></tr></tbody>
       </table>
+    </div>
+  </div>
+
+
+  <div class="page" id="page-email-riepilogo">
+    <div class="page-hdr">
+      <div><div class="page-title">Riepilogo Email</div><div class="page-sub">Stato invio email ai marittimi e ai centri corsi</div></div>
+    </div>
+    <div class="er-schede-switch">
+      <button class="er-scheda-btn active" onclick="erSwitchScheda('mar',this)">&#9993; Marittimi</button>
+      <button class="er-scheda-btn" onclick="erSwitchScheda('cen',this)">&#127963; Centri Corsi</button>
+    </div>
+    <!-- SCHEDA MARITTIMI -->
+    <div id="er-scheda-mar">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem" id="er-mar-kpi"></div>
+      <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:.8rem">
+        <button class="er-tab active" data-target="mar" data-filter="da-inviare" onclick="erSetTab(this,'mar')">Da inviare</button>
+        <button class="er-tab" data-target="mar" data-filter="inviate" onclick="erSetTab(this,'mar')">Inviate</button>
+        <button class="er-tab" data-target="mar" data-filter="tutti" onclick="erSetTab(this,'mar')">Tutti</button>
+      </div>
+      <input type="text" id="er-mar-search" placeholder="Cerca nome o matricola..." oninput="renderErMarittimi()" style="width:100%;padding:.5rem .8rem;border:1px solid var(--border);border-radius:8px;font-size:.82rem;margin-bottom:.8rem;background:var(--surface);color:var(--text)">
+      <div class="er-table-wrap">
+        <table class="er-table"><thead><tr><th>Nome</th><th>Matricola</th><th>Qualifica</th><th>Sessioni</th><th>Stato</th><th id="er-mar-th-azione" style="text-align:center;display:none">Azione</th></tr></thead><tbody id="er-mar-tbody"></tbody></table>
+      </div>
+    </div>
+    <!-- SCHEDA CENTRI -->
+    <div id="er-scheda-cen" style="display:none">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1rem" id="er-cen-kpi"></div>
+      <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:.8rem">
+        <button class="er-tab active" data-target="cen" data-filter="da-inviare" onclick="erSetTab(this,'cen')">Da inviare</button>
+        <button class="er-tab" data-target="cen" data-filter="modificate" onclick="erSetTab(this,'cen')">Modificate</button>
+        <button class="er-tab" data-target="cen" data-filter="inviate" onclick="erSetTab(this,'cen')">Inviate</button>
+        <button class="er-tab" data-target="cen" data-filter="tutti" onclick="erSetTab(this,'cen')">Tutti</button>
+      </div>
+      <input type="text" id="er-cen-search" placeholder="Cerca centro o corso..." oninput="renderErCentri()" style="width:100%;padding:.5rem .8rem;border:1px solid var(--border);border-radius:8px;font-size:.82rem;margin-bottom:.8rem;background:var(--surface);color:var(--text)">
+      <div class="er-table-wrap">
+        <table class="er-table"><thead><tr><th>Centro</th><th>Corso</th><th>Data inizio</th><th>Data fine</th><th>Iscritti</th><th>Stato</th><th id="er-cen-th-azione" style="text-align:center;display:none">Azione</th></tr></thead><tbody id="er-cen-tbody"></tbody></table>
+      </div>
     </div>
   </div>
 
@@ -1363,6 +1428,7 @@ async function showPage(id,tab){
   if(id==='sessioni')await loadSessioni();
   if(id==='riepilogo')await loadRiepilogo();
   if(id==='certificati')await loadCertificati();
+  if(id==='email-riepilogo')await loadEmailRiepilogo();
   if(id==='config-email')loadCfgEmail();
   if(id==='admin')await loadAdmin();
 }
@@ -2539,6 +2605,117 @@ async function esportaPdfCertificati(){
 }
 
 buildLoginGrid();
+
+// ========== RIEPILOGO EMAIL ==========
+var _erMarFilter='da-inviare',_erCenFilter='da-inviare';
+function erSwitchScheda(id,btn){
+  document.querySelectorAll('.er-scheda-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  document.getElementById('er-scheda-mar').style.display=id==='mar'?'':'none';
+  document.getElementById('er-scheda-cen').style.display=id==='cen'?'':'none';
+}
+function erSetTab(btn,target){
+  document.querySelectorAll('.er-tab[data-target="'+target+'"]').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  if(target==='mar'){_erMarFilter=btn.dataset.filter;renderErMarittimi();}
+  else{_erCenFilter=btn.dataset.filter;renderErCentri();}
+}
+async function loadEmailRiepilogo(){
+  setConnDot('loading');
+  try{
+    _sessioni=await sbGet('corsi_sessioni','order=data_inizio&select=*,corsi_tipologie(nome),corsi_centri(nome)');
+    _iscrizioni=await sbGet('corsi_iscritti','order=cognome_nome&select=*');
+    var mats=[...new Set(_iscrizioni.map(function(i){return i.matricola_aziendale;}).filter(Boolean))];
+    if(mats.length){
+      var dips=await sbGet('Dipendenti','Matricola_Aziendale=in.('+mats.map(function(m){return encodeURIComponent(m);}).join(',')+')'+'&select=Matricola_Aziendale,Email,reparto,Qualifica');
+      var em={},rep={},qual={};
+      dips.forEach(function(d){em[d.Matricola_Aziendale]=d.Email||null;rep[d.Matricola_Aziendale]=d.reparto||null;qual[d.Matricola_Aziendale]=d.Qualifica||null;});
+      _iscrizioni=_iscrizioni.map(function(i){return Object.assign({},i,{email_marittimo:em[i.matricola_aziendale]||null,reparto_dip:rep[i.matricola_aziendale]||null,qualifica_dip:qual[i.matricola_aziendale]||i.qualifica||null});});
+    }
+    setConnDot('on');
+    renderErKpiMar();renderErMarittimi();
+    renderErKpiCen();renderErCentri();
+    document.getElementById('er-mar-th-azione').style.display=isAdmin?'':'none';
+    document.getElementById('er-cen-th-azione').style.display=isAdmin?'':'none';
+  }catch(e){setConnDot('off');toast('Errore: '+e.message,'error');}
+}
+function erGetMarittimi(){
+  var map={};
+  _iscrizioni.forEach(function(i){
+    var k=i.matricola_aziendale||('_'+i.cognome_nome);
+    if(!map[k])map[k]={id_primo:i.id,matricola:i.matricola_aziendale,nome:i.cognome_nome,qualifica:i.qualifica_dip||i.qualifica,sessioni:[],email_inviata_at:null};
+    var sess=_sessioni.find(function(s){return s.id===i.sessione_id;});
+    if(sess)map[k].sessioni.push({nome:sess.nota||(sess.corsi_tipologie&&sess.corsi_tipologie.nome)||'--',data:sess.data_inizio});
+    if(i.email_inviata_at&&(!map[k].email_inviata_at||i.email_inviata_at>map[k].email_inviata_at))map[k].email_inviata_at=i.email_inviata_at;
+  });
+  return Object.values(map);
+}
+function renderErKpiMar(){
+  var tutti=erGetMarittimi();
+  var inviate=tutti.filter(function(m){return m.email_inviata_at;}).length;
+  var daInv=tutti.filter(function(m){return !m.email_inviata_at;}).length;
+  document.getElementById('er-mar-kpi').innerHTML='<div class="er-kpi"><div class="er-kpi-n">'+tutti.length+'</div><div class="er-kpi-l">Totali iscritti</div></div><div class="er-kpi"><div class="er-kpi-n" style="color:#1a5c2e">'+inviate+'</div><div class="er-kpi-l">Email inviate</div></div><div class="er-kpi"><div class="er-kpi-n" style="color:#7d4e00">'+daInv+'</div><div class="er-kpi-l">Da inviare</div></div>';
+  document.querySelector('.er-tab[data-target="mar"][data-filter="da-inviare"]').textContent='Da inviare ('+daInv+')';
+  document.querySelector('.er-tab[data-target="mar"][data-filter="inviate"]').textContent='Inviate ('+inviate+')';
+  document.querySelector('.er-tab[data-target="mar"][data-filter="tutti"]').textContent='Tutti ('+tutti.length+')';
+}
+function renderErMarittimi(){
+  var q=(document.getElementById('er-mar-search').value||'').toLowerCase();
+  var lista=erGetMarittimi().sort(function(a,b){return(a.nome||'').localeCompare(b.nome||'','it');});
+  if(q)lista=lista.filter(function(m){return(m.nome||'').toLowerCase().includes(q)||(m.matricola||'').toLowerCase().includes(q);});
+  if(_erMarFilter==='da-inviare')lista=lista.filter(function(m){return !m.email_inviata_at;});
+  else if(_erMarFilter==='inviate')lista=lista.filter(function(m){return m.email_inviata_at;});
+  var tbody=document.getElementById('er-mar-tbody');
+  if(!lista.length){tbody.innerHTML='<tr class="empty-row"><td colspan="6" style="text-align:center;padding:1.5rem;color:var(--muted)">Nessun risultato</td></tr>';return;}
+  var fmt=function(ts){return ts?new Date(ts).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'';}
+  tbody.innerHTML=lista.map(function(m){
+    var tags=m.sessioni.map(function(s){return'<span class="er-tag">'+s.nome+(s.data?' - '+s.data.slice(5,10).split('-').reverse().join('/'):'')+'</span>';}).join('');
+    var stato=m.email_inviata_at?'<span class="er-pill er-pill-green">inviata</span><div class="er-ts">'+fmt(m.email_inviata_at)+'</div>':'<span class="er-pill er-pill-amber">da inviare</span>';
+    var act=isAdmin?'<td style="text-align:center"><button class="er-act-btn '+(m.email_inviata_at?'resend':'send')+'" onclick="erApriEmailMar('+m.id_primo+')" title="'+(m.email_inviata_at?'Reinvia':'Invia')+'">'+(m.email_inviata_at?'&#8635;':'&#9993;')+'</button></td>':'';
+    return'<tr><td style="font-weight:600">'+(m.nome||'--')+'</td><td>'+(m.matricola||'--')+'</td><td>'+(m.qualifica||'--')+'</td><td>'+(tags||'--')+'</td><td>'+stato+'</td>'+act+'</tr>';
+  }).join('');
+}
+function erApriEmailMar(id){
+  var i=_iscrizioni.find(function(x){return x.id===id;});
+  if(i)apriPremail(i.matricola_aziendale||i.cognome_nome,i.id);
+}
+function renderErKpiCen(){
+  var sc=_sessioni.filter(function(s){return _iscrizioni.some(function(i){return i.sessione_id===s.id;});});
+  var inv=sc.filter(function(s){return s.email_inviata_at;}).length;
+  var mod=sc.filter(function(s){return s.email_inviata_at&&s.iscritti_updated_at&&s.iscritti_updated_at>s.email_inviata_at;}).length;
+  var daInv=sc.filter(function(s){return !s.email_inviata_at;}).length;
+  document.getElementById('er-cen-kpi').innerHTML='<div class="er-kpi"><div class="er-kpi-n">'+sc.length+'</div><div class="er-kpi-l">Sessioni totali</div></div><div class="er-kpi"><div class="er-kpi-n" style="color:#1a5c2e">'+inv+'</div><div class="er-kpi-l">Email inviate</div></div><div class="er-kpi"><div class="er-kpi-n" style="color:#7a2b13">'+mod+'</div><div class="er-kpi-l">Modificate</div></div><div class="er-kpi"><div class="er-kpi-n" style="color:#7d4e00">'+daInv+'</div><div class="er-kpi-l">Da inviare</div></div>';
+  document.querySelector('.er-tab[data-target="cen"][data-filter="da-inviare"]').textContent='Da inviare ('+daInv+')';
+  document.querySelector('.er-tab[data-target="cen"][data-filter="modificate"]').textContent='Modificate ('+mod+')';
+  document.querySelector('.er-tab[data-target="cen"][data-filter="inviate"]').textContent='Inviate ('+inv+')';
+  document.querySelector('.er-tab[data-target="cen"][data-filter="tutti"]').textContent='Tutti ('+sc.length+')';
+}
+function renderErCentri(){
+  var q=(document.getElementById('er-cen-search').value||'').toLowerCase();
+  var lista=_sessioni.filter(function(s){return _iscrizioni.some(function(i){return i.sessione_id===s.id;});});
+  lista=lista.map(function(s){return Object.assign({},s,{isModificata:!!(s.email_inviata_at&&s.iscritti_updated_at&&s.iscritti_updated_at>s.email_inviata_at),nIscritti:_iscrizioni.filter(function(i){return i.sessione_id===s.id;}).length,nomeSessione:s.nota||(s.corsi_tipologie&&s.corsi_tipologie.nome)||'--',nomeCentro:(s.corsi_centri&&s.corsi_centri.nome)||'--'});});
+  lista.sort(function(a,b){var r=a.nomeCentro.localeCompare(b.nomeCentro,'it');return r!==0?r:a.nomeSessione.localeCompare(b.nomeSessione,'it');});
+  if(q)lista=lista.filter(function(s){return s.nomeCentro.toLowerCase().includes(q)||s.nomeSessione.toLowerCase().includes(q);});
+  if(_erCenFilter==='da-inviare')lista=lista.filter(function(s){return !s.email_inviata_at;});
+  else if(_erCenFilter==='modificate')lista=lista.filter(function(s){return s.isModificata;});
+  else if(_erCenFilter==='inviate')lista=lista.filter(function(s){return s.email_inviata_at&&!s.isModificata;});
+  var tbody=document.getElementById('er-cen-tbody');
+  if(!lista.length){tbody.innerHTML='<tr class="empty-row"><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--muted)">Nessun risultato</td></tr>';return;}
+  var fmt=function(ts){return ts?new Date(ts).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'';}
+  var fmtD=function(d){return d?d.slice(5,10).split('-').reverse().join('/'):'--';}
+  tbody.innerHTML=lista.map(function(s){
+    var stato,rowCls='';
+    if(s.isModificata){rowCls=' class="er-modified"';stato='<span class="er-pill er-pill-red">&#9888; modificata</span><div class="er-ts">inviata '+fmt(s.email_inviata_at)+'</div><div class="er-ts-warn">iscritti cambiati '+fmt(s.iscritti_updated_at)+'</div>';}
+    else if(s.email_inviata_at){stato='<span class="er-pill er-pill-green">inviata</span><div class="er-ts">'+fmt(s.email_inviata_at)+'</div>';}
+    else{stato='<span class="er-pill er-pill-amber">da inviare</span>';}
+    var bc=s.email_inviata_at?(s.isModificata?'warn':'resend'):'send';
+    var bi=s.email_inviata_at?(s.isModificata?'&#9993;':'&#8635;'):'&#9993;';
+    var act=isAdmin?'<td style="text-align:center"><button class="er-act-btn '+bc+'" onclick="apriModalEmail('+s.id+')" title="Email centro">'+bi+'</button></td>':'';
+    return'<tr'+rowCls+'><td style="font-weight:600">'+s.nomeCentro+'</td><td>'+s.nomeSessione+'</td><td>'+fmtD(s.data_inizio)+'</td><td>'+fmtD(s.data_fine)+'</td><td>'+s.nIscritti+'</td><td>'+stato+'</td>'+act+'</tr>';
+  }).join('');
+}
+// ========== FINE RIEPILOGO EMAIL ==========
+
 </script>
 
 <div id="smart-footer">
