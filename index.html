@@ -319,9 +319,9 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
 .modal-overlay.open .modal-csv{transform:translateY(0) scale(1);}
 @media(max-width:680px){main{padding:1rem;}header,nav{padding:0 1rem;}.edit-grid{grid-template-columns:1fr 1fr;}.matricola-row{flex-direction:column;}.stat-cards{grid-template-columns:1fr 1fr;}}
 
-.er-schede-switch{display:inline-flex;background:var(--surface2);border-radius:10px;padding:3px;gap:2px;margin-bottom:1.2rem;}
-.er-scheda-btn{padding:6px 20px;font-size:.8rem;font-weight:600;border:none;border-radius:8px;cursor:pointer;background:transparent;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;}
-.er-scheda-btn.active{background:var(--bg);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1);}
+.er-schede-switch{display:inline-flex;gap:8px;margin-bottom:1.2rem;}
+.er-scheda-btn{padding:7px 22px;font-size:.82rem;font-weight:600;border:1.5px solid #D9D2C5;border-radius:20px;cursor:pointer;background:#ffffff;color:#8A8478;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;}
+.er-scheda-btn.active{background:#DDE8DC;color:#2E5E30;border-color:#A8C8A0;font-weight:700;}
 .er-tab{padding:7px 16px;font-size:.78rem;font-weight:600;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
 .er-tab.active{color:var(--orange);border-bottom-color:var(--orange);}
 .er-table-wrap{border-radius:10px;overflow:hidden;border:1px solid var(--border);}
@@ -330,7 +330,10 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
 .er-table td{padding:8px 10px;border-bottom:1px solid var(--surface2);color:var(--text);vertical-align:top;background:#ffffff;}
 .er-table tr:last-child td{border-bottom:none;}
 .er-table tr.er-modified td{background:#FFF5F0;}
-.er-kpi{background:var(--surface2);border-radius:10px;padding:.7rem 1rem;}
+.er-kpi{background:#fff;border-radius:10px;padding:.7rem 1rem;border:1px solid #E0D9CC;border-left:4px solid #8A8478;}
+.er-kpi.kpi-inv{border-left-color:#2E7D32;}
+.er-kpi.kpi-mod{border-left-color:#C0561A;}
+.er-kpi.kpi-dai{border-left-color:#B8860B;}
 .er-kpi-n{font-size:1.3rem;font-weight:700;color:var(--text);}
 .er-kpi-l{font-size:.72rem;color:var(--muted);margin-top:2px;}
 .er-pill{display:inline-flex;align-items:center;gap:3px;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;}
@@ -395,7 +398,7 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
   <button class="nav-tab" onclick="showPage('riepilogo',this)">Riepilogo</button>
   <button class="nav-tab" onclick="showPage('certificati',this)">Certificati</button>
     <button class="nav-tab" onclick="showPage('email-riepilogo',this)">Riepilogo Email</button>
-  <button class="nav-tab admin-only" style="display:none" onclick="showPage('config-email',this)">✉️ Email</button>
+  <button class="nav-tab admin-only" style="display:none" onclick="showPage('config-email',this)">✉️ Config Email</button>
   <button class="nav-tab admin-only" style="display:none" onclick="showPage('admin',this)">Admin</button>
 </nav>
 
@@ -448,7 +451,7 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
   <div class="page" id="page-certificati">
     <div class="page-hdr">
       <div><div class="page-title">Certificati Marittimi</div><div class="page-sub">Situazione certificati e scadenze</div></div>
-      <button class="btn btn-ghost" onclick="loadCertificati()">↻ Aggiorna</button>
+      <button class="btn btn-primary" onclick="loadCertificati()" style="display:flex;align-items:center;gap:6px">&#8635; Aggiorna</button>
     </div>
     <!-- PANNELLO FILTRI -->
     <div class="cert-filtri-panel">
@@ -529,6 +532,7 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
   <div class="page" id="page-email-riepilogo">
     <div class="page-hdr">
       <div><div class="page-title">Riepilogo Email</div><div class="page-sub">Stato invio email ai marittimi e ai centri corsi</div></div>
+      <button class="btn btn-primary" onclick="loadEmailRiepilogo()" style="display:flex;align-items:center;gap:6px">&#8635; Aggiorna</button>
     </div>
     <div class="er-schede-switch">
       <button class="er-scheda-btn active" onclick="erSwitchScheda('mar',this)">&#9993; Marittimi</button>
@@ -1384,7 +1388,7 @@ async function esportaPdfCertificati(){
 function setConnDot(s){const d=document.getElementById('conn-dot');d.className='conn-dot'+(s==='on'?'':s==='off'?' off':' loading');}
 
 function fmtData(d){if(!d)return'—';return new Date(d+'T00:00:00').toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'});}
-function fmtBreve(d){if(!d)return'—';return new Date(d+'T00:00:00').toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric'});}
+function fmtBreve(d){if(!d)return'—';var p=d.slice(0,10).split('-');if(p.length<3)return d;return p[2]+'/'+p[1]+'/'+p[0];}
 function fmtEstesa(d){if(!d)return'—';const dt=new Date(d+'T00:00:00');const gg=['domenica','lunedì','martedì','mercoledì','giovedì','venerdì','sabato'];const mm=['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];return`${gg[dt.getDay()]} ${dt.getDate()} ${mm[dt.getMonth()]} ${dt.getFullYear()}`;}
 function isPassata(d,forzaAttiva){if(forzaAttiva)return false;if(!d)return false;const o=new Date();o.setHours(0,0,0,0);return new Date(d+'T00:00:00')<o;}
 function statoScad(ds){
@@ -1479,7 +1483,7 @@ function renderSessioni(){
     const libCls=isFull?'liberi-zero':liberi<=3?'liberi-warn':'liberi-ok';
     const nomeCorso=s.nota||s.corsi_tipologie?.nome||'—';
     const nomeCentro=s.corsi_centri?.nome||'—';
-    const dateStr=s.data_fine&&s.data_fine!==s.data_inizio?`${fmtBreve(s.data_inizio)} – ${fmtBreve(s.data_fine)}`:fmtData(s.data_inizio);
+    const dateStr=s.data_fine&&s.data_fine!==s.data_inizio?`${fmtBreve(s.data_inizio)} – ${fmtBreve(s.data_fine)}`:fmtBreve(s.data_inizio);
     if(past)return`<tr style="opacity:.4"><td><span style="font-weight:700">${nomeCorso}</span> <span class="badge-past">Conclusa</span></td><td>${dateStr}</td><td>${nomeCentro}</td><td class="td-num">${s.posti_totali||'—'}</td><td class="td-num">—</td></tr>`;
     if(isFull)return`<tr style="opacity:.6;cursor:default"><td><div class="td-main">${nomeCorso}</div></td><td><div class="td-main">${dateStr}</div></td><td class="td-sub">${nomeCentro}</td><td class="td-num">${s.posti_totali||'—'}</td><td class="td-num liberi-zero">0 <span style="font-size:.72rem;font-weight:600">Esaurito</span></td></tr>`;
     return`<tr class="clickable" onclick="apriIscrizione(${s.id})"><td><div class="td-main">${nomeCorso}</div></td><td><div class="td-main">${dateStr}</div></td><td class="td-sub">${nomeCentro}</td><td class="td-num">${s.posti_totali||'—'}</td><td class="td-num ${libCls}">${liberi}</td></tr>`;
@@ -1788,7 +1792,7 @@ function renderDatesPanel(){
     const past=isPassata(s.data_fine||s.data_inizio,s.forza_attiva);
     const liberi=Math.max(0,(s.posti_totali||0)-cnt);
     const postiCls=liberi===0?'liberi-zero':liberi<=3?'liberi-warn':'liberi-ok';
-    const dateStr=s.data_fine&&s.data_fine!==s.data_inizio?`${fmtBreve(s.data_inizio)} – ${fmtBreve(s.data_fine)}`:fmtData(s.data_inizio);
+    const dateStr=s.data_fine&&s.data_fine!==s.data_inizio?`${fmtBreve(s.data_inizio)} – ${fmtBreve(s.data_fine)}`:fmtBreve(s.data_inizio);
     const emailTs=_iscrizioni.filter(i=>i.sessione_id===s.id&&i.email_inviata_at).length;
     const emailHtml=emailTs>0?`<span class="cdr-email">✉️ ${emailTs}</span>`:`<span class="cdr-no-email">nessuna</span>`;
     const sel=s.id===_cascadeSelSessId;
@@ -2121,7 +2125,8 @@ async function inviaEmailMarittimo(id){
   const i=_iscrizioni.find(x=>x.id===id);if(!i||!i.email_marittimo)return;
   _premailId=id;
   // Trova tutte le iscrizioni della stessa persona
-  const tutteIscrizioni=_iscrizioni.filter(x=>x.matricola_aziendale===i.matricola_aziendale);
+  const _tutteRaw=_iscrizioni.filter(x=>x.matricola_aziendale===i.matricola_aziendale);
+  const seenSess=new Set();const tutteIscrizioni=_tutteRaw.filter(x=>{if(seenSess.has(x.sessione_id))return false;seenSess.add(x.sessione_id);return true;});
   // Iniziali avatar
   const parti=(i.cognome_nome||'').trim().split(/\s+/);
   const iniziali=(parti[0]?.[0]||'')+(parti[1]?.[0]||'');
@@ -2137,10 +2142,10 @@ async function inviaEmailMarittimo(id){
   // Lista corsi
   const oggi=new Date();oggi.setHours(0,0,0,0);
   const rows=tutteIscrizioni.map(isc=>{
-    const s=_sessioni.find(x=>x.id===isc.sessione_id);if(!s)return'';
-    const nomeCorso=s.nota||s.corsi_tipologie?.nome||'—';
-    const nomeCentro=s.corsi_centri?.nome||'—';
-    const dateStr=s.data_fine&&s.data_fine!==s.data_inizio?`${fmtBreve(s.data_inizio)} – ${fmtBreve(s.data_fine)}`:fmtData(s.data_inizio);
+    const s=_sessioni.find(x=>x.id==isc.sessione_id);if(!s)return'';
+    const nomeCorso=s.nota||(s.corsi_tipologie&&s.corsi_tipologie.nome)||'—';
+    const nomeCentro=(s.corsi_centri&&s.corsi_centri.nome)||'—';
+    const dateStr=s.data_fine&&s.data_fine!==s.data_inizio?`${fmtBreve(s.data_inizio)} – ${fmtBreve(s.data_fine)}`:fmtBreve(s.data_inizio);
     const past=isPassata(s.data_fine||s.data_inizio,s.forza_attiva);
     const badge=past
       ?`<span style="background:var(--surface2);color:var(--muted);border-radius:999px;padding:1px 7px;font-size:.65rem;font-weight:600">Concluso</span>`
@@ -2151,7 +2156,7 @@ async function inviaEmailMarittimo(id){
     </div>`;
   }).join('');
   document.getElementById('premail-corsi-list').innerHTML=rows||`<div style="padding:1rem;text-align:center;color:var(--muted);font-size:.82rem">Nessun corso trovato</div>`;
-  const futuri=tutteIscrizioni.filter(isc=>{const s=_sessioni.find(x=>x.id===isc.sessione_id);return s&&!isPassata(s.data_fine||s.data_inizio,s.forza_attiva);});
+  const futuri=tutteIscrizioni.filter(isc=>{const s=_sessioni.find(x=>x.id==isc.sessione_id);return s&&!isPassata(s.data_fine||s.data_inizio,s.forza_attiva);});
   document.getElementById('premail-note').textContent=`L'email includerà ${tutteIscrizioni.length} corso${tutteIscrizioni.length!==1?'i':''} (${futuri.length} futur${futuri.length!==1?'i':'o'}).`;
   document.getElementById('modal-premail-overlay').classList.add('open');
 }
@@ -2159,29 +2164,29 @@ function chiudiPremail(){document.getElementById('modal-premail-overlay').classL
 document.getElementById('modal-premail-overlay').addEventListener('click',function(e){if(e.target===this)chiudiPremail();});
 async function confermaPremailInvia(){
   const i=_iscrizioni.find(x=>x.id===_premailId);if(!i||!i.email_marittimo)return;
-  const tutteIscrizioni=_iscrizioni.filter(x=>x.matricola_aziendale===i.matricola_aziendale);
+  const _tutteRaw2=_iscrizioni.filter(x=>x.matricola_aziendale===i.matricola_aziendale);
+  const seenSess2=new Set();const tutteIscrizioni=_tutteRaw2.filter(x=>{if(seenSess2.has(x.sessione_id))return false;seenSess2.add(x.sessione_id);return true;});
+  // Ricarica sempre _sessioni con i join per garantire corsi_tipologie e corsi_centri
+  _sessioni=await sbGet('corsi_sessioni','order=data_inizio&select=*,corsi_tipologie(nome),corsi_centri(nome)');
   const firma=currentUser||'';
   const nomeFormattato=(i.cognome_nome||'').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
   // Costruisce lista corsi per email
-  const righeCorsi=tutteIscrizioni.filter(isc=>{
-    const s=_sessioni.find(x=>x.id===isc.sessione_id);
-    return s&&!isPassata(s.data_fine||s.data_inizio,s.forza_attiva);
-  }).map(isc=>{
-    const s=_sessioni.find(x=>x.id===isc.sessione_id);if(!s)return'';
-    const nomeCorso=s.nota||s.corsi_tipologie?.nome||'—';
-    const nomeCentro=s.corsi_centri?.nome||'—';
-    const dateStr=s.data_fine&&s.data_fine!==s.data_inizio?`${fmtEstesa(s.data_inizio)} – ${fmtBreve(s.data_fine)}`:fmtEstesa(s.data_inizio);
-    return`- ${nomeCorso}: ${dateStr}`;
+  const righeCorsi=tutteIscrizioni.map(isc=>{
+    const s=_sessioni.find(x=>x.id==isc.sessione_id);if(!s)return'';
+    if(isPassata(s.data_fine||s.data_inizio,s.forza_attiva))return'';
+    const nomeCorso=s.nota||(s.corsi_tipologie&&s.corsi_tipologie.nome)||'—';
+    const dateStr=s.data_fine&&s.data_fine!==s.data_inizio?fmtBreve(s.data_inizio)+' – '+fmtBreve(s.data_fine):fmtBreve(s.data_inizio);
+    return'- '+nomeCorso+': '+dateStr;
   }).filter(Boolean).join('\n');
   const template=_emailDest['body']||CFG_EMAIL_BASE;
   // Usa il primo corso come riferimento per [CORSO] [DATA] [CENTRO]
-  const s0=_sessioni.find(x=>x.id===i.sessione_id);
-  const nomeCorso0=s0?.nota||s0?.corsi_tipologie?.nome||'—';
-  const dateStr0=s0&&s0.data_fine&&s0.data_fine!==s0.data_inizio?`${fmtEstesa(s0.data_inizio)} – ${fmtBreve(s0.data_fine)}`:fmtEstesa(s0?.data_inizio);
-  const nomeCentro0=s0?.corsi_centri?.nome||'—';
+  const s0=_sessioni.find(x=>x.id==i.sessione_id);
+  const nomeCorso0=(s0&&s0.nota)||(s0&&s0.corsi_tipologie&&s0.corsi_tipologie.nome)||'—';
+  const dateStr0=s0&&s0.data_fine&&s0.data_fine!==s0.data_inizio?fmtBreve(s0.data_inizio)+' – '+fmtBreve(s0.data_fine):fmtBreve(s0&&s0.data_inizio);
+  const nomeCentro0=(s0&&s0.corsi_centri&&s0.corsi_centri.nome)||'—';
   const body=template
     .replace(/\[NOME\]/g,nomeFormattato)
-    .replace(/\[CORSO\]/g,tutteIscrizioni.length>1?righeCorsi:nomeCorso0)
+    .replace(/\[CORSO\]/g,righeCorsi||('- '+nomeCorso0+': '+dateStr0))
     .replace(/\[DATA\]/g,dateStr0)
     .replace(/\[CENTRO\]/g,nomeCentro0)
     .replace(/\[FIRMA\]/g,firma);
@@ -2200,6 +2205,7 @@ async function confermaPremailInvia(){
       await sbPatch('corsi_iscritti',isc.id,{email_inviata_at:new Date().toISOString()});
     }
     await loadRiepilogo();
+    if(document.getElementById('page-email-riepilogo').style.display!=='none')await loadEmailRiepilogo();
   }catch(e){}
   chiudiPremail();
 }
@@ -2287,7 +2293,7 @@ async function invioEmailImat(){
   const to=_emailDest.imat_to||'';const cc=_emailDest.imat_cc||'';
   const ccParams=cc?'cc='+cc.split(/[;,]+/).map(s=>encodeURIComponent(s.trim())).filter(Boolean).join('%3B'):'';
   setTimeout(()=>{window.location.href=`mailto:${to}?${ccParams?ccParams+'&':''}subject=${encodeURIComponent(oggetto)}&body=${encodeURIComponent(corpoEmail)}`;},600);
-  try{await sbPatch('corsi_sessioni',s.id,{email_inviata_at:new Date().toISOString()});await loadAdmin();}catch(e){}
+  try{await sbPatch('corsi_sessioni',s.id,{email_inviata_at:new Date().toISOString()});await loadAdmin();if(document.getElementById('page-email-riepilogo').style.display!=='none')await loadEmailRiepilogo();}catch(e){}
   setTimeout(()=>toast('✅ PDF in Download + Outlook aperto'),1200);
 }
 
@@ -2317,7 +2323,7 @@ function renderAdminSessioni(){
   function itemHtml(s){
     const cnt=_iscrizioni.filter(i=>i.sessione_id===s.id).length;const liberi=Math.max(0,(s.posti_totali||0)-cnt);const past=isPassata(s.data_fine||s.data_inizio,s.forza_attiva);
     const nomeCorso=s.nota||s.corsi_tipologie?.nome||'—';const nomeCentro=s.corsi_centri?.nome||'—';
-    const dateStr=s.data_fine&&s.data_fine!==s.data_inizio?`${fmtBreve(s.data_inizio)} – ${fmtBreve(s.data_fine)}`:fmtData(s.data_inizio);
+    const dateStr=s.data_fine&&s.data_fine!==s.data_inizio?`${fmtBreve(s.data_inizio)} – ${fmtBreve(s.data_fine)}`:fmtBreve(s.data_inizio);
     const switchHtml=past||s.forza_attiva?`<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.75rem;color:${s.forza_attiva?'var(--green)':'var(--muted)'}">
       <div style="position:relative;width:34px;height:18px;flex-shrink:0" onclick="toggleForzaAttiva(${s.id},${!s.forza_attiva})">
         <div style="width:34px;height:18px;border-radius:9px;background:${s.forza_attiva?'var(--green)':'var(--border)'};transition:background .2s"></div>
@@ -2654,14 +2660,19 @@ function renderErKpiMar(){
   var tutti=erGetMarittimi();
   var inviate=tutti.filter(function(m){return m.email_inviata_at;}).length;
   var daInv=tutti.filter(function(m){return !m.email_inviata_at;}).length;
-  document.getElementById('er-mar-kpi').innerHTML='<div class="er-kpi"><div class="er-kpi-n">'+tutti.length+'</div><div class="er-kpi-l">Totali iscritti</div></div><div class="er-kpi"><div class="er-kpi-n" style="color:#1a5c2e">'+inviate+'</div><div class="er-kpi-l">Email inviate</div></div><div class="er-kpi"><div class="er-kpi-n" style="color:#7d4e00">'+daInv+'</div><div class="er-kpi-l">Da inviare</div></div>';
+  document.getElementById('er-mar-kpi').innerHTML='<div class="er-kpi"><div class="er-kpi-n">'+tutti.length+'</div><div class="er-kpi-l">Totali iscritti</div></div><div class="er-kpi kpi-inv"><div class="er-kpi-n" style="color:#2E7D32">'+inviate+'</div><div class="er-kpi-l">Email inviate</div></div><div class="er-kpi kpi-dai"><div class="er-kpi-n" style="color:#B8860B">'+daInv+'</div><div class="er-kpi-l">Da inviare</div></div>';
   document.querySelector('.er-tab[data-target="mar"][data-filter="da-inviare"]').textContent='Da inviare ('+daInv+')';
   document.querySelector('.er-tab[data-target="mar"][data-filter="inviate"]').textContent='Inviate ('+inviate+')';
   document.querySelector('.er-tab[data-target="mar"][data-filter="tutti"]').textContent='Tutti ('+tutti.length+')';
 }
 function renderErMarittimi(){
   var q=(document.getElementById('er-mar-search').value||'').toLowerCase();
-  var lista=erGetMarittimi().sort(function(a,b){return(a.nome||'').localeCompare(b.nome||'','it');});
+  var oggi=new Date().toISOString().slice(0,10);
+  var lista=erGetMarittimi().sort(function(a,b){
+    var da=a.sessioni.map(function(s){return s.data||'';}).filter(function(d){return d>=oggi;}).sort()[0]||a.sessioni.map(function(s){return s.data||'';}).sort()[0]||'9999';
+    var db=b.sessioni.map(function(s){return s.data||'';}).filter(function(d){return d>=oggi;}).sort()[0]||b.sessioni.map(function(s){return s.data||'';}).sort()[0]||'9999';
+    return da.localeCompare(db);
+  });
   if(q)lista=lista.filter(function(m){return(m.nome||'').toLowerCase().includes(q)||(m.matricola||'').toLowerCase().includes(q);});
   if(_erMarFilter==='da-inviare')lista=lista.filter(function(m){return !m.email_inviata_at;});
   else if(_erMarFilter==='inviate')lista=lista.filter(function(m){return m.email_inviata_at;});
@@ -2677,14 +2688,14 @@ function renderErMarittimi(){
 }
 function erApriEmailMar(id){
   var i=_iscrizioni.find(function(x){return x.id===id;});
-  if(i)apriPremail(i.matricola_aziendale||i.cognome_nome,i.id);
+  if(i)inviaEmailMarittimo(i.id);
 }
 function renderErKpiCen(){
   var sc=_sessioni.filter(function(s){return _iscrizioni.some(function(i){return i.sessione_id===s.id;});});
   var inv=sc.filter(function(s){return s.email_inviata_at;}).length;
   var mod=sc.filter(function(s){return s.email_inviata_at&&s.iscritti_updated_at&&s.iscritti_updated_at>s.email_inviata_at;}).length;
   var daInv=sc.filter(function(s){return !s.email_inviata_at;}).length;
-  document.getElementById('er-cen-kpi').innerHTML='<div class="er-kpi"><div class="er-kpi-n">'+sc.length+'</div><div class="er-kpi-l">Sessioni totali</div></div><div class="er-kpi"><div class="er-kpi-n" style="color:#1a5c2e">'+inv+'</div><div class="er-kpi-l">Email inviate</div></div><div class="er-kpi"><div class="er-kpi-n" style="color:#7a2b13">'+mod+'</div><div class="er-kpi-l">Modificate</div></div><div class="er-kpi"><div class="er-kpi-n" style="color:#7d4e00">'+daInv+'</div><div class="er-kpi-l">Da inviare</div></div>';
+  document.getElementById('er-cen-kpi').innerHTML='<div class="er-kpi"><div class="er-kpi-n">'+sc.length+'</div><div class="er-kpi-l">Sessioni totali</div></div><div class="er-kpi kpi-inv"><div class="er-kpi-n" style="color:#2E7D32">'+inv+'</div><div class="er-kpi-l">Email inviate</div></div><div class="er-kpi kpi-mod"><div class="er-kpi-n" style="color:#C0561A">'+mod+'</div><div class="er-kpi-l">Modificate</div></div><div class="er-kpi kpi-dai"><div class="er-kpi-n" style="color:#B8860B">'+daInv+'</div><div class="er-kpi-l">Da inviare</div></div>';
   document.querySelector('.er-tab[data-target="cen"][data-filter="da-inviare"]').textContent='Da inviare ('+daInv+')';
   document.querySelector('.er-tab[data-target="cen"][data-filter="modificate"]').textContent='Modificate ('+mod+')';
   document.querySelector('.er-tab[data-target="cen"][data-filter="inviate"]').textContent='Inviate ('+inv+')';
@@ -2694,7 +2705,7 @@ function renderErCentri(){
   var q=(document.getElementById('er-cen-search').value||'').toLowerCase();
   var lista=_sessioni.filter(function(s){return _iscrizioni.some(function(i){return i.sessione_id===s.id;});});
   lista=lista.map(function(s){return Object.assign({},s,{isModificata:!!(s.email_inviata_at&&s.iscritti_updated_at&&s.iscritti_updated_at>s.email_inviata_at),nIscritti:_iscrizioni.filter(function(i){return i.sessione_id===s.id;}).length,nomeSessione:s.nota||(s.corsi_tipologie&&s.corsi_tipologie.nome)||'--',nomeCentro:(s.corsi_centri&&s.corsi_centri.nome)||'--'});});
-  lista.sort(function(a,b){var r=a.nomeCentro.localeCompare(b.nomeCentro,'it');return r!==0?r:a.nomeSessione.localeCompare(b.nomeSessione,'it');});
+  lista.sort(function(a,b){return(a.data_inizio||'9999').localeCompare(b.data_inizio||'9999');});
   if(q)lista=lista.filter(function(s){return s.nomeCentro.toLowerCase().includes(q)||s.nomeSessione.toLowerCase().includes(q);});
   if(_erCenFilter==='da-inviare')lista=lista.filter(function(s){return !s.email_inviata_at;});
   else if(_erCenFilter==='modificate')lista=lista.filter(function(s){return s.isModificata;});
