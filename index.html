@@ -17,6 +17,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+#app-content{margin-left:210px;}
+main#app-main{padding:1.4rem 1.8rem;}
 .smart-banner{background:linear-gradient(120deg,#00c6d7 0%,#0070c0 55%,#003a8c 100%);border-radius:10px;padding:.55rem 1.2rem;display:flex;align-items:center;position:relative;overflow:hidden;}
 .smart-banner::before{content:'';position:absolute;left:-10px;top:50%;transform:translateY(-50%);width:40px;height:80px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.2);}
 .smart-text{position:relative;z-index:1;text-align:center;flex:1;}
@@ -77,6 +79,57 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 .nav-tab{padding:12px 18px;font-size:.81rem;font-weight:600;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:2px solid transparent;font-family:'Plus Jakarta Sans',sans-serif;transition:all .18s;position:relative;top:1px;}
 .nav-tab:hover{color:var(--text);}
 .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+/* STATISTICHE */
+.stat-filtri{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.2rem;align-items:center;}
+.stat-sel{padding:5px 10px;font-size:.76rem;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;}
+.stat-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.2rem;}
+.stat-kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem;border-left:4px solid var(--muted);}
+.stat-kpi.green{border-left-color:#2E7D32;}
+.stat-kpi.amber{border-left-color:#B8860B;}
+.stat-kpi.red{border-left-color:#8B3010;}
+.stat-kpi.blue{border-left-color:#1A5FA8;}
+.stat-kpi-n{font-size:1.4rem;font-weight:800;color:var(--text);}
+.stat-kpi-l{font-size:.7rem;color:var(--muted);margin-top:2px;}
+.stat-charts-row{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:1.2rem;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.stat-card-title{font-size:.8rem;font-weight:700;margin-bottom:12px;color:var(--text);}
+.stat-bar-chart{display:flex;align-items:flex-end;gap:5px;height:110px;padding-bottom:22px;position:relative;}
+.stat-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative;}
+.stat-bar{border-radius:4px 4px 0 0;width:100%;}
+.stat-bar-lbl{font-size:.58rem;color:var(--muted);position:absolute;bottom:-18px;white-space:nowrap;}
+.stat-bar-val{font-size:.6rem;font-weight:700;color:var(--text);}
+.stat-leg{display:flex;flex-direction:column;gap:6px;}
+.stat-leg-item{display:flex;align-items:center;gap:6px;font-size:.73rem;}
+.stat-leg-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0;}
+.stat-leg-val{font-weight:700;margin-left:auto;}
+.stat-leg-pct{font-size:.65rem;color:var(--muted);}
+.stat-bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.2rem;}
+.stat-mini-bar{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:.75rem;}
+.stat-mini-bar:last-child{border-bottom:none;}
+.stat-mini-track{flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+.stat-mini-fill{height:100%;border-radius:3px;}
+.stat-mini-val{font-weight:700;font-size:.72rem;min-width:40px;text-align:right;}
+.stat-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1.2rem;}
+.stat-table-hdr{padding:10px 14px;font-size:.8rem;font-weight:700;border-bottom:1px solid var(--border);}
+.stat-table table{width:100%;border-collapse:collapse;font-size:.75rem;}
+.stat-table th{text-align:left;padding:6px 10px;font-size:.67rem;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);background:var(--surface2);}
+.stat-table td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text);}
+.stat-table tr:last-child td{border-bottom:none;}
+/* SIDEBAR */
+#app-layout{display:flex;min-height:100vh;}
+#app-sidebar{width:210px;background:#2C2A25;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;}
+#app-sidebar .sb-logo{padding:1rem 1.1rem .9rem;font-size:.88rem;font-weight:800;color:#fff;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:.5rem}
+#app-sidebar .sb-logo span{color:#C0561A}
+#app-sidebar .sb-section{font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:.8rem 1.1rem .3rem}
+#app-sidebar .sb-item{display:flex;align-items:center;gap:.65rem;padding:.55rem 1.1rem;font-size:.78rem;color:rgba(255,255,255,.55);cursor:pointer;border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;width:100%;text-align:left;border-left:2px solid transparent;transition:all .15s;}
+#app-sidebar .sb-item:hover{background:rgba(255,255,255,.05);color:#fff;}
+#app-sidebar .sb-item.active{background:rgba(192,86,26,.18);color:#E8825A;border-left-color:#C0561A;font-weight:600;}
+#app-sidebar .sb-icon{font-size:.9rem;width:18px;text-align:center;flex-shrink:0}
+#app-sidebar .sb-bottom{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);padding:.8rem 1.1rem;display:flex;align-items:center;gap:.6rem}
+#app-sidebar .sb-user{font-size:.72rem;color:rgba(255,255,255,.4);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#app-sidebar .sb-logout{font-size:.72rem;color:rgba(255,255,255,.3);cursor:pointer;background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif;padding:0}
+#app-sidebar .sb-logout:hover{color:rgba(255,255,255,.7)}
+#app-content{margin-left:210px;flex:1;min-width:0;}
 main{max-width:980px;margin:0 auto;padding:1.5rem;}
 .page{display:none;}
 .page.active{display:block;}
@@ -310,6 +363,18 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
 #toast.error{background:var(--red);}
 #smart-footer{position:fixed;bottom:12px;right:14px;z-index:500;}
 .log-wrap{background:#1a1a1a;border-radius:10px;padding:1rem;height:220px;overflow-y:auto;font-family:'DM Mono',monospace;font-size:.75rem;line-height:1.7;}
+.imp-log-storico{margin-top:1.2rem;}
+.imp-log-casc-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;cursor:pointer;user-select:none;font-size:.8rem;font-weight:700;color:var(--text);}
+.imp-log-casc-hdr:hover{background:var(--surface);}
+.imp-log-casc-body{margin-top:4px;border:1px solid var(--border);border-radius:10px;overflow:hidden;display:none;}
+.imp-log-row{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border);}
+.imp-log-row:last-child{border-bottom:none;}
+.imp-log-icon{width:30px;height:30px;border-radius:8px;background:#E8F5E9;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;}
+.imp-log-main{flex:1;}
+.imp-log-ts{font-size:.7rem;color:var(--muted);margin-bottom:2px;}
+.imp-log-cnt{font-size:.78rem;font-weight:700;color:var(--text);}
+.imp-log-corsi{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;}
+.imp-log-tag{font-size:.67rem;font-weight:600;background:var(--surface2);border-radius:4px;padding:2px 7px;color:var(--muted);}
 .log-ok{color:#4ade80;}.log-warn{color:#fbbf24;}.log-err{color:#f87171;}.log-info{color:#94a3b8;}.log-head{color:#e2e8f0;font-weight:500;}
 .imp-progress-wrap{background:var(--surface2);border-radius:10px;height:10px;overflow:hidden;margin:.6rem 0;}
 .imp-progress-bar{height:100%;background:var(--accent);border-radius:10px;transition:width .3s;width:0%;}
@@ -324,7 +389,7 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
 .modal-csv{background:var(--surface);border:1px solid var(--border);border-radius:18px;width:100%;max-width:500px;box-shadow:0 8px 40px rgba(44,36,22,.13);transform:translateY(18px) scale(.97);transition:transform .24s;padding:1.6rem;}
 .cert-filtri-panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1rem 1.2rem;margin-bottom:1rem;box-shadow:var(--shadow-s);}
 .cert-filtri-top{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-bottom:.9rem;padding-bottom:.9rem;border-bottom:1px solid var(--border);}
-.cert-cb-groups{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.cert-cb-groups{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
 .cert-cb-title{font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;}
 .cert-cb-reset{font-size:.68rem;font-weight:400;color:var(--accent);cursor:pointer;text-transform:none;letter-spacing:0;text-decoration:underline;}
 .cert-cb-item{display:flex;align-items:center;gap:7px;padding:3px 0;cursor:pointer;}
@@ -413,15 +478,28 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
   </div>
 </header>
 
-<nav id="app-nav" style="display:none">
-  <button class="nav-tab active" onclick="showPage('sessioni',this)">Sessioni</button>
-  <button class="nav-tab" onclick="showPage('riepilogo',this)">Riepilogo</button>
-  <button class="nav-tab" onclick="showPage('certificati',this)">Certificati</button>
-    <button class="nav-tab" onclick="showPage('email-riepilogo',this)">Riepilogo Email</button>
-  <button class="nav-tab admin-only" style="display:none" onclick="showPage('config-email',this)">✉️ Config Email</button>
-  <button class="nav-tab admin-only" style="display:none" onclick="showPage('admin',this)">Admin</button>
-</nav>
+<!-- SIDEBAR -->
+<div id="app-sidebar" style="display:none">
+  <div class="sb-logo">🎓 <span>IMAT</span> Corsi</div>
+  <div class="sb-section">Principale</div>
+  <button class="sb-item active" onclick="showPage('sessioni',this)"><span class="sb-icon">📅</span> Sessioni</button>
+  <button class="sb-item" onclick="showPage('riepilogo',this)"><span class="sb-icon">📋</span> Riepilogo</button>
+  <button class="sb-item" onclick="showPage('certificati',this)"><span class="sb-icon">🏅</span> Certificati</button>
+  <button class="sb-item" onclick="showPage('statistiche',this)"><span class="sb-icon">📊</span> Statistiche</button>
+  <div class="sb-section">Email</div>
+  <button class="sb-item" onclick="showPage('email-riepilogo',this)"><span class="sb-icon">📬</span> Riepilogo Email</button>
+  <button class="sb-item admin-only" style="display:none" onclick="showPage('config-email',this)"><span class="sb-icon">⚙️</span> Config Email</button>
+  <div class="sb-section">Gestione</div>
+  <button class="sb-item admin-only" style="display:none" onclick="showPage('admin',this)"><span class="sb-icon">🔧</span> Admin</button>
+  <div class="sb-bottom">
+    <span class="sb-icon">👤</span>
+    <span class="sb-user" id="sb-username"></span>
+    <button class="sb-logout" onclick="doLogout()">Esci</button>
+  </div>
+</div>
 
+<div id="app-layout">
+<div id="app-content">
 <main id="app-main" style="display:none">
 
   <div class="page active" id="page-sessioni">
@@ -485,19 +563,16 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
           <input class="f-inp" id="cert-q" type="text" placeholder="Nome o matricola…" oninput="renderCertificati()" style="width:100%">
         </div>
         <div>
-          <label class="lbl" style="margin-bottom:5px">Corso</label>
-          <select class="f-sel" id="cert-corso" onchange="renderCertificati()" style="width:100%">
-            <option value="">Tutti i corsi</option>
-          </select>
-        </div>
-        <div>
           <label class="lbl" style="margin-bottom:5px">Stato certificato</label>
           <select class="f-sel" id="cert-stato" onchange="renderCertificati()" style="width:100%">
             <option value="">Tutti gli stati</option>
             <option value="scaduto">Scaduti</option>
-            <option value="scade">In scadenza (60gg)</option>
             <option value="valido">Validi</option>
           </select>
+        </div>
+        <div>
+          <label class="lbl" style="margin-bottom:5px;color:#1E6B35">📅 Scadenza entro</label>
+          <input class="f-inp" id="cert-scad-entro" type="date" oninput="renderCertificati()" style="width:100%;border-color:#A8D5AB;background:#F0FAF1">
         </div>
       </div>
       <div class="cert-cb-groups">
@@ -515,6 +590,11 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
         <div>
           <div class="cert-cb-title">Nazionalità <span class="cert-cb-reset" onclick="resetCbGroup('stato')">reset</span></div>
           <div id="cb-stato"></div>
+        </div>
+        <!-- Corso -->
+        <div>
+          <div class="cert-cb-title">Corso <span class="cert-cb-reset" onclick="resetCbGroup('corso')">reset</span></div>
+          <div id="cb-corso"></div>
         </div>
       </div>
       <div class="cert-filtri-footer">
@@ -629,6 +709,37 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
         <button class="btn btn-ghost" onclick="resetCfgEmail()">↺ Ripristina</button>
         <button class="btn btn-primary" onclick="salvaCfgEmail()">💾 Salva configurazione</button>
       </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-statistiche">
+    <div class="page-hdr">
+      <div><div class="page-title">📊 Statistiche</div><div class="page-sub">Analisi corsi e certificati marittimi</div></div>
+      <button class="btn btn-primary" onclick="loadStatistiche()">↻ Aggiorna</button>
+    </div>
+    <!-- Filtri -->
+    <div class="stat-filtri">
+      <select class="stat-sel" id="stat-anno" onchange="loadStatistiche()"></select>
+      <select class="stat-sel" id="stat-compagnia" onchange="loadStatistiche()"><option value="">Tutte le compagnie</option></select>
+      <select class="stat-sel" id="stat-reparto" onchange="loadStatistiche()"><option value="">Tutti i reparti</option></select>
+      <select class="stat-sel" id="stat-corso" onchange="loadStatistiche()"><option value="">Tutti i corsi</option></select>
+    </div>
+    <!-- KPI -->
+    <div class="stat-kpi-grid" id="stat-kpi"></div>
+    <!-- Grafici -->
+    <div class="stat-charts-row">
+      <div class="stat-card"><div class="stat-card-title">📅 Corsi effettuati per mese</div><div class="stat-bar-chart" id="stat-mesi"></div></div>
+      <div class="stat-card"><div class="stat-card-title">📋 Distribuzione per corso</div><div class="stat-leg" id="stat-corsi-leg"></div></div>
+    </div>
+    <!-- Compagnia + Reparto -->
+    <div class="stat-bottom-row">
+      <div class="stat-card"><div class="stat-card-title">🏢 Per compagnia</div><div id="stat-compagnie"></div></div>
+      <div class="stat-card"><div class="stat-card-title">👥 Per reparto</div><div id="stat-reparti"></div></div>
+    </div>
+    <!-- Tabella scadenze mese per mese -->
+    <div class="stat-table-wrap">
+      <div class="stat-table-hdr">⏳ Scadenze prossimi 12 mesi per corso</div>
+      <div class="stat-table" id="stat-scadenze"></div>
     </div>
   </div>
 
@@ -837,6 +948,16 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
           </div>
           <div style="font-size:.75rem;color:var(--muted);margin-bottom:.4rem;margin-top:.8rem">Log:</div>
           <div class="log-wrap" id="imp-log"></div>
+        </div>
+        <!-- Log storico import -->
+        <div class="imp-log-storico">
+          <div class="imp-log-casc-hdr" onclick="toggleImpLogStorico()">
+            <span>📋 Log importazioni</span>
+            <span id="imp-log-storico-chev">▼ mostra</span>
+          </div>
+          <div class="imp-log-casc-body" id="imp-log-storico-body">
+            <div id="imp-log-storico-list" style="font-size:.78rem;color:var(--muted);padding:12px 14px">Caricamento...</div>
+          </div>
         </div>
         <!-- Anteprima tabella -->
         <div id="imp-card-table" style="display:none;margin-top:1rem">
@@ -1058,12 +1179,14 @@ async function initApp(){
   await caricaEmailDest();
   buildNaveSelect();fillCentroSelects();fillCorsoSelects();
   document.getElementById('login-screen').style.display='none';
-  document.getElementById('app-header').style.display='flex';
-  document.getElementById('app-nav').style.display='flex';
+  // header nascosto, usiamo sidebar
+  // document.getElementById('app-header').style.display='flex';
+  document.getElementById('app-sidebar').style.display='flex';
   document.getElementById('app-main').style.display='block';
+  const sbUser=document.getElementById('sb-username');if(sbUser)sbUser.textContent=currentUser||'';
   document.getElementById('hdr-name').textContent=currentUser;
   document.getElementById('hdr-av').textContent=currentUser.split(/[\s']+/).map(w=>w[0]).filter(Boolean).join('').slice(0,2).toUpperCase();
-  document.querySelectorAll('.admin-only').forEach(el=>el.style.display=isAdmin?'':'none');
+  document.querySelectorAll('.admin-only').forEach(el=>el.style.display=isAdmin?(el.classList.contains('sb-item')?'flex':''):'none');
   setConnDot('on');
   await loadSessioni();
 }
@@ -1071,7 +1194,7 @@ function doLogout(){
   currentUser=null;isAdmin=false;_pendingAdminUser=null;
   _sessioni=[];_iscrizioni=[];_certificati=[];
   document.getElementById('login-screen').style.display='flex';
-  ['app-header','app-nav','app-main'].forEach(id=>document.getElementById(id).style.display='none');
+  ['app-header','app-sidebar','app-main'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
   document.getElementById('pin-wrap').style.display='none';
   document.getElementById('pin-input').value='';
   document.getElementById('login-err').style.display='none';
@@ -1282,13 +1405,15 @@ async function esportaPdfCertificati(){
 
     // raccoglie record filtrati correnti
     const q=document.getElementById('cert-q').value.toLowerCase();
-    const corso=document.getElementById('cert-corso').value;
+     // corso filtrato via checkbox
     const statoFiltro=document.getElementById('cert-stato').value;
     const filtered=_certificati.filter(c=>{
       if(q&&!c.cognome_nome?.toLowerCase().includes(q)&&!String(c.matricola_aziendale||'').includes(q))return false;
-      if(corso&&c.nome_corso!==corso)return false;
+      if(_certSelCorso.size&&!_certSelCorso.has(c.nome_corso))return false;
       if(statoFiltro){const s=statoScad(c.data_scadenza);if(statoFiltro==='scaduto'&&s.txt!=='Scaduto')return false;if(statoFiltro==='scade'&&s.txt!=='Scade presto')return false;if(statoFiltro==='valido'&&s.txt!=='Valido')return false;}
-      if(_certSelCompagnia.size&&!_certSelCompagnia.has(c.compagnia))return false;
+      const scadEntro=document.getElementById('cert-scad-entro')?.value;
+    if(scadEntro&&c.data_scadenza&&c.data_scadenza>scadEntro)return false;
+    if(_certSelCompagnia.size&&!_certSelCompagnia.has(c.compagnia))return false;
       if(_certSelReparto.size&&!_certSelReparto.has(c.reparto))return false;
       if(_certSelStato.size&&!_certSelStato.has(c.stato))return false;
       return true;
@@ -1459,17 +1584,18 @@ function fillCentroSelects(){
 function fillCorsoSelects(){
   const sel=document.getElementById('ns-corso');if(!sel)return;
   sel.innerHTML='<option value="">— seleziona —</option>'+_nomiSessioni.map(n=>`<option value="${n.id}">${n.nome}</option>`).join('');
-  const cf=document.getElementById('cert-corso');
-  if(cf)cf.innerHTML='<option value="">Tutti i corsi</option>'+_corsi.map(c=>`<option value="${c.nome}">${c.nome}</option>`).join('');
+  // cert-corso rimosso, ora usa checkbox
+
 }
 
 async function showPage(id,tab){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab,.sb-item').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');tab.classList.add('active');
   if(id==='sessioni')await loadSessioni();
   if(id==='riepilogo')await loadRiepilogo();
   if(id==='certificati')await loadCertificati();
+  if(id==='statistiche')await loadStatistiche();
   if(id==='email-riepilogo')await loadEmailRiepilogo();
   if(id==='config-email')loadCfgEmail();
   if(id==='admin')await loadAdmin();
@@ -1978,7 +2104,7 @@ async function delIscrizione(id){if(!confirm('Eliminare questa iscrizione?'))ret
 async function modificaIscrizione(id){const i=_iscrizioni.find(x=>x.id===id);if(!i)return;const n=prompt('Modifica note:',i.note||'');if(n===null)return;try{await sbPatch('corsi_iscritti',id,{note:n});toast('✅ Note aggiornate');await loadRiepilogo();}catch(e){toast('Errore: '+e.message,'error');}}
 
 // ── CERTIFICATI ── contatori e checkbox ──────────
-let _certSelCompagnia=new Set(),_certSelReparto=new Set(),_certSelStato=new Set();
+let _certSelCompagnia=new Set(),_certSelReparto=new Set(),_certSelStato=new Set(),_certSelCorso=new Set();
 
 async function loadCertificati(){
   document.getElementById('cert-tbody').innerHTML=`<tr class="empty-row"><td colspan="6"><span class="spinner"></span></td></tr>`;
@@ -1996,13 +2122,14 @@ function buildCbGroups(){
   // Per ogni gruppo conta sui record filtrati ESCLUDENDO il filtro del gruppo stesso
   // Questo è il comportamento "faceted search" — come Amazon/Booking
   const q=document.getElementById('cert-q').value.toLowerCase();
-  const corso=document.getElementById('cert-corso').value;
   const statoFiltro=document.getElementById('cert-stato').value;
 
+  const scadEntroBase=document.getElementById('cert-scad-entro')?.value||'';
   function baseFilter(c,escludi){
     if(q&&!c.cognome_nome?.toLowerCase().includes(q)&&!String(c.matricola_aziendale||'').includes(q))return false;
-    if(corso&&c.nome_corso!==corso)return false;
+    if(scadEntroBase&&c.data_scadenza&&c.data_scadenza>scadEntroBase)return false;
     if(statoFiltro){const s=statoScad(c.data_scadenza);if(statoFiltro==='scaduto'&&s.txt!=='Scaduto')return false;if(statoFiltro==='scade'&&s.txt!=='Scade presto')return false;if(statoFiltro==='valido'&&s.txt!=='Valido')return false;}
+    if(escludi!=='corso'&&_certSelCorso.size&&!_certSelCorso.has(c.nome_corso))return false;
     if(escludi!=='compagnia'&&_certSelCompagnia.size&&!_certSelCompagnia.has(c.compagnia))return false;
     if(escludi!=='reparto'&&_certSelReparto.size&&!_certSelReparto.has(c.reparto))return false;
     if(escludi!=='stato'&&_certSelStato.size&&!_certSelStato.has(c.stato))return false;
@@ -2038,15 +2165,22 @@ function buildCbGroups(){
         </span>
       </label>`).join('');
   }
+  // Conta per corso
+  const cntCorso={};
+  _certificati.filter(c=>baseFilter(c,'corso')).forEach(c=>{
+    if(c.nome_corso)cntCorso[c.nome_corso]=(cntCorso[c.nome_corso]||0)+1;
+  });
   buildCb('cb-compagnia',cntCompagnia,_certSelCompagnia,'compagnia');
   buildCb('cb-reparto',cntReparto,_certSelReparto,'reparto');
   buildCb('cb-stato',cntStato,_certSelStato,'stato');
+  buildCb('cb-corso',cntCorso,_certSelCorso,'corso');
 }
 
 function toggleCb(group,val,checked){
   if(group==='compagnia'){checked?_certSelCompagnia.add(val):_certSelCompagnia.delete(val);}
   if(group==='reparto'){checked?_certSelReparto.add(val):_certSelReparto.delete(val);}
   if(group==='stato'){checked?_certSelStato.add(val):_certSelStato.delete(val);}
+  if(group==='corso'){checked?_certSelCorso.add(val):_certSelCorso.delete(val);}
   renderCertificati();
   aggiornaTagFiltri();
 }
@@ -2054,14 +2188,17 @@ function resetCbGroup(group){
   if(group==='compagnia'){_certSelCompagnia.clear();document.querySelectorAll('#cb-compagnia input').forEach(i=>i.checked=false);}
   if(group==='reparto'){_certSelReparto.clear();document.querySelectorAll('#cb-reparto input').forEach(i=>i.checked=false);}
   if(group==='stato'){_certSelStato.clear();document.querySelectorAll('#cb-stato input').forEach(i=>i.checked=false);}
+  if(group==='corso'){_certSelCorso.clear();document.querySelectorAll('#cb-corso input').forEach(i=>i.checked=false);}
   renderCertificati();aggiornaTagFiltri();
 }
 function resetTuttiFiltri(){
+  const se=document.getElementById('cert-scad-entro');if(se)se.value='';
+  const sh=document.getElementById('cert-scad-entro-hint');if(sh)sh.textContent='';
   _certSelCompagnia.clear();_certSelReparto.clear();_certSelStato.clear();
   document.getElementById('cert-q').value='';
-  document.getElementById('cert-corso').value='';
+  _certSelCorso.clear();
   document.getElementById('cert-stato').value='';
-  document.querySelectorAll('#cb-compagnia input,#cb-reparto input,#cb-stato input').forEach(i=>i.checked=false);
+  document.querySelectorAll('#cb-compagnia input,#cb-reparto input,#cb-stato input,#cb-corso input').forEach(i=>i.checked=false);
   renderCertificati();aggiornaTagFiltri();
 }
 function aggiornaTagFiltri(){
@@ -2091,12 +2228,13 @@ function aggiornaTagFiltri(){
 
 function renderCertificati(){
   const q=document.getElementById('cert-q').value.toLowerCase();
-  const corso=document.getElementById('cert-corso').value;
   const statoFiltro=document.getElementById('cert-stato').value;
   let filtered=_certificati.filter(c=>{
     if(q&&!c.cognome_nome?.toLowerCase().includes(q)&&!String(c.matricola_aziendale||'').includes(q))return false;
-    if(corso&&c.nome_corso!==corso)return false;
+    if(_certSelCorso.size&&!_certSelCorso.has(c.nome_corso))return false;
     if(statoFiltro){const s=statoScad(c.data_scadenza);if(statoFiltro==='scaduto'&&s.txt!=='Scaduto')return false;if(statoFiltro==='scade'&&s.txt!=='Scade presto')return false;if(statoFiltro==='valido'&&s.txt!=='Valido')return false;}
+    const scadEntro=document.getElementById('cert-scad-entro')?.value;
+    if(scadEntro&&c.data_scadenza&&c.data_scadenza>scadEntro)return false;
     if(_certSelCompagnia.size&&!_certSelCompagnia.has(c.compagnia))return false;
     if(_certSelReparto.size&&!_certSelReparto.has(c.reparto))return false;
     if(_certSelStato.size&&!_certSelStato.has(c.stato))return false;
@@ -2112,7 +2250,11 @@ function renderCertificati(){
   document.getElementById('cert-kpi-validi').textContent=kpiValidi.toLocaleString('it-IT');
   // descrizione filtri attivi
   const filtriDesc=[];
-  if(document.getElementById('cert-corso').value)filtriDesc.push(document.getElementById('cert-corso').value);
+  const scadEntroVal=document.getElementById('cert-scad-entro')?.value;
+  const hintEl=document.getElementById('cert-scad-entro-hint');
+  if(hintEl)hintEl.textContent=scadEntroVal?'Mostra certificati che scadono entro il '+scadEntroVal.split('-').reverse().join('/'):'';
+  if(scadEntroVal)filtriDesc.push('Scadenza entro '+scadEntroVal.split('-').reverse().join('/'));
+  [..._certSelCorso].forEach(v=>filtriDesc.push(v));
   if(document.getElementById('cert-stato').value){const m={'scaduto':'Scaduti','scade':'In scadenza','valido':'Validi'};filtriDesc.push(m[document.getElementById('cert-stato').value]||'');}
   [..._certSelCompagnia,..._certSelReparto,..._certSelStato].forEach(v=>filtriDesc.push(v));
   const fEl=document.getElementById('cert-kpi-filtri');
@@ -2152,6 +2294,36 @@ document.getElementById('csv-file').addEventListener('change',function(){
   };
   reader.readAsText(file);
 });
+function toggleImpLogStorico(){
+  const body=document.getElementById('imp-log-storico-body');
+  const chev=document.getElementById('imp-log-storico-chev');
+  if(!body)return;
+  const open=body.style.display!=='none';
+  body.style.display=open?'none':'block';
+  chev.textContent=open?'▼ mostra':'▲ nascondi';
+  if(!open)loadImpLogStorico();
+}
+async function loadImpLogStorico(){
+  const list=document.getElementById('imp-log-storico-list');
+  if(!list)return;
+  try{
+    const rows=await sbGet('corsi_import_log','order=created_at.desc&limit=20');
+    if(!rows.length){list.innerHTML='<div style="padding:10px 0;color:var(--muted);font-style:italic">Nessun import registrato</div>';return;}
+    const fmt=ts=>{const d=new Date(ts);return d.toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric'})+' · '+d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});};
+    list.innerHTML=rows.map(r=>{
+      const corsi=Array.isArray(r.corsi)?r.corsi:[];
+      const tags=corsi.map(c=>`<span class="imp-log-tag">${c}</span>`).join('');
+      return`<div class="imp-log-row">
+        <div class="imp-log-icon">📥</div>
+        <div class="imp-log-main">
+          <div class="imp-log-ts">${fmt(r.created_at)}${r.utente?' — da <strong>'+r.utente+'</strong>':''}</div>
+          <div class="imp-log-cnt">${(r.n_record||0).toLocaleString('it-IT')} record importati</div>
+          ${tags?`<div class="imp-log-corsi">${tags}</div>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  }catch(e){list.innerHTML='<div style="padding:10px 0;color:var(--muted)">Errore caricamento log</div>';}
+}
 async function importaCsv(){
   if(!_csvData.length)return;
   const btn=document.getElementById('btn-importa-csv');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Importazione…';
@@ -2164,6 +2336,11 @@ async function importaCsv(){
       await fetch(`${SB_URL}/rest/v1/corsi_certificati?on_conflict=matricola_aziendale,nome_corso`,{method:'POST',headers:{...HDR,'Prefer':'resolution=merge-duplicates,return=representation'},body:JSON.stringify({matricola_aziendale:row.matricola_aziendale,nome_corso:row.nome_corso,cognome_nome:dipMap[row.matricola_aziendale]||row.cognome_nome||row.matricola_aziendale,data_rilascio:row.data_rilascio||null,data_scadenza:row.data_scadenza||null})});ok++;
     }catch(e){err++;}
   }
+  // Salva log nel DB
+  const corsiImportati=[...new Set(_csvData.map(r=>r.nome_corso).filter(Boolean))];
+  try{
+    await fetch(`${SB_URL}/rest/v1/corsi_import_log`,{method:'POST',headers:{...HDR},body:JSON.stringify({utente:currentUser||'',n_record:ok,corsi:corsiImportati})});
+  }catch(e){}
   btn.disabled=false;btn.textContent='⬆ Importa';chiudiCsv();
   toast(err===0?`✅ ${ok} certificati importati`:`⚠️ ${ok} ok, ${err} errori`,err>0?'error':'');
   await loadCertificati();
@@ -2606,13 +2783,15 @@ async function esportaPdfCertificati(){
     const pw=doc.internal.pageSize.getWidth();
     const ph=doc.internal.pageSize.getHeight();
     const q=document.getElementById('cert-q').value.toLowerCase();
-    const corso=document.getElementById('cert-corso').value;
+     // corso filtrato via checkbox
     const statoFiltro=document.getElementById('cert-stato').value;
     const filtered=_certificati.filter(c=>{
       if(q&&!c.cognome_nome?.toLowerCase().includes(q)&&!String(c.matricola_aziendale||'').includes(q))return false;
-      if(corso&&c.nome_corso!==corso)return false;
+      if(_certSelCorso.size&&!_certSelCorso.has(c.nome_corso))return false;
       if(statoFiltro){const s=statoScad(c.data_scadenza);if(statoFiltro==='scaduto'&&s.txt!=='Scaduto')return false;if(statoFiltro==='scade'&&s.txt!=='Scade presto')return false;if(statoFiltro==='valido'&&s.txt!=='Valido')return false;}
-      if(_certSelCompagnia.size&&!_certSelCompagnia.has(c.compagnia))return false;
+      const scadEntro=document.getElementById('cert-scad-entro')?.value;
+    if(scadEntro&&c.data_scadenza&&c.data_scadenza>scadEntro)return false;
+    if(_certSelCompagnia.size&&!_certSelCompagnia.has(c.compagnia))return false;
       if(_certSelReparto.size&&!_certSelReparto.has(c.reparto))return false;
       if(_certSelStato.size&&!_certSelStato.has(c.stato))return false;
       return true;
@@ -2702,6 +2881,93 @@ async function esportaPdfCertificati(){
 
 buildLoginGrid();
 
+// ========== STATISTICHE ==========
+const STAT_COLORS=['#8B5C2A','#C0561A','#1A5FA8','#2E7D32','#B8860B','#7B3FA0','#1A7A7A','#A03030','#4A7A1A','#5A5A8B'];
+async function loadStatistiche(){
+  try{
+    // Carica certificati se non già presenti
+    if(!_certificati.length)await loadCertificati();
+    // Popola filtri
+    const annoSel=document.getElementById('stat-anno');
+    const anni=[...new Set(_certificati.map(c=>c.data_scadenza?c.data_scadenza.slice(0,4):null).filter(Boolean))].sort().reverse();
+    if(annoSel&&!annoSel.options.length){anni.forEach(a=>{const o=document.createElement('option');o.value=a;o.textContent=a;annoSel.appendChild(o);});}
+    const compSel=document.getElementById('stat-compagnia');
+    const reps=document.getElementById('stat-reparto');
+    const corsSel=document.getElementById('stat-corso');
+    if(compSel&&compSel.options.length<=1){[...new Set(_certificati.map(c=>c.compagnia).filter(Boolean))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;compSel.appendChild(o);});}
+    if(reps&&reps.options.length<=1){[...new Set(_certificati.map(c=>c.reparto).filter(Boolean))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;reps.appendChild(o);});}
+    if(corsSel&&corsSel.options.length<=1){[...new Set(_certificati.map(c=>c.nome_corso).filter(Boolean))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;corsSel.appendChild(o);});}
+    // Filtri attivi
+    const anno=annoSel?.value||'';
+    const comp=compSel?.value||'';
+    const rep=reps?.value||'';
+    const cors=corsSel?.value||'';
+    let data=_certificati;
+    if(anno)data=data.filter(c=>c.data_scadenza&&c.data_scadenza.startsWith(anno));
+    if(comp)data=data.filter(c=>c.compagnia===comp);
+    if(rep)data=data.filter(c=>c.reparto===rep);
+    if(cors)data=data.filter(c=>c.nome_corso===cors);
+    const oggi=new Date().toISOString().slice(0,10);
+    const tra60=new Date(Date.now()+60*86400000).toISOString().slice(0,10);
+    const validi=data.filter(c=>c.data_scadenza&&c.data_scadenza>=oggi).length;
+    const scaduti=data.filter(c=>c.data_scadenza&&c.data_scadenza<oggi).length;
+    const inScad=data.filter(c=>c.data_scadenza&&c.data_scadenza>=oggi&&c.data_scadenza<=tra60).length;
+    // KPI
+    document.getElementById('stat-kpi').innerHTML=
+      `<div class="stat-kpi green"><div class="stat-kpi-n">${validi.toLocaleString('it-IT')}</div><div class="stat-kpi-l">Certificati validi</div></div>`+
+      `<div class="stat-kpi amber"><div class="stat-kpi-n">${inScad.toLocaleString('it-IT')}</div><div class="stat-kpi-l">In scadenza (60gg)</div></div>`+
+      `<div class="stat-kpi red"><div class="stat-kpi-n">${scaduti.toLocaleString('it-IT')}</div><div class="stat-kpi-l">Scaduti</div></div>`+
+      `<div class="stat-kpi blue"><div class="stat-kpi-n">${data.length.toLocaleString('it-IT')}</div><div class="stat-kpi-l">Totale certificati</div></div>`;
+    // Grafico mesi (basato su data_scadenza anno selezionato)
+    const meseLabels=['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+    const annoGraf=anno||new Date().getFullYear().toString();
+    const perMese=Array(12).fill(0);
+    data.forEach(c=>{if(c.data_scadenza&&c.data_scadenza.startsWith(annoGraf)){const m=parseInt(c.data_scadenza.slice(5,7))-1;if(m>=0&&m<12)perMese[m]++;}});
+    const maxM=Math.max(...perMese,1);
+    const meseCurr=new Date().getMonth();
+    const annoCurr=new Date().getFullYear().toString();
+    document.getElementById('stat-mesi').innerHTML=perMese.map((v,i)=>{
+      const futuro=annoGraf>annoCurr||(annoGraf===annoCurr&&i>meseCurr);
+      const h=Math.round((v/maxM)*90)||4;
+      const col=futuro?'var(--surface2)':(i===meseCurr?'#C0561A':'#8B5C2A');
+      const lbl=v>0?v:'—';
+      const lblCol=v>0?'var(--text)':'var(--muted)';
+      return`<div class="stat-bar-wrap"><div class="stat-bar-val" style="color:${lblCol}">${lbl}</div><div class="stat-bar" style="height:${h}px;background:${col}"></div><div class="stat-bar-lbl">${meseLabels[i]}</div></div>`;
+    }).join('');
+    // Distribuzione per corso
+    const perCorso={};
+    data.forEach(c=>{if(c.nome_corso)perCorso[c.nome_corso]=(perCorso[c.nome_corso]||0)+1;});
+    const corsiOrd=Object.entries(perCorso).sort((a,b)=>b[1]-a[1]);
+    document.getElementById('stat-corsi-leg').innerHTML=corsiOrd.map(([n,v],i)=>{
+      const pct=data.length?Math.round(v/data.length*100):0;
+      return`<div class="stat-leg-item"><span class="stat-leg-dot" style="background:${STAT_COLORS[i%STAT_COLORS.length]}"></span><span>${n}</span><span class="stat-leg-val">${v.toLocaleString('it-IT')}</span><span class="stat-leg-pct">${pct}%</span></div>`;
+    }).join('');
+    // Per compagnia
+    const perComp={};data.forEach(c=>{if(c.compagnia)perComp[c.compagnia]=(perComp[c.compagnia]||0)+1;});
+    const maxComp=Math.max(...Object.values(perComp),1);
+    document.getElementById('stat-compagnie').innerHTML=Object.entries(perComp).sort((a,b)=>b[1]-a[1]).map(([n,v],i)=>
+      `<div class="stat-mini-bar"><span style="width:80px;flex-shrink:0">${n}</span><div class="stat-mini-track"><div class="stat-mini-fill" style="width:${Math.round(v/maxComp*100)}%;background:${STAT_COLORS[i%STAT_COLORS.length]}"></div></div><span class="stat-mini-val">${v.toLocaleString('it-IT')}</span></div>`
+    ).join('');
+    // Per reparto
+    const perRep={};data.forEach(c=>{if(c.reparto)perRep[c.reparto]=(perRep[c.reparto]||0)+1;});
+    const maxRep=Math.max(...Object.values(perRep),1);
+    document.getElementById('stat-reparti').innerHTML=Object.entries(perRep).sort((a,b)=>b[1]-a[1]).map(([n,v],i)=>
+      `<div class="stat-mini-bar"><span style="width:80px;flex-shrink:0">${n}</span><div class="stat-mini-track"><div class="stat-mini-fill" style="width:${Math.round(v/maxRep*100)}%;background:${STAT_COLORS[i%STAT_COLORS.length]}"></div></div><span class="stat-mini-val">${v.toLocaleString('it-IT')}</span></div>`
+    ).join('');
+    // Tabella scadenze prossimi 12 mesi per corso
+    const corsiUnici=[...new Set(data.map(c=>c.nome_corso).filter(Boolean))].sort();
+    const mesi=[];
+    for(let i=0;i<12;i++){const d=new Date();d.setMonth(d.getMonth()+i);mesi.push({y:d.getFullYear(),m:d.getMonth(),key:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`});}
+    const tHead=`<thead><tr><th>Mese</th>${corsiUnici.map(c=>`<th>${c}</th>`).join('')}<th>Totale</th></tr></thead>`;
+    const tBody=`<tbody>${mesi.map(({y,m,key})=>{
+      const counts=corsiUnici.map(c=>data.filter(x=>x.nome_corso===c&&x.data_scadenza&&x.data_scadenza.startsWith(key)).length);
+      const tot=counts.reduce((a,b)=>a+b,0);
+      const meseStr=new Date(y,m,1).toLocaleDateString('it-IT',{month:'short',year:'numeric'});
+      return`<tr><td><strong>${meseStr}</strong></td>${counts.map(v=>`<td>${v||'—'}</td>`).join('')}<td><strong>${tot||'—'}</strong></td></tr>`;
+    }).join('')}</tbody>`;
+    document.getElementById('stat-scadenze').innerHTML=`<table>${tHead}${tBody}</table>`;
+  }catch(e){console.error(e);toast('Errore statistiche: '+e.message,'error');}
+}
 // ========== RIEPILOGO EMAIL ==========
 var _erMarFilter='da-inviare',_erCenFilter='da-inviare',_erMarOrd='data',_erCenOrd='data';
 function erSetOrd(target,ord){
@@ -2840,5 +3106,6 @@ function renderErCentri(){
     </div>
   </div>
 </div>
+</main></div></div>
 </body>
 </html>
