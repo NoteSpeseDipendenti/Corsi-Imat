@@ -91,6 +91,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 .stat-kpi-n{font-size:1.4rem;font-weight:800;color:var(--text);}
 .stat-kpi-l{font-size:.7rem;color:var(--muted);margin-top:2px;}
 .stat-charts-row{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:1.2rem;}
+.stat-tre-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:1.2rem;}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;}
 .stat-card-title{font-size:.8rem;font-weight:700;margin-bottom:12px;color:var(--text);}
 .stat-bar-chart{display:flex;align-items:flex-end;gap:5px;height:110px;padding-bottom:22px;position:relative;}
@@ -111,10 +112,15 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 .stat-mini-val{font-weight:700;font-size:.72rem;min-width:40px;text-align:right;}
 .stat-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1.2rem;}
 .stat-table-hdr{padding:10px 14px;font-size:.8rem;font-weight:700;border-bottom:1px solid var(--border);}
-.stat-table table{width:100%;border-collapse:collapse;font-size:.75rem;}
-.stat-table th{text-align:left;padding:6px 10px;font-size:.67rem;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);background:var(--surface2);}
-.stat-table td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text);}
+.stat-table table{width:100%;border-collapse:collapse;font-size:.75rem;table-layout:fixed;}
+.stat-table th{text-align:center;padding:6px 4px;font-size:.62rem;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);background:var(--surface2);}
+.stat-table th.st-corso{text-align:left;padding-left:10px;width:160px;}
+.stat-table td{padding:7px 4px;border-bottom:1px solid var(--border);color:var(--text);text-align:center;}
+.stat-table td.st-corso{text-align:left;padding-left:10px;font-weight:600;}
 .stat-table tr:last-child td{border-bottom:none;}
+.stat-scad-num{background:none;border:none;color:var(--accent);font-weight:700;font-size:.75rem;cursor:pointer;padding:0;}
+.stat-scad-num:hover{text-decoration:underline;}
+.stat-scad-zero{color:var(--muted);}
 /* SIDEBAR */
 #app-layout{display:flex;min-height:100vh;}
 #app-sidebar{width:210px;background:#2C2A25;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;}
@@ -247,20 +253,21 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
 .stat-card-muted .stat-card-num{color:var(--muted);}
 .stat-card-muted .stat-card-lbl{color:var(--muted);}
 .riepilogo-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);}
-.riepilogo-thead{display:grid;grid-template-columns:240px 1fr 110px 150px 100px 110px;gap:6px;padding:7px 14px;background:var(--surface2);border-bottom:1px solid var(--border);}
+.riepilogo-thead{display:grid;grid-template-columns:240px 1fr 150px 100px 110px;gap:6px;padding:7px 14px;background:var(--surface2);border-bottom:1px solid var(--border);}
 .riepilogo-th{font-size:.63rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
 .riepilogo-item{border-bottom:1px solid var(--border);}
 .riepilogo-item:last-child{border-bottom:none;}
 .riepilogo-item.email-inviata{background:#f0faf3;border-left:3px solid #52b788;}
-.riepilogo-row{display:grid;grid-template-columns:240px 1fr 110px 150px 100px 110px;gap:6px;padding:9px 14px;align-items:center;transition:background .12s;}
+.riepilogo-row{display:grid;grid-template-columns:240px 1fr 150px 100px 110px;gap:6px;padding:9px 14px;align-items:center;transition:background .12s;}
 .riepilogo-row:hover{background:var(--accent-l);}
 .rc-nome{font-weight:800;font-size:.84rem;white-space:nowrap;}
 .rc-sub{font-size:.71rem;color:var(--muted);margin-top:2px;white-space:nowrap;}
 .rc-cell{font-size:.81rem;white-space:nowrap;}
+.rc-cell-corso{font-size:.81rem;white-space:normal;word-break:break-word;max-width:160px;}
 .rc-actions{display:flex;gap:3px;align-items:center;flex-wrap:nowrap;width:100px;flex-shrink:0}
 .rc-ts{font-size:.6rem;color:#1a5c2e;background:#eaf4ee;border:1px solid #a8dbb8;border-radius:5px;padding:2px 5px;white-space:nowrap;text-align:right;width:110px;display:flex;align-items:center;justify-content:flex-end}
 .rc-ts-empty{width:110px}
-@media(max-width:760px){.riepilogo-row,.riepilogo-thead{grid-template-columns:1fr 1fr 1fr 44px;}}
+@media(max-width:760px){.riepilogo-row,.riepilogo-thead{grid-template-columns:1fr 1fr 44px 110px;}}
 .progress-bar{height:4px;background:var(--surface2);border-radius:2px;margin-top:4px;}
 .progress-fill{height:4px;border-radius:2px;}
 .modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(44,36,22,.45);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s;padding:1rem;}
@@ -455,7 +462,7 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
       <button class="btn btn-primary btn-full" onclick="doLogin()">Accedi</button>
     </div>
     <div id="login-err"></div>
-    <div style="margin-top:1.8rem;font-size:.68rem;color:var(--muted)">Gestione Corsi IMAT — v23 · 2026</div>
+    <div style="margin-top:1.8rem;font-size:.68rem;color:var(--muted)">Gestione Corsi IMAT — v31c1 · 06/06/2026</div>
     <div style="margin-top:.4rem;font-size:.62rem;color:var(--muted);opacity:.7">© 2025 S.M.A.R.T Solutions</div>
   </div>
 </div>
@@ -518,7 +525,7 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
         <tbody id="sess-tbody"><tr class="empty-row"><td colspan="5"><span class="spinner"></span> Caricamento…</td></tr></tbody>
       </table>
     </div>
-    <div style="text-align:center;margin-top:2.5rem;font-size:.72rem;color:var(--muted)">Gestione Corsi IMAT — v1 · 2025 · © S.M.A.R.T Solutions</div>
+    <div style="text-align:center;margin-top:2.5rem;font-size:.72rem;color:var(--muted)">Gestione Corsi IMAT — v31c1 · 06/06/2026 · © S.M.A.R.T Solutions</div>
   </div>
 
   <div class="page" id="page-riepilogo">
@@ -554,6 +561,31 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
     <div class="page-hdr">
       <div><div class="page-title">Certificati Marittimi</div><div class="page-sub">Situazione certificati e scadenze</div></div>
       <button class="btn btn-primary" onclick="loadCertificati()" style="display:flex;align-items:center;gap:6px">&#8635; Aggiorna</button>
+    </div>
+    <!-- TABELLA SCADENZE TOP -->
+    <div class="stat-table-wrap" id="cert-scad-wrap" style="margin-bottom:1.2rem">
+      <div class="stat-table-hdr">⏳ Scadenze prossimi 12 mesi per corso <span style="font-size:.72rem;font-weight:400;color:var(--muted)">(solo italiani)</span></div>
+      <div class="stat-table" id="cert-scad-table"></div>
+    </div>
+    <!-- Modal scadenze certificati -->
+    <div id="cert-scad-overlay" style="display:none;position:fixed;inset:0;background:rgba(44,36,22,.45);z-index:600;align-items:center;justify-content:center;" onclick="if(event.target===this)chiudiCertScad()">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.2rem;width:560px;max-height:480px;display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:.82rem;font-weight:700;" id="cert-scad-title">—</div>
+          <button onclick="chiudiCertScad()" style="background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted)">✕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1.2fr 1fr;gap:8px;padding:4px 8px;font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);">
+          <span>Nome</span><span>Matricola</span><span>Qualifica</span><span>Scadenza</span>
+        </div>
+        <div id="cert-scad-list" style="overflow-y:auto;display:flex;flex-direction:column;gap:3px;"></div>
+        <button onclick="stampaCertScadPDF()" style="display:flex;align-items:center;justify-content:center;gap:5px;padding:7px;border-radius:8px;background:var(--accent);color:#fff;font-size:.75rem;font-weight:700;cursor:pointer;border:none;width:100%">🖨 Stampa PDF</button>
+      </div>
+    </div>
+    <!-- SEPARATORE -->
+    <div style="display:flex;align-items:center;gap:8px;margin:1rem 0 .8rem;">
+      <div style="flex:1;height:.5px;background:var(--border)"></div>
+      <span style="font-size:.68rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;white-space:nowrap">Filtri lista certificati</span>
+      <div style="flex:1;height:.5px;background:var(--border)"></div>
     </div>
     <!-- PANNELLO FILTRI -->
     <div class="cert-filtri-panel">
@@ -717,29 +749,45 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
       <div><div class="page-title">📊 Statistiche</div><div class="page-sub">Analisi corsi e certificati marittimi</div></div>
       <button class="btn btn-primary" onclick="loadStatistiche()">↻ Aggiorna</button>
     </div>
-    <!-- Filtri -->
-    <div class="stat-filtri">
-      <select class="stat-sel" id="stat-anno" onchange="loadStatistiche()"></select>
-      <select class="stat-sel" id="stat-compagnia" onchange="loadStatistiche()"><option value="">Tutte le compagnie</option></select>
-      <select class="stat-sel" id="stat-reparto" onchange="loadStatistiche()"><option value="">Tutti i reparti</option></select>
-      <select class="stat-sel" id="stat-corso" onchange="loadStatistiche()"><option value="">Tutti i corsi</option></select>
+    <!-- Filtro anno grafico -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;flex-wrap:wrap;">
+      <select class="stat-sel" id="stat-anno" onchange="renderStatGrafico()"></select>
+      <div style="font-size:.72rem;color:var(--muted);background:var(--surface2);border-radius:8px;padding:6px 10px;">ℹ️ Il filtro Anno agisce solo sul grafico (dati da data rilascio certificati / iscrizioni future).</div>
     </div>
-    <!-- KPI -->
-    <div class="stat-kpi-grid" id="stat-kpi"></div>
-    <!-- Grafici -->
-    <div class="stat-charts-row">
-      <div class="stat-card"><div class="stat-card-title">📅 Corsi effettuati per mese</div><div class="stat-bar-chart" id="stat-mesi"></div></div>
+    <!-- Grafico full width -->
+    <div class="stat-card" style="margin-bottom:1.2rem"><div class="stat-card-title" id="stat-grafico-title">📅 Corsi effettuati per mese</div><div class="stat-bar-chart" id="stat-mesi"></div></div>
+    <!-- Filtri blocchi -->
+    <div class="stat-card" style="margin-bottom:.5rem;padding:12px 16px;">
+      <div style="font-size:.78rem;font-weight:600;color:var(--text);margin-bottom:10px;">📋 Filtri certificati <span style="font-weight:400;color:var(--muted);font-size:.72rem;">— dati per data di scadenza</span></div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;">
+        <div>
+          <div style="font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Anno</div>
+          <select class="stat-sel" id="stat-blocchi-anno" onchange="renderStatBlocchi()"><option value="">Tutti</option></select>
+        </div>
+        <div>
+          <div style="font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Compagnia</div>
+          <div id="stat-cb-comp" style="display:flex;flex-direction:column;gap:4px;"></div>
+        </div>
+        <div>
+          <div style="font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Reparto</div>
+          <div id="stat-cb-rep" style="display:flex;flex-direction:column;gap:4px;"></div>
+        </div>
+        <div>
+          <div style="font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Nazionalità</div>
+          <div id="stat-cb-stato" style="display:flex;flex-direction:column;gap:4px;"></div>
+        </div>
+        <div>
+          <div style="font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Corso</div>
+          <div id="stat-cb-corso" style="display:flex;flex-direction:column;gap:4px;"></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:1rem;"></div>
+    <!-- 3 blocchi uguali -->
+    <div class="stat-tre-row">
       <div class="stat-card"><div class="stat-card-title">📋 Distribuzione per corso</div><div class="stat-leg" id="stat-corsi-leg"></div></div>
-    </div>
-    <!-- Compagnia + Reparto -->
-    <div class="stat-bottom-row">
       <div class="stat-card"><div class="stat-card-title">🏢 Per compagnia</div><div id="stat-compagnie"></div></div>
       <div class="stat-card"><div class="stat-card-title">👥 Per reparto</div><div id="stat-reparti"></div></div>
-    </div>
-    <!-- Tabella scadenze mese per mese -->
-    <div class="stat-table-wrap">
-      <div class="stat-table-hdr">⏳ Scadenze prossimi 12 mesi per corso</div>
-      <div class="stat-table" id="stat-scadenze"></div>
     </div>
   </div>
 
@@ -840,35 +888,49 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
     <div class="adm-panel" id="adm-panel-email">
       <div class="adm-card">
         <div class="adm-card-title">📧 Gestione Destinatari Email</div>
-        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.2rem">Separare più indirizzi con <strong>;</strong></p>
-        <div class="form-group" style="margin-bottom:1rem">
-          <label style="font-weight:700;color:var(--accent)">A: — Email ai marittimi</label>
-          <div style="display:flex;gap:8px;margin-top:4px">
-            <input class="form-input" type="text" id="email-mar-to" placeholder="es. corsi@tirrenia.it" style="flex:1">
-            <button class="btn btn-primary" onclick="salvaEmailDest('mar_to')" style="height:40px;padding:0 16px">💾 Salva</button>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.2rem">Seleziona un utente e imposta i suoi indirizzi email. Separare più indirizzi con <strong>;</strong></p>
+        <!-- Selezione utente -->
+        <div class="form-group" style="margin-bottom:1.4rem">
+          <label style="font-weight:700;color:var(--text)">👤 Utente</label>
+          <div style="display:flex;gap:8px;margin-top:4px;align-items:center">
+            <select class="form-input" id="email-utente-sel" onchange="caricaEmailUtente()" style="flex:1;max-width:280px">
+              <option value="">— Seleziona utente —</option>
+            </select>
+            <span id="email-utente-stato" style="font-size:.75rem;color:var(--muted)"></span>
           </div>
         </div>
-        <div class="form-group" style="margin-bottom:1.5rem">
-          <label style="font-weight:700;color:var(--amm)">CC: — Email ai marittimi</label>
-          <div style="display:flex;gap:8px;margin-top:4px">
-            <input class="form-input" type="text" id="email-mar-cc" style="flex:1;font-family:'DM Mono',monospace;font-size:.82rem" placeholder="es. armamento@tirrenia.it">
-            <button class="btn btn-primary" onclick="salvaEmailDest('mar_cc')" style="height:40px;padding:0 16px">💾 Salva</button>
+        <!-- Campi email (nascosti finché non si seleziona utente) -->
+        <div id="email-utente-form" style="display:none">
+          <div class="form-group" style="margin-bottom:1rem">
+            <label style="font-weight:700;color:var(--accent)">A: — Email ai marittimi</label>
+            <div style="display:flex;gap:8px;margin-top:4px">
+              <input class="form-input" type="text" id="eu-mar-to" placeholder="es. corsi@tirrenia.it" style="flex:1">
+              <button class="btn btn-primary" onclick="salvaEmailUtente()" style="height:40px;padding:0 16px">💾 Salva tutto</button>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:1.5rem">
+            <label style="font-weight:700;color:var(--amm)">CC: — Email ai marittimi</label>
+            <div style="margin-top:4px">
+              <input class="form-input" type="text" id="eu-mar-cc" style="width:100%;font-family:'DM Mono',monospace;font-size:.82rem" placeholder="es. armamento@tirrenia.it">
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="form-group" style="margin-bottom:1rem;margin-top:1rem">
+            <label style="font-weight:700;color:var(--accent)">A: — Email al centro IMAT</label>
+            <div style="margin-top:4px">
+              <input class="form-input" type="text" id="eu-imat-to" placeholder="es. info@imat.it" style="width:100%">
+            </div>
+          </div>
+          <div class="form-group">
+            <label style="font-weight:700;color:var(--amm)">CC: — Email al centro IMAT</label>
+            <div style="margin-top:4px">
+              <input class="form-input" type="text" id="eu-imat-cc" style="width:100%;font-family:'DM Mono',monospace;font-size:.82rem" placeholder="es. responsabile@tirrenia.it">
+            </div>
           </div>
         </div>
-        <div class="divider"></div>
-        <div class="form-group" style="margin-bottom:1rem">
-          <label style="font-weight:700;color:var(--accent)">A: — Email al centro IMAT</label>
-          <div style="display:flex;gap:8px;margin-top:4px">
-            <input class="form-input" type="text" id="email-imat-to" placeholder="es. info@imat.it" style="flex:1">
-            <button class="btn btn-primary" onclick="salvaEmailDest('imat_to')" style="height:40px;padding:0 16px">💾 Salva</button>
-          </div>
-        </div>
-        <div class="form-group">
-          <label style="font-weight:700;color:var(--amm)">CC: — Email al centro IMAT</label>
-          <div style="display:flex;gap:8px;margin-top:4px">
-            <input class="form-input" type="text" id="email-imat-cc" style="flex:1;font-family:'DM Mono',monospace;font-size:.82rem" placeholder="es. responsabile@tirrenia.it">
-            <button class="btn btn-primary" onclick="salvaEmailDest('imat_cc')" style="height:40px;padding:0 16px">💾 Salva</button>
-          </div>
+        <!-- Placeholder se nessun utente selezionato -->
+        <div id="email-utente-placeholder" style="padding:1.5rem;text-align:center;color:var(--muted);font-size:.82rem;border:1px dashed var(--border);border-radius:10px">
+          Seleziona un utente per gestire i suoi indirizzi email
         </div>
       </div>
     </div>
@@ -1126,6 +1188,7 @@ const SB2_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJl
 const HDR2={'apikey':SB2_KEY,'Authorization':'Bearer '+SB2_KEY,'Content-Type':'application/json'};
 async function sbGet2(t,p=''){const r=await fetch(`${SB2_URL}/rest/v1/${t}?${p}`,{headers:HDR2});if(!r.ok)throw new Error(await r.text());return r.json();}
 let currentUser=null,isAdmin=false,_pendingAdminUser=null;
+let _currentUserData=null;
 let _sessioni=[],_iscrizioni=[],_certificati=[],_corsi=[],_centri=[],_navi=[];
 let _selSessId=null,_selSessione=null,_selMarittimo=null,_selMatricola=null;
 let _emailSessione=null,_csvData=[];
@@ -1177,6 +1240,11 @@ async function initApp(){
     sbGet('Navi','order=Societa,Nome_Nave').catch(()=>[])
   ]);
   await caricaEmailDest();
+  // Carica dati utente loggato per email personalizzate
+  try{
+    const rows=await sbGet('corsi_utenti',`nome=eq.${encodeURIComponent(currentUser)}&limit=1`);
+    _currentUserData=rows.length?rows[0]:null;
+  }catch(e){_currentUserData=null;}
   buildNaveSelect();fillCentroSelects();fillCorsoSelects();
   document.getElementById('login-screen').style.display='none';
   // header nascosto, usiamo sidebar
@@ -1191,7 +1259,7 @@ async function initApp(){
   await loadSessioni();
 }
 function doLogout(){
-  currentUser=null;isAdmin=false;_pendingAdminUser=null;
+  currentUser=null;isAdmin=false;_pendingAdminUser=null;_currentUserData=null;
   _sessioni=[];_iscrizioni=[];_certificati=[];
   document.getElementById('login-screen').style.display='flex';
   ['app-header','app-sidebar','app-main'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
@@ -1622,7 +1690,7 @@ let _filtroSessione=null;
 let _plFiltro=null;
 function renderPillsFiltro(){
   const cont=document.getElementById('sess-pills');if(!cont)return;
-  const nomi=[...new Set(_sessioni.map(s=>s.nota||s.corsi_tipologie?.nome||'—'))].sort();
+  const nomi=[...new Set(_sessioni.map(s=>s.nota||s.corsi_tipologie?.nome||'—'))].sort((a,b)=>a.localeCompare(b,'it',{sensitivity:'base'}));
   const totale=_sessioni.length;
   let html=`<div class="sess-filter-pill${!_filtroSessione&&!_plFiltro?' active':''}" onclick="filtraSessione(null);_plFiltro=null;renderPlPanel();">Tutte <span class="pill-cnt">${totale}</span></div>`;
   html+=nomi.map(n=>{
@@ -1911,7 +1979,7 @@ async function loadRiepilogo(){
       const em={};const rep={};dips.forEach(d=>{em[d.Matricola_Aziendale]=d.Email||null;rep[d.Matricola_Aziendale]=d.reparto||null;});
       _iscrizioni=_iscrizioni.map(i=>({...i,email_marittimo:em[i.matricola_aziendale]||null,reparto_dip:rep[i.matricola_aziendale]||null}));
     }
-    fillOpFilter();renderPillsRiepilogo();aggiornaKpi();setConnDot('on');
+    fillOpFilter();renderPillsRiepilogo();aggiornaKpi();renderRiepilogoSess();setConnDot('on');
   }catch(e){setConnDot('off');document.getElementById('riepilogo-pills').innerHTML=`<div class="empty">⚠️ ${e.message}</div>`;}
 }
 function fillOpFilter(){
@@ -1963,15 +2031,6 @@ function onRiepilogoFilter(){
 function renderPillsRiepilogo(){
   const cont=document.getElementById('riepilogo-pills');
   const nomi=[...new Set(_sessioni.map(s=>s.nota||s.corsi_tipologie?.nome||'—'))].sort();
-  const oggi=new Date();oggi.setHours(0,0,0,0);
-  const prossima=_sessioni.filter(s=>{
-    const d=new Date(s.data_inizio+'T00:00:00');
-    const cnt=_iscrizioni.filter(i=>i.sessione_id===s.id).length;
-    return d>=oggi&&!isPassata(s.data_fine||s.data_inizio,s.forza_attiva)&&Math.max(0,(s.posti_totali||0)-cnt)>0;
-  }).sort((a,b)=>a.data_inizio.localeCompare(b.data_inizio))[0];
-  const bannerHtml=prossima?`<div style="background:var(--orange-l);border:1.5px solid #fac775;border-radius:10px;padding:.6rem 1rem;margin-bottom:.75rem;font-size:.8rem;display:flex;align-items:center;gap:8px;width:100%">
-    <span>📅</span><span>Prossima sessione con posti liberi: <strong>${prossima.nota||prossima.corsi_tipologie?.nome||'—'}</strong> — ${fmtData(prossima.data_inizio)} — <span style="color:var(--green);font-weight:700">${Math.max(0,(prossima.posti_totali||0)-_iscrizioni.filter(i=>i.sessione_id===prossima.id).length)} posti liberi</span></span>
-  </div>`:'';
   const cardHtml=`<div class="riepilogo-grid">`+nomi.map(nome=>{
     const sessNome=_sessioni.filter(s=>(s.nota||s.corsi_tipologie?.nome||'—')===nome);
     const isc=_iscrizioni.filter(i=>sessNome.some(s=>s.id===i.sessione_id)).length;
@@ -1982,7 +2041,7 @@ function renderPillsRiepilogo(){
       <div class="rc-card-row"><span class="rc-card-isc">${isc} iscritti</span><span class="rc-card-lib">▲${libTot} lib</span></div>
     </div>`;
   }).join('')+`</div>`;
-  cont.innerHTML=bannerHtml+cardHtml;
+  cont.innerHTML=cardHtml;
 }
 function selPillRiepilogo(nome){
   _pillSelNome=(_pillSelNome===nome)?null:nome;
@@ -2075,8 +2134,7 @@ function renderRiepilogoSess(){
     return`<div class="riepilogo-item${i.email_inviata_at?' email-inviata':''}">
       <div class="riepilogo-row">
         <div style="align-self:center"><div class="rc-nome">${i.cognome_nome||'—'}</div><div class="rc-sub">${i.qualifica||''}${i.qualifica&&i.matricola_aziendale?' · ':''}${i.matricola_aziendale?`<span style="font-family:'DM Mono',monospace">${i.matricola_aziendale}</span>`:''}</div>${cntHtml}</div>
-        <div class="rc-cell">${nomeCorso}</div>
-        <div class="rc-cell" style="font-size:.78rem">${fmtBreve(s?.data_inizio)}${s?.data_fine&&s.data_fine!==s.data_inizio?'<br>'+fmtBreve(s.data_fine):''}</div>
+        <div class="rc-cell-corso">${nomeCorso}<div style="font-size:.72rem;color:var(--muted);margin-top:2px">${fmtBreve(s?.data_inizio)}${s?.data_fine&&s.data_fine!==s.data_inizio?' – '+fmtBreve(s.data_fine):''}</div></div>
         <div class="rc-cell" style="font-size:.78rem">${nomeCentro}<br><span style="color:var(--muted);font-size:.7rem">da ${i.operatore||'—'}</span></div>
         <div class="rc-actions" style="align-self:center">
           ${canEdit?`<button class="btn btn-warn btn-sm" onclick="modificaIscrizione(${i.id})" title="Modifica">✏️</button>`:''}
@@ -2090,7 +2148,7 @@ function renderRiepilogoSess(){
   }).join('');
   const s=_cascadeSelSessId?_sessioni.find(x=>x.id===_cascadeSelSessId):null;
   const titolo=s?`📋 ${s.nota||s.corsi_tipologie?.nome||'—'} — ${fmtBreve(s.data_inizio)}${s.data_fine&&s.data_fine!==s.data_inizio?' – '+fmtBreve(s.data_fine):''}`:fQ?`📋 Risultati per "${fQ}"`:_pillSelNome?`📋 ${_pillSelNome}`:'📋 Risultati';
-  cont.innerHTML=`<div style="font-size:.8rem;font-weight:700;color:var(--text);padding:.5rem 0;margin-bottom:.5rem">${titolo} <span style="font-weight:400;color:var(--muted)">(${filtered.length} iscrizioni)</span></div><div class="riepilogo-table-wrap"><div class="riepilogo-thead"><div class="riepilogo-th">Nome</div><div class="riepilogo-th">Corso</div><div class="riepilogo-th">Date</div><div class="riepilogo-th">Centro</div><div class="riepilogo-th"></div><div class="riepilogo-th" style="text-align:right">Email inviata</div></div>${rows}</div>`;
+  cont.innerHTML=`<div style="font-size:.8rem;font-weight:700;color:var(--text);padding:.5rem 0;margin-bottom:.5rem">${titolo} <span style="font-weight:400;color:var(--muted)">(${filtered.length} iscrizioni)</span></div><div class="riepilogo-table-wrap"><div class="riepilogo-thead"><div class="riepilogo-th">Nome</div><div class="riepilogo-th">Corso / Date</div><div class="riepilogo-th">Centro</div><div class="riepilogo-th"></div><div class="riepilogo-th" style="text-align:right">Email inviata</div></div>${rows}</div>`;
 }
 function renderRiepilogo(){renderRiepilogoSess();}
 function renderCascade(){renderPillsRiepilogo();aggiornaKpi();}
@@ -2114,6 +2172,7 @@ async function loadCertificati(){
     fillCorsoSelects();
     buildCbGroups();
     renderCertificati();
+    renderCertScadenze();
     setConnDot('on');
   }catch(e){setConnDot('off');document.getElementById('cert-tbody').innerHTML=`<tr class="empty-row"><td colspan="6">⚠️ ${e.message}</td></tr>`;}
 }
@@ -2171,7 +2230,18 @@ function buildCbGroups(){
     if(c.nome_corso)cntCorso[c.nome_corso]=(cntCorso[c.nome_corso]||0)+1;
   });
   buildCb('cb-compagnia',cntCompagnia,_certSelCompagnia,'compagnia');
-  buildCb('cb-reparto',cntReparto,_certSelReparto,'reparto');
+  // Reparto: ordine fisso, no Altro, deduplicato case-insensitive
+  const repOrdCert=['Coperta','Macchina','Camera','Cucina'];
+  const cntRepartoPulito={};
+  Object.entries(cntReparto).forEach(function(e){
+    const k=e[0].trim();
+    if(k.toLowerCase()==='altro')return;
+    const canonical=repOrdCert.find(function(r){return r.toLowerCase()===k.toLowerCase();})||k;
+    cntRepartoPulito[canonical]=(cntRepartoPulito[canonical]||0)+e[1];
+  });
+  const cntRepartoOrdinato={};
+  repOrdCert.forEach(function(r){if(cntRepartoPulito[r])cntRepartoOrdinato[r]=cntRepartoPulito[r];});
+  buildCb('cb-reparto',cntRepartoOrdinato,_certSelReparto,'reparto');
   buildCb('cb-stato',cntStato,_certSelStato,'stato');
   buildCb('cb-corso',cntCorso,_certSelCorso,'corso');
 }
@@ -2374,6 +2444,73 @@ async function caricaEmailDest(){
     ['mar_to','mar_cc','imat_to','imat_cc'].forEach(k=>{const el=document.getElementById('email-'+k.replace('_','-'));if(el)el.value=_emailDest[k]||'';});
   }catch(e){}
 }
+async function caricaEmailDest(){
+  try{
+    const rows=await sbGet('corsi_email_dest','order=tipo');
+    rows.forEach(r=>{_emailDest[r.tipo]=r.valore||r.email||'';});
+    ['mar_to','mar_cc','imat_to','imat_cc'].forEach(k=>{const el=document.getElementById('email-'+k.replace('_','-'));if(el)el.value=_emailDest[k]||'';});
+  }catch(e){}
+  // Popola anche il dropdown utenti nel pannello email
+  await popolaEmailUtenteSel();
+}
+async function popolaEmailUtenteSel(){
+  try{
+    const utenti=await sbGet('corsi_utenti','order=nome');
+    const sel=document.getElementById('email-utente-sel');
+    if(!sel)return;
+    const cur=sel.value;
+    sel.innerHTML='<option value="">— Seleziona utente —</option>';
+    utenti.forEach(u=>{
+      const opt=document.createElement('option');
+      opt.value=u.id;
+      opt.textContent=u.nome+(u.ruolo?` (${u.ruolo})`:'');
+      opt.dataset.mar_to=u.email_mar_a||'';
+      opt.dataset.mar_cc=u.email_mar_cc||'';
+      opt.dataset.imat_to=u.email_imat_a||'';
+      opt.dataset.imat_cc=u.email_imat_cc||'';
+      sel.appendChild(opt);
+    });
+    if(cur)sel.value=cur;
+  }catch(e){}
+}
+function caricaEmailUtente(){
+  const sel=document.getElementById('email-utente-sel');
+  const form=document.getElementById('email-utente-form');
+  const ph=document.getElementById('email-utente-placeholder');
+  const stato=document.getElementById('email-utente-stato');
+  if(!sel.value){
+    form.style.display='none';ph.style.display='';stato.textContent='';return;
+  }
+  const opt=sel.options[sel.selectedIndex];
+  document.getElementById('eu-mar-to').value=opt.dataset.mar_to||'';
+  document.getElementById('eu-mar-cc').value=opt.dataset.mar_cc||'';
+  document.getElementById('eu-imat-to').value=opt.dataset.imat_to||'';
+  document.getElementById('eu-imat-cc').value=opt.dataset.imat_cc||'';
+  form.style.display='';ph.style.display='none';
+  stato.textContent='';
+}
+async function salvaEmailUtente(){
+  const sel=document.getElementById('email-utente-sel');
+  if(!sel.value){toast('Seleziona un utente','error');return;}
+  const patch={
+    email_mar_a:document.getElementById('eu-mar-to').value.trim(),
+    email_mar_cc:document.getElementById('eu-mar-cc').value.trim(),
+    email_imat_a:document.getElementById('eu-imat-to').value.trim(),
+    email_imat_cc:document.getElementById('eu-imat-cc').value.trim()
+  };
+  try{
+    await sbPatch('corsi_utenti',sel.value,patch);
+    // Aggiorna dataset dell'option
+    const opt=sel.options[sel.selectedIndex];
+    opt.dataset.mar_to=patch.email_mar_a;
+    opt.dataset.mar_cc=patch.email_mar_cc;
+    opt.dataset.imat_to=patch.email_imat_a;
+    opt.dataset.imat_cc=patch.email_imat_cc;
+    document.getElementById('email-utente-stato').textContent='✅ Salvato';
+    setTimeout(()=>{const s=document.getElementById('email-utente-stato');if(s)s.textContent='';},2500);
+    toast('✅ Email utente salvate');
+  }catch(e){toast('Errore: '+e.message,'error');}
+}
 async function salvaEmailDest(tipo){
   const el=document.getElementById('email-'+tipo.replace('_','-'));if(!el)return;
   const email=el.value.trim();
@@ -2455,7 +2592,9 @@ async function confermaPremailInvia(){
   const isHotel=reparto==='camera'||reparto==='cucina';
   const ccKey=isHotel?'cc_hotel':'cc_copmac';
   const dbCcKey=isHotel?'mar_cc_hotel':'mar_cc_copmac';
-  const ccRaw=_emailDest[ccKey]||_emailDest[dbCcKey]||'';
+  // Se l'utente ha dati in DB usa SOLO i suoi (anche se vuoti), altrimenti fallback globale
+  const hasUserEmails=!!_currentUserData;
+  const ccRaw=hasUserEmails?(_currentUserData.email_mar_cc||''):(_emailDest[ccKey]||_emailDest[dbCcKey]||'');
   const cc=ccRaw.split(/[;,]+/).map(s=>s.trim()).filter(Boolean);
   const subject=tutteIscrizioni.length>1?`Convocazione corsi IMAT`:`Convocazione corso ${nomeCorso0}`;
   const ccParams=cc.length?'cc='+cc.map(s=>encodeURIComponent(s)).join('%3B'):'';
@@ -2485,8 +2624,8 @@ async function apriModalEmail(sessId){
   const nomeCorso=s.nota||s.corsi_tipologie?.nome||'—';const nomeCentro=s.corsi_centri?.nome||'—';
   const dateStr=s.data_fine&&s.data_fine!==s.data_inizio?`${fmtBreve(s.data_inizio)} – ${fmtBreve(s.data_fine)}`:fmtBreve(s.data_inizio);
   document.getElementById('me-oggetto').textContent=`Convocazione ${nomeCorso} — ${dateStr} — ${nomeCentro}`;
-  document.getElementById('me-to').textContent=_emailDest.imat_to||'—';
-  document.getElementById('me-cc').textContent=_emailDest.imat_cc||'—';
+  document.getElementById('me-to').textContent=(_currentUserData?(_currentUserData.email_imat_a||''):(_emailDest.imat_to||''))||'—';
+  document.getElementById('me-cc').textContent=(_currentUserData?(_currentUserData.email_imat_cc||''):(_emailDest.imat_cc||''))||'—';
   document.getElementById('me-tbody').innerHTML=`<tr><td colspan="11" style="text-align:center;padding:1rem"><span class="spinner"></span></td></tr>`;
   document.getElementById('modal-email-overlay').classList.add('open');
   try{
@@ -2551,7 +2690,7 @@ async function invioEmailImat(){
   const firma=currentUser||'';
   const listaCorpo=righe.map(r=>`${r[1]} — Matr.${r[0]}`).join('\n');
   const corpoEmail=`Buongiorno,\n\nVi inviamo quanto in oggetto.\n\nCorso: ${nomeCorso}\nDate: ${dateStr}\nCentro: ${nomeCentro}\nIscritti: ${nIscritti}\n\n${listaCorpo}\n\n(Elenco completo in allegato PDF)\n\nCordiali saluti,\n\n${firma}`;
-  const to=_emailDest.imat_to||'';const cc=_emailDest.imat_cc||'';
+  const to=_currentUserData?(_currentUserData.email_imat_a||''):(_emailDest.imat_to||'');const cc=_currentUserData?(_currentUserData.email_imat_cc||''):(_emailDest.imat_cc||'');
   const ccParams=cc?'cc='+cc.split(/[;,]+/).map(s=>encodeURIComponent(s.trim())).filter(Boolean).join('%3B'):'';
   setTimeout(()=>{window.location.href=`mailto:${to}?${ccParams?ccParams+'&':''}subject=${encodeURIComponent(oggetto)}&body=${encodeURIComponent(corpoEmail)}`;},600);
   try{await sbPatch('corsi_sessioni',s.id,{email_inviata_at:new Date().toISOString()});await loadAdmin();if(document.getElementById('page-email-riepilogo').style.display!=='none')await loadEmailRiepilogo();}catch(e){}
@@ -2885,88 +3024,230 @@ buildLoginGrid();
 const STAT_COLORS=['#8B5C2A','#C0561A','#1A5FA8','#2E7D32','#B8860B','#7B3FA0','#1A7A7A','#A03030','#4A7A1A','#5A5A8B'];
 async function loadStatistiche(){
   try{
-    // Carica certificati se non già presenti
     if(!_certificati.length)await loadCertificati();
-    // Popola filtri
+    if(!_sessioni.length)_sessioni=await sbGet('corsi_sessioni','order=data_inizio&select=*,corsi_tipologie(nome),corsi_centri(nome)');
+    if(!_iscrizioni.length)_iscrizioni=await sbGet('corsi_iscritti','order=cognome_nome&select=*');
+    // Popola filtro anno grafico
     const annoSel=document.getElementById('stat-anno');
-    const anni=[...new Set(_certificati.map(c=>c.data_scadenza?c.data_scadenza.slice(0,4):null).filter(Boolean))].sort().reverse();
-    if(annoSel&&!annoSel.options.length){anni.forEach(a=>{const o=document.createElement('option');o.value=a;o.textContent=a;annoSel.appendChild(o);});}
-    const compSel=document.getElementById('stat-compagnia');
-    const reps=document.getElementById('stat-reparto');
-    const corsSel=document.getElementById('stat-corso');
-    if(compSel&&compSel.options.length<=1){[...new Set(_certificati.map(c=>c.compagnia).filter(Boolean))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;compSel.appendChild(o);});}
-    if(reps&&reps.options.length<=1){[...new Set(_certificati.map(c=>c.reparto).filter(Boolean))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;reps.appendChild(o);});}
-    if(corsSel&&corsSel.options.length<=1){[...new Set(_certificati.map(c=>c.nome_corso).filter(Boolean))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;corsSel.appendChild(o);});}
-    // Filtri attivi
-    const anno=annoSel?.value||'';
-    const comp=compSel?.value||'';
-    const rep=reps?.value||'';
-    const cors=corsSel?.value||'';
-    let data=_certificati;
-    if(anno)data=data.filter(c=>c.data_scadenza&&c.data_scadenza.startsWith(anno));
-    if(comp)data=data.filter(c=>c.compagnia===comp);
-    if(rep)data=data.filter(c=>c.reparto===rep);
-    if(cors)data=data.filter(c=>c.nome_corso===cors);
-    const oggi=new Date().toISOString().slice(0,10);
-    const tra60=new Date(Date.now()+60*86400000).toISOString().slice(0,10);
-    const validi=data.filter(c=>c.data_scadenza&&c.data_scadenza>=oggi).length;
-    const scaduti=data.filter(c=>c.data_scadenza&&c.data_scadenza<oggi).length;
-    const inScad=data.filter(c=>c.data_scadenza&&c.data_scadenza>=oggi&&c.data_scadenza<=tra60).length;
-    // KPI
-    document.getElementById('stat-kpi').innerHTML=
-      `<div class="stat-kpi green"><div class="stat-kpi-n">${validi.toLocaleString('it-IT')}</div><div class="stat-kpi-l">Certificati validi</div></div>`+
-      `<div class="stat-kpi amber"><div class="stat-kpi-n">${inScad.toLocaleString('it-IT')}</div><div class="stat-kpi-l">In scadenza (60gg)</div></div>`+
-      `<div class="stat-kpi red"><div class="stat-kpi-n">${scaduti.toLocaleString('it-IT')}</div><div class="stat-kpi-l">Scaduti</div></div>`+
-      `<div class="stat-kpi blue"><div class="stat-kpi-n">${data.length.toLocaleString('it-IT')}</div><div class="stat-kpi-l">Totale certificati</div></div>`;
-    // Grafico mesi (basato su data_scadenza anno selezionato)
-    const meseLabels=['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
-    const annoGraf=anno||new Date().getFullYear().toString();
-    const perMese=Array(12).fill(0);
-    data.forEach(c=>{if(c.data_scadenza&&c.data_scadenza.startsWith(annoGraf)){const m=parseInt(c.data_scadenza.slice(5,7))-1;if(m>=0&&m<12)perMese[m]++;}});
-    const maxM=Math.max(...perMese,1);
-    const meseCurr=new Date().getMonth();
-    const annoCurr=new Date().getFullYear().toString();
-    document.getElementById('stat-mesi').innerHTML=perMese.map((v,i)=>{
-      const futuro=annoGraf>annoCurr||(annoGraf===annoCurr&&i>meseCurr);
-      const h=Math.round((v/maxM)*90)||4;
-      const col=futuro?'var(--surface2)':(i===meseCurr?'#C0561A':'#8B5C2A');
-      const lbl=v>0?v:'—';
-      const lblCol=v>0?'var(--text)':'var(--muted)';
-      return`<div class="stat-bar-wrap"><div class="stat-bar-val" style="color:${lblCol}">${lbl}</div><div class="stat-bar" style="height:${h}px;background:${col}"></div><div class="stat-bar-lbl">${meseLabels[i]}</div></div>`;
-    }).join('');
-    // Distribuzione per corso
-    const perCorso={};
-    data.forEach(c=>{if(c.nome_corso)perCorso[c.nome_corso]=(perCorso[c.nome_corso]||0)+1;});
-    const corsiOrd=Object.entries(perCorso).sort((a,b)=>b[1]-a[1]);
-    document.getElementById('stat-corsi-leg').innerHTML=corsiOrd.map(([n,v],i)=>{
-      const pct=data.length?Math.round(v/data.length*100):0;
-      return`<div class="stat-leg-item"><span class="stat-leg-dot" style="background:${STAT_COLORS[i%STAT_COLORS.length]}"></span><span>${n}</span><span class="stat-leg-val">${v.toLocaleString('it-IT')}</span><span class="stat-leg-pct">${pct}%</span></div>`;
-    }).join('');
-    // Per compagnia
-    const perComp={};data.forEach(c=>{if(c.compagnia)perComp[c.compagnia]=(perComp[c.compagnia]||0)+1;});
-    const maxComp=Math.max(...Object.values(perComp),1);
-    document.getElementById('stat-compagnie').innerHTML=Object.entries(perComp).sort((a,b)=>b[1]-a[1]).map(([n,v],i)=>
-      `<div class="stat-mini-bar"><span style="width:80px;flex-shrink:0">${n}</span><div class="stat-mini-track"><div class="stat-mini-fill" style="width:${Math.round(v/maxComp*100)}%;background:${STAT_COLORS[i%STAT_COLORS.length]}"></div></div><span class="stat-mini-val">${v.toLocaleString('it-IT')}</span></div>`
-    ).join('');
-    // Per reparto
-    const perRep={};data.forEach(c=>{if(c.reparto)perRep[c.reparto]=(perRep[c.reparto]||0)+1;});
-    const maxRep=Math.max(...Object.values(perRep),1);
-    document.getElementById('stat-reparti').innerHTML=Object.entries(perRep).sort((a,b)=>b[1]-a[1]).map(([n,v],i)=>
-      `<div class="stat-mini-bar"><span style="width:80px;flex-shrink:0">${n}</span><div class="stat-mini-track"><div class="stat-mini-fill" style="width:${Math.round(v/maxRep*100)}%;background:${STAT_COLORS[i%STAT_COLORS.length]}"></div></div><span class="stat-mini-val">${v.toLocaleString('it-IT')}</span></div>`
-    ).join('');
-    // Tabella scadenze prossimi 12 mesi per corso
-    const corsiUnici=[...new Set(data.map(c=>c.nome_corso).filter(Boolean))].sort();
-    const mesi=[];
-    for(let i=0;i<12;i++){const d=new Date();d.setMonth(d.getMonth()+i);mesi.push({y:d.getFullYear(),m:d.getMonth(),key:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`});}
-    const tHead=`<thead><tr><th>Mese</th>${corsiUnici.map(c=>`<th>${c}</th>`).join('')}<th>Totale</th></tr></thead>`;
-    const tBody=`<tbody>${mesi.map(({y,m,key})=>{
-      const counts=corsiUnici.map(c=>data.filter(x=>x.nome_corso===c&&x.data_scadenza&&x.data_scadenza.startsWith(key)).length);
-      const tot=counts.reduce((a,b)=>a+b,0);
-      const meseStr=new Date(y,m,1).toLocaleDateString('it-IT',{month:'short',year:'numeric'});
-      return`<tr><td><strong>${meseStr}</strong></td>${counts.map(v=>`<td>${v||'—'}</td>`).join('')}<td><strong>${tot||'—'}</strong></td></tr>`;
-    }).join('')}</tbody>`;
-    document.getElementById('stat-scadenze').innerHTML=`<table>${tHead}${tBody}</table>`;
+    if(annoSel&&!annoSel.options.length){
+      const anni=[...new Set([
+        ..._certificati.map(c=>c.data_rilascio?c.data_rilascio.slice(0,4):null),
+        ..._iscrizioni.map(function(i){var s=_sessioni.find(function(x){return x.id===i.sessione_id;});return s&&s.data_inizio?s.data_inizio.slice(0,4):null;})
+      ].filter(Boolean))].sort().reverse();
+      anni.forEach(function(a){var o=document.createElement('option');o.value=a;o.textContent=a;annoSel.appendChild(o);});
+    }
+    // Popola filtro anno blocchi
+    const annoBlocchiSel=document.getElementById('stat-blocchi-anno');
+    if(annoBlocchiSel&&annoBlocchiSel.options.length<=1){
+      const anni=[...new Set(_certificati.map(c=>c.data_scadenza?c.data_scadenza.slice(0,4):null).filter(Boolean))].sort().reverse();
+      anni.forEach(function(a){var o=document.createElement('option');o.value=a;o.textContent=a;annoBlocchiSel.appendChild(o);});
+    }
+    // Popola checkbox compagnia — normalizzati Moby/Cin
+    const cbComp=document.getElementById('stat-cb-comp');
+    if(cbComp&&!cbComp.children.length){
+      const comps=['Moby','Cin'];
+      cbComp.innerHTML=comps.map(function(v){return '<label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer;color:var(--text)"><input type="checkbox" checked value="'+v+'" onchange="renderStatBlocchi()" style="accent-color:#c07840;width:13px;height:13px;cursor:pointer"> '+v+'</label>';}).join('');
+    }
+    // Popola checkbox reparto — ordine fisso, senza Altro
+    const cbRep=document.getElementById('stat-cb-rep');
+    if(cbRep&&!cbRep.children.length){
+      const reps=['Coperta','Macchina','Camera','Cucina'];
+      cbRep.innerHTML=reps.map(function(v){return '<label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer;color:var(--text)"><input type="checkbox" checked value="'+v+'" onchange="renderStatBlocchi()" style="accent-color:#c07840;width:13px;height:13px;cursor:pointer"> '+v+'</label>';}).join('');
+    }
+    // Popola checkbox corso
+    const cbCorso=document.getElementById('stat-cb-corso');
+    if(cbCorso&&!cbCorso.children.length){
+      const corsi=[...new Set(_certificati.map(c=>c.nome_corso).filter(Boolean))].sort();
+      cbCorso.innerHTML=corsi.map(function(v){return '<label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer;color:var(--text)"><input type="checkbox" checked value="'+v+'" onchange="renderStatBlocchi()" style="accent-color:#c07840;width:13px;height:13px;cursor:pointer"> '+v+'</label>';}).join('');
+    }
+    // Popola checkbox stato nazionalità
+    const cbStato=document.getElementById('stat-cb-stato');
+    if(cbStato&&!cbStato.children.length){
+      const stati=['Italiani','Comunitario','Extra EU'];
+      cbStato.innerHTML=stati.map(function(v){return '<label style="display:flex;align-items:center;gap:5px;font-size:.75rem;cursor:pointer;color:var(--text)"><input type="checkbox" checked value="'+v+'" onchange="renderStatBlocchi()" style="accent-color:#c07840;width:13px;height:13px;cursor:pointer"> '+v+'</label>';}).join('');
+    }
+    renderStatGrafico();
+    renderStatBlocchi();
   }catch(e){console.error(e);toast('Errore statistiche: '+e.message,'error');}
+}
+function renderStatGrafico(){
+  const annoSel=document.getElementById('stat-anno');
+  const anno=annoSel&&annoSel.value?annoSel.value:new Date().getFullYear().toString();
+  const TAGLIO='2026-05';
+  const meseLabels=['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+  const meseCurr=new Date().getMonth();
+  const annoCurr=new Date().getFullYear().toString();
+  const perMese=Array(12).fill(0);
+  for(var i=0;i<12;i++){
+    var key=anno+'-'+String(i+1).padStart(2,'0');
+    if(key<TAGLIO){
+      perMese[i]=_certificati.filter(function(c){return c.data_rilascio&&c.data_rilascio.startsWith(key);}).length;
+    } else {
+      perMese[i]=_iscrizioni.filter(function(isc){
+        var s=_sessioni.find(function(x){return x.id===isc.sessione_id;});
+        return s&&s.data_inizio&&s.data_inizio.startsWith(key);
+      }).length;
+    }
+  }
+  const maxM=Math.max.apply(null,perMese.concat([1]));
+  const totAnno=perMese.reduce(function(a,b){return a+b;},0);
+  const titGraf=document.getElementById('stat-grafico-title');
+  if(titGraf)titGraf.innerHTML='📅 Corsi effettuati per mese <span style="font-weight:400;color:var(--muted);font-size:.75rem">(tot. '+totAnno.toLocaleString('it-IT')+')</span>';
+  document.getElementById('stat-mesi').innerHTML=perMese.map(function(v,i){
+    const passato=anno<annoCurr||(anno===annoCurr&&i<meseCurr);
+    const corrente=anno===annoCurr&&i===meseCurr;
+    const h=Math.round((v/maxM)*90)||4;
+    const col=passato?'#8B5C2A':corrente?'#C07840':'#E8C99A';
+    const lbl=v>0?v:'—';
+    const lblCol=v>0?'var(--text)':'var(--muted)';
+    return '<div class="stat-bar-wrap"><div class="stat-bar-val" style="color:'+lblCol+'">'+lbl+'</div><div class="stat-bar" style="height:'+h+'px;background:'+col+'"></div><div class="stat-bar-lbl">'+meseLabels[i]+'</div></div>';
+  }).join('');
+}
+function renderStatBlocchi(){
+  const anno=document.getElementById('stat-blocchi-anno')&&document.getElementById('stat-blocchi-anno').value||'';
+  const compsOn=[...document.querySelectorAll('#stat-cb-comp input:checked')].map(function(i){return i.value;});
+  const repsOn=[...document.querySelectorAll('#stat-cb-rep input:checked')].map(function(i){return i.value;});
+  const corsiOn=[...document.querySelectorAll('#stat-cb-corso input:checked')].map(function(i){return i.value;});
+  const statiOn=[...document.querySelectorAll('#stat-cb-stato input:checked')].map(function(i){return i.value;});
+  var data=_certificati;
+  if(anno)data=data.filter(function(c){return c.data_scadenza&&c.data_scadenza.startsWith(anno);});
+  if(compsOn.length)data=data.filter(function(c){return compsOn.map(function(x){return x.toLowerCase();}).includes((c.compagnia||'').toLowerCase());});
+  if(repsOn.length)data=data.filter(function(c){var r=(c.reparto||'').toLowerCase();return r!=='altro'&&repsOn.map(function(x){return x.toLowerCase();}).includes(r);});
+  else data=data.filter(function(c){return (c.reparto||'').toLowerCase()!=='altro';});
+  if(corsiOn.length)data=data.filter(function(c){return corsiOn.includes(c.nome_corso);});
+  if(statiOn.length)data=data.filter(function(c){return statiOn.map(function(x){return x.toLowerCase();}).includes((c.stato||'').toLowerCase());});
+  const tot=data.length;
+  const perCorso={};data.forEach(function(c){if(c.nome_corso)perCorso[c.nome_corso]=(perCorso[c.nome_corso]||0)+1;});
+  document.getElementById('stat-corsi-leg').innerHTML=Object.entries(perCorso).sort(function(a,b){return b[1]-a[1];}).map(function(e,i){
+    const pct=tot?Math.round(e[1]/tot*100):0;
+    return '<div class="stat-leg-item"><span class="stat-leg-dot" style="background:'+STAT_COLORS[i%STAT_COLORS.length]+'"></span><span>'+e[0]+'</span><span class="stat-leg-val">'+e[1].toLocaleString('it-IT')+'</span><span class="stat-leg-pct">'+pct+'%</span></div>';
+  }).join('');
+  const perComp={};data.forEach(function(c){if(c.compagnia){var k=(c.compagnia||'').toLowerCase()==='moby'?'Moby':(c.compagnia||'').toLowerCase()==='cin'?'Cin':c.compagnia;perComp[k]=(perComp[k]||0)+1;}});
+  const compOrdine=['Moby','Cin'];
+  const compEntries=compOrdine.filter(function(c){return perComp[c]>0;}).map(function(c){return[c,perComp[c]||0];});
+  const maxComp=Math.max.apply(null,compEntries.map(function(e){return e[1];}).concat([1]));
+  document.getElementById('stat-compagnie').innerHTML=compEntries.map(function(e,i){
+    return '<div class="stat-mini-bar"><span style="width:80px;flex-shrink:0">'+e[0]+'</span><div class="stat-mini-track"><div class="stat-mini-fill" style="width:'+Math.round(e[1]/maxComp*100)+'%;background:'+STAT_COLORS[i%STAT_COLORS.length]+'"></div></div><span class="stat-mini-val">'+e[1].toLocaleString('it-IT')+'</span></div>';
+  }).join('');
+  const perRep={};data.forEach(function(c){if(c.reparto&&c.reparto.toLowerCase()!=='altro')perRep[c.reparto]=(perRep[c.reparto]||0)+1;});
+  const repOrdine=['Coperta','Macchina','Camera','Cucina'];
+  const repEntries=repOrdine.filter(function(r){return perRep[r]||Object.keys(perRep).find(function(k){return k.toLowerCase()===r.toLowerCase();});}).map(function(r,i){
+    const key=Object.keys(perRep).find(function(k){return k.toLowerCase()===r.toLowerCase();})||r;
+    return[r,perRep[key]||0];
+  }).filter(function(e){return e[1]>0;});
+  const maxRep=Math.max.apply(null,repEntries.map(function(e){return e[1];}).concat([1]));
+  document.getElementById('stat-reparti').innerHTML=repEntries.map(function(e,i){
+    return '<div class="stat-mini-bar"><span style="width:80px;flex-shrink:0">'+e[0]+'</span><div class="stat-mini-track"><div class="stat-mini-fill" style="width:'+Math.round(e[1]/maxRep*100)+'%;background:'+STAT_COLORS[i%STAT_COLORS.length]+'"></div></div><span class="stat-mini-val">'+e[1].toLocaleString('it-IT')+'</span></div>';
+  }).join('');
+}
+function renderCertScadenze(){
+  const tuttiCert=_certificati.filter(function(c){return (c.stato||'').toLowerCase()==='italiani';});
+  const corsiUnici=[...new Set(tuttiCert.map(function(c){return c.nome_corso;}).filter(Boolean))].sort();
+  const mesi12=[];
+  const oggi=new Date();
+  const meseCorr=oggi.getFullYear()+'-'+String(oggi.getMonth()+1).padStart(2,'0');
+  for(var i=0;i<12;i++){var d=new Date();d.setDate(1);d.setMonth(d.getMonth()+i);var mm=d.toLocaleDateString('it-IT',{month:'short'}).replace('.','').slice(0,3);var yy=String(d.getFullYear()).slice(2);var key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');mesi12.push({label:mm+' '+yy,key:key});}
+  _certScadData={};
+  mesi12.forEach(function(m){
+    var allMese=tuttiCert.filter(function(c){return c.data_scadenza&&c.data_scadenza.startsWith(m.key);});
+    _certScadData['MESE||'+m.key]={mese:m.label,key:m.key,records:allMese.sort(function(a,b){return (a.data_scadenza||'').localeCompare(b.data_scadenza||'');})};
+  });
+  const tHead='<thead><tr><th class="st-corso">Corso</th>'+mesi12.map(function(m){
+    var idxEsc=('MESE||'+m.key).replace(/'/g,"\\'");
+    var isPassato=m.key<meseCorr;
+    var isCorr=m.key===meseCorr;
+    var hdrStyle=isCorr?'color:var(--accent);font-weight:700;':'';
+    var btnStyle=isPassato?'font-size:.6rem;color:var(--muted);padding:0;margin:0;opacity:.5;':'font-size:.6rem;color:var(--muted);padding:0;margin:0;';
+    return '<th style="'+hdrStyle+'"><div style="display:flex;flex-direction:column;align-items:center;gap:2px;">'+m.label+'<button class="stat-scad-num" style="'+btnStyle+'" onclick="certStampaMesePDF(\''+idxEsc+'\')" title="Stampa PDF mese">🖨</button></div></th>';
+  }).join('')+'</tr></thead>';
+  const tBody='<tbody>'+corsiUnici.map(function(corso){
+    var cells=mesi12.map(function(m){
+      var matches=tuttiCert.filter(function(c){return c.nome_corso===corso&&c.data_scadenza&&c.data_scadenza.startsWith(m.key);});
+      matches.sort(function(a,b){return (a.data_scadenza||'').localeCompare(b.data_scadenza||'');});
+      var v=matches.length;
+      if(!v)return '<td><span class="stat-scad-zero">—</span></td>';
+      var idx=corso+'||'+m.key;
+      _certScadData[idx]={corso:corso,mese:m.label,records:matches};
+      var idxEsc=idx.replace(/'/g,"\\'");
+      var isPassato=m.key<meseCorr;
+      var numStyle=isPassato?'opacity:.45;':'';
+      return '<td><button class="stat-scad-num" style="'+numStyle+'" onclick="apriCertScad(\''+idxEsc+'\')">'+v+'</button></td>';
+    }).join('');
+    return '<tr><td class="st-corso">'+corso+'</td>'+cells+'</tr>';
+  }).join('')+'</tbody>';
+  document.getElementById('cert-scad-table').innerHTML='<table>'+tHead+tBody+'</table>';
+}
+function apriCertScad(idx){
+  const d=_certScadData[idx];if(!d)return;
+  const tot=d.records.length;
+  document.getElementById('cert-scad-title').textContent=d.corso+' · '+d.mese+' — '+tot+' person'+(tot===1?'a':'e');
+  document.getElementById('cert-scad-list').innerHTML=d.records.map(function(c){
+    return '<div style="display:grid;grid-template-columns:2fr 1fr 1.2fr 1fr;gap:8px;padding:5px 8px;border-radius:6px;background:var(--surface2);font-size:.74rem;align-items:center;">'
+      +'<span>'+(c.cognome_nome||'—')+'</span>'
+      +'<span>'+(c.matricola_aziendale||'—')+'</span>'
+      +'<span>'+(c.qualifica||'—')+'</span>'
+      +'<span>'+(c.data_scadenza?fmtBreve(c.data_scadenza):'—')+'</span>'
+      +'</div>';
+  }).join('');
+  document.getElementById('cert-scad-overlay').style.display='flex';
+  _certScadCurr=d;
+}
+function chiudiCertScad(){document.getElementById('cert-scad-overlay').style.display='none';}
+var _certScadCurr=null,_certScadData={};
+function stampaCertScadPDF(){
+  if(!_certScadCurr)return;
+  const {jsPDF}=window.jspdf;const doc=new jsPDF();
+  const tot=_certScadCurr.records.length;
+  doc.setFontSize(10);doc.setFont('helvetica','normal');doc.text('Scadenze certificati (solo italiani)',14,10);
+  var y=_pdfScadTable(doc,_certScadCurr.records,_certScadCurr.corso+' — '+_certScadCurr.mese+' ('+tot+' persone)',18,true);
+  doc.setFont('helvetica','bold');doc.setFontSize(9);
+  doc.text('Totale: '+tot+' person'+(tot===1?'a':'e'),14,y+4);
+  doc.save('scadenze_'+_certScadCurr.corso+'_'+_certScadCurr.mese+'.pdf');
+}
+function certStampaMesePDF(idx){
+  const d=_certScadData[idx];if(!d)return;
+  const {jsPDF}=window.jspdf;const doc=new jsPDF();
+  doc.setFontSize(13);doc.setFont('helvetica','bold');
+  doc.text('Scadenze certificati '+d.mese+' (solo italiani)',14,16);
+  doc.setFontSize(10);doc.setFont('helvetica','normal');
+  doc.text('Totale generale: '+d.records.length+' persone',14,26);
+  var y=34;
+  const corsi=[...new Set(d.records.map(function(c){return c.nome_corso||'—';}))].sort();
+  doc.setFontSize(9);doc.setFont('helvetica','bold');
+  doc.text('Riepilogo per corso:',14,y);y+=6;
+  doc.setFont('helvetica','normal');
+  corsi.forEach(function(corso){
+    var n=d.records.filter(function(c){return (c.nome_corso||'—')===corso;}).length;
+    doc.text('• '+corso+': '+n+' persone',18,y);y+=5;
+  });
+  corsi.forEach(function(corso){
+    var recs=d.records.filter(function(c){return (c.nome_corso||'—')===corso;});
+    if(!recs.length)return;
+    doc.addPage();
+    _pdfScadTable(doc,recs,corso+' — '+d.mese+' ('+recs.length+' persone)',16,true);
+  });
+  doc.save('scadenze_'+d.mese+'.pdf');
+}
+
+function apriStatScad(idx){}
+function _pdfScadTable(doc,records,title,startY,numbered){
+  doc.setFontSize(12);doc.setFont('helvetica','bold');doc.text(title,14,startY);
+  var y=startY+8;
+  doc.setFontSize(7);doc.setFont('helvetica','bold');
+  if(numbered)doc.text('#',14,y);
+  doc.text('Nome',numbered?20:14,y);doc.text('Matricola',90,y);doc.text('Qualifica',120,y);doc.text('Scadenza',170,y);
+  y+=5;doc.setLineWidth(.2);doc.line(14,y,196,y);y+=4;
+  doc.setFont('helvetica','normal');doc.setFontSize(8);
+  records.forEach(function(c,i){
+    if(y>275){doc.addPage();y=16;}
+    if(numbered)doc.text(String(i+1),14,y);
+    doc.text((c.cognome_nome||'—').slice(0,32),numbered?20:14,y);
+    doc.text((c.matricola_aziendale||'—'),90,y);
+    doc.text((c.qualifica||'—').slice(0,18),120,y);
+    doc.text(c.data_scadenza?fmtBreve(c.data_scadenza):'—',170,y);
+    y+=6;
+  });
+  return y;
 }
 // ========== RIEPILOGO EMAIL ==========
 var _erMarFilter='da-inviare',_erCenFilter='da-inviare',_erMarOrd='data',_erCenOrd='data';
