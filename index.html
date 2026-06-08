@@ -1208,7 +1208,7 @@ window.addEventListener('DOMContentLoaded', async function(){
     // Carica ADMIN_USERS prima di procedere
     await buildLoginGrid();
     currentUser = al.nome;
-    isAdmin = ADMIN_USERS.some(u=>u.name===currentUser);
+    isAdmin = al.can_admin === true;
     await initApp();
   } catch(e) { /* fallback a login normale */ }
 });
