@@ -72,10 +72,29 @@ main#app-main{padding:1.4rem 1.8rem;}
 .ce-pill-noassoc .ce-pill-cnt{background:var(--orange);color:#fff;}
 .ce-pill-noassoc:not(.active){border-color:var(--border);color:var(--muted);background:var(--surface2);}
 .ce-pill-noassoc:not(.active) .ce-pill-cnt{background:var(--border);color:var(--muted);}
+.ce-pill-sm{padding:4px 12px;font-size:.74rem;}
+.ce-pill-dainviare{border-color:var(--amm);color:var(--amm);background:var(--amm-l);}
+.ce-pill-dainviare .ce-pill-cnt{background:var(--amm);color:#fff;}
+.ce-pill-dainviare:not(.active){border-color:var(--border);color:var(--muted);background:var(--surface2);}
+.ce-pill-dainviare:not(.active) .ce-pill-cnt{background:var(--border);color:var(--muted);}
+.ce-pill-inviate{border-color:var(--green);color:var(--green);background:var(--green-l);}
+.ce-pill-inviate .ce-pill-cnt{background:var(--green);color:#fff;}
+.ce-pill-inviate:not(.active){border-color:var(--border);color:var(--muted);background:var(--surface2);}
+.ce-pill-inviate:not(.active) .ce-pill-cnt{background:var(--border);color:var(--muted);}
+.ce-pill-tutti{border-color:var(--muted);color:var(--text);background:var(--surface2);}
+.ce-pill-tutti .ce-pill-cnt{background:var(--muted);color:#fff;}
+.ce-pill-tutti:not(.active){border-color:var(--border);color:var(--muted);background:var(--surface2);}
+.ce-pill-tutti:not(.active) .ce-pill-cnt{background:var(--border);color:var(--muted);}
 .ce-cb-item{display:flex;align-items:center;font-size:.8rem;color:var(--muted);cursor:pointer;padding:5px 10px;border-radius:7px;background:transparent;user-select:none;transition:background .12s,color .12s;white-space:nowrap;}
 .ce-cb-item:hover{background:var(--surface2);}
 .ce-cb-item.active{background:#dbeafe;color:#1e40af;font-weight:600;}
 .ce-cb-item input[type=checkbox]{display:none;}
+.ce-cb-cnt{margin-left:auto;padding-left:10px;font-size:.68rem;font-weight:600;color:var(--muted);background:var(--surface2);border-radius:8px;padding:1px 6px;}
+.ce-cb-item.active .ce-cb-cnt{background:#bcd4f7;color:#1e40af;}
+.ce-corso-line{display:flex;align-items:baseline;gap:8px;font-size:.82rem;font-weight:600;padding:3px 0;flex-wrap:wrap;}
+.ce-corso-line+.ce-corso-line{border-top:1px dashed var(--border);margin-top:2px;padding-top:5px;}
+.ce-corso-date{font-size:.72rem;color:var(--muted);font-weight:500;white-space:nowrap;}
+.ce-corso-sent-tag{font-size:.62rem;color:#3b6d11;font-weight:600;white-space:nowrap;}
 .ce-mese{justify-content:center;padding:5px 0;font-size:.76rem;}
 .ce-pill{position:relative;}
 .ce-pill[data-tip]:hover::after{content:attr(data-tip);position:absolute;top:calc(100% + 8px);left:0;background:var(--text);color:#fff;font-size:.68rem;font-weight:500;padding:8px 12px;border-radius:8px;white-space:normal;width:270px;text-align:left;z-index:300;line-height:1.5;box-shadow:var(--shadow);pointer-events:none;}
@@ -721,6 +740,13 @@ if(new URLSearchParams(window.location.search).get('al')) {
       <span id="ce-count" style="margin-left:auto;font-size:.78rem;color:var(--muted);font-weight:600"></span>
     </div>
 
+    <!-- Sub-pill stato sollecito (solo tab Associati) -->
+    <div id="ce-subpills" style="display:flex;align-items:center;gap:8px;margin:-0.4rem 0 1.2rem;flex-wrap:wrap;">
+      <button id="ce-subpill-dainviare" class="ce-pill ce-pill-dainviare ce-pill-sm active" onclick="setCeSubTab('dainviare')">📩 Da inviare <span id="ce-cnt-dainviare" class="ce-pill-cnt">0</span></button>
+      <button id="ce-subpill-inviate" class="ce-pill ce-pill-inviate ce-pill-sm" onclick="setCeSubTab('inviate')">✅ Inviate <span id="ce-cnt-inviate" class="ce-pill-cnt">0</span></button>
+      <button id="ce-subpill-tutti" class="ce-pill ce-pill-tutti ce-pill-sm" onclick="setCeSubTab('tutti')">📋 Tutti <span id="ce-cnt-tutti" class="ce-pill-cnt">0</span></button>
+    </div>
+
     <!-- Filtri (stile righe evidenziate) -->
     <div style="display:grid;grid-template-columns:1.3fr .8fr 1.2fr;margin-bottom:1.2rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;">
 
@@ -734,10 +760,10 @@ if(new URLSearchParams(window.location.search).get('al')) {
       <div style="padding:0 16px;border-right:1px solid var(--border);min-width:0;">
         <div style="font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Reparto</div>
         <div style="display:flex;flex-direction:column;gap:2px;" id="ce-cb-reparti">
-          <label class="ce-cb-item" data-val="coperta"><input type="checkbox" onchange="renderCorsiEffettuati()"> Coperta</label>
-          <label class="ce-cb-item" data-val="macchina"><input type="checkbox" onchange="renderCorsiEffettuati()"> Macchina</label>
-          <label class="ce-cb-item" data-val="camera"><input type="checkbox" onchange="renderCorsiEffettuati()"> Camera</label>
-          <label class="ce-cb-item" data-val="cucina"><input type="checkbox" onchange="renderCorsiEffettuati()"> Cucina</label>
+          <label class="ce-cb-item" data-val="coperta"><input type="checkbox" onchange="renderCorsiEffettuati()"> Coperta<span class="ce-cb-cnt">0</span></label>
+          <label class="ce-cb-item" data-val="macchina"><input type="checkbox" onchange="renderCorsiEffettuati()"> Macchina<span class="ce-cb-cnt">0</span></label>
+          <label class="ce-cb-item" data-val="camera"><input type="checkbox" onchange="renderCorsiEffettuati()"> Camera<span class="ce-cb-cnt">0</span></label>
+          <label class="ce-cb-item" data-val="cucina"><input type="checkbox" onchange="renderCorsiEffettuati()"> Cucina<span class="ce-cb-cnt">0</span></label>
         </div>
       </div>
 
@@ -782,13 +808,12 @@ if(new URLSearchParams(window.location.search).get('al')) {
             <th style="padding:10px 14px;text-align:left;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;">Matricola</th>
             <th style="padding:10px 14px;text-align:left;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;">Qualifica</th>
             <th style="padding:10px 14px;text-align:left;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;">Reparto</th>
-            <th style="padding:10px 14px;text-align:left;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;">Corso</th>
-            <th style="padding:10px 14px;text-align:left;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;">Data Sessione</th>
+            <th style="padding:10px 14px;text-align:left;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;">Corsi</th>
             <th style="padding:10px 14px;text-align:center;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;">Sollecito</th>
           </tr>
         </thead>
         <tbody id="ce-tbody-assoc">
-          <tr class="empty-row"><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted)">Clicca Aggiorna per caricare i dati</td></tr>
+          <tr class="empty-row"><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted)">Clicca Aggiorna per caricare i dati</td></tr>
         </tbody>
       </table>
     </div>
@@ -1687,161 +1712,6 @@ async function impAvvia(){
   }catch(e){}
   if(err===0){toast('✅ Importazione completata!');await loadCertificati();}
   else toast(`⚠️ ${err} errori — controlla il log`,'error');
-}
-
-// ── ESPORTA PDF CERTIFICATI ──────────────────
-async function esportaPdfCertificati(){
-  const btn=document.querySelector('[onclick="esportaPdfCertificati()"]');
-  if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Generazione…';}
-  try{
-    const {jsPDF}=window.jspdf;
-    const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
-    const pw=doc.internal.pageSize.getWidth();
-    const ph=doc.internal.pageSize.getHeight();
-
-    // raccoglie record filtrati correnti
-    const q=document.getElementById('cert-q').value.toLowerCase();
-     // corso filtrato via checkbox
-    const statoFiltro=document.getElementById('cert-stato').value;
-    const filtered=_certificati.filter(c=>{
-      if(q&&!c.cognome_nome?.toLowerCase().includes(q)&&!String(c.matricola_aziendale||'').includes(q))return false;
-      if(_certSelCorso.size&&!_certSelCorso.has(c.nome_corso))return false;
-      if(statoFiltro){const s=statoScad(c.data_scadenza);if(statoFiltro==='scaduto'&&s.txt!=='Scaduto')return false;if(statoFiltro==='scade'&&s.txt!=='Scade presto')return false;if(statoFiltro==='valido'&&s.txt!=='Valido')return false;}
-      const scadEntro=document.getElementById('cert-scad-entro')?.value;
-    if(scadEntro&&c.data_scadenza&&c.data_scadenza>scadEntro)return false;
-    if(_certSelCompagnia.size&&!_certSelCompagnia.has(c.compagnia))return false;
-      if(_certSelReparto.size&&!_certSelReparto.has(c.reparto))return false;
-      if(_certSelStato.size&&!_certSelStato.has(c.stato))return false;
-      return true;
-    });
-
-    const kpiScad=filtered.filter(c=>statoScad(c.data_scadenza).txt==='Scaduto').length;
-    const kpiScade=filtered.filter(c=>statoScad(c.data_scadenza).txt==='Scade presto').length;
-    const kpiValidi=filtered.filter(c=>statoScad(c.data_scadenza).txt==='Valido').length;
-    const dataOra=new Date().toLocaleString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-
-    // filtri applicati
-    const filtriDesc=[];
-    if(corso)filtriDesc.push(corso);
-    if(statoFiltro){const m={'scaduto':'Scaduti','scade':'In scadenza','valido':'Validi'};filtriDesc.push(m[statoFiltro]||'');}
-    [..._certSelCompagnia,..._certSelReparto,..._certSelStato].forEach(v=>filtriDesc.push(v));
-    const filtriStr=filtriDesc.length?filtriDesc.join(' · '):'Nessun filtro — tutti i certificati';
-
-    function drawHeader(doc){
-      // Header blu gradient
-      doc.setFillColor(0,112,192);doc.rect(0,0,pw,20,'F');
-      doc.setFillColor(0,58,140);doc.rect(pw*0.55,0,pw*0.45,20,'F');
-      // Logo S.M.A.R.T
-      doc.setTextColor(255,255,255);
-      doc.setFontSize(11);doc.setFont('helvetica','bold');doc.text('S.M.A.R.T',12,8);
-      doc.setFontSize(5);doc.setFont('helvetica','normal');doc.text('SOLUTIONS',12,12.5);
-      // Titolo centro
-      doc.setFontSize(13);doc.setFont('helvetica','bold');doc.text('Situazione Certificati Marittimi',pw/2,8,{align:'center'});
-      doc.setFontSize(8);doc.setFont('helvetica','normal');doc.text('Gestione Corsi IMAT — CIN / Moby',pw/2,13,{align:'center'});
-      // Data destra
-      doc.setFontSize(7);doc.text('Generato il',pw-10,7,{align:'right'});
-      doc.setFontSize(8);doc.setFont('helvetica','bold');doc.text(dataOra,pw-10,12,{align:'right'});
-    }
-
-    function drawKpiBar(doc,y){
-      doc.setFillColor(240,244,248);doc.rect(0,y,pw,14,'F');
-      doc.setDrawColor(221,227,234);doc.line(0,y+14,pw,y+14);
-      const kpis=[
-        {num:filtered.length.toLocaleString('it-IT'),lbl:'Record totali',color:[26,58,92]},
-        {num:kpiScad.toLocaleString('it-IT'),lbl:'Scaduti',color:[200,80,80]},
-        {num:kpiScade.toLocaleString('it-IT'),lbl:'In scadenza',color:[212,133,58]},
-        {num:kpiValidi.toLocaleString('it-IT'),lbl:'Validi',color:[74,158,114]}
-      ];
-      const colW=pw/4;
-      kpis.forEach((k,i)=>{
-        const cx=colW*i+colW/2;
-        doc.setTextColor(...k.color);
-        doc.setFontSize(12);doc.setFont('helvetica','bold');doc.text(k.num,cx,y+7,{align:'center'});
-        doc.setTextColor(140,154,168);
-        doc.setFontSize(6);doc.setFont('helvetica','normal');doc.text(k.lbl.toUpperCase(),cx,y+12,{align:'center'});
-        if(i<3){doc.setDrawColor(221,227,234);doc.line(colW*(i+1),y+2,colW*(i+1),y+12);}
-      });
-    }
-
-    function drawFiltriBar(doc,y){
-      doc.setFillColor(250,247,244);doc.rect(0,y,pw,8,'F');
-      doc.setDrawColor(237,232,226);doc.line(0,y+8,pw,y+8);
-      doc.setTextColor(140,126,110);
-      doc.setFontSize(6);doc.setFont('helvetica','bold');doc.text('FILTRI APPLICATI:',10,y+5);
-      doc.setFont('helvetica','normal');doc.text(filtriStr,42,y+5);
-      doc.setTextColor(192,120,64);doc.setFont('helvetica','bold');
-      doc.text('Operatore: '+currentUser,pw-10,y+5,{align:'right'});
-    }
-
-    function drawFooter(doc,pag,totPag){
-      doc.setFillColor(26,58,92);doc.rect(0,ph-8,pw,8,'F');
-      doc.setTextColor(255,255,255);
-      doc.setFontSize(6);doc.setFont('helvetica','bold');doc.text('S.M.A.R.T',10,ph-3.5);
-      doc.setFontSize(5);doc.setFont('helvetica','normal');doc.text('SOLUTIONS',10,ph-1);
-      doc.setFontSize(6);doc.text(`Gestione Corsi IMAT — Generato il ${dataOra}`,pw/2,ph-3,{align:'center'});
-      doc.text(`Pag. ${pag} / ${totPag}`,pw-10,ph-3,{align:'right'});
-    }
-
-    // Prima pagina
-    drawHeader(doc);
-    drawKpiBar(doc,20);
-    drawFiltriBar(doc,34);
-
-    // Tabella
-    const intestazioni=['Cognome e Nome','Matricola','Qualifica','Reparto','Compagnia','Corso','Data rilascio','Data scadenza','Stato'];
-    const righe=filtered.map(c=>{
-      const s=statoScad(c.data_scadenza);
-      return[
-        c.cognome_nome||'—',
-        c.matricola_aziendale||'—',
-        c.qualifica||'—',
-        c.reparto||'—',
-        c.compagnia||'—',
-        c.nome_corso||'—',
-        c.data_rilascio?fmtBreve(c.data_rilascio):'—',
-        c.data_scadenza?fmtBreve(c.data_scadenza):'—',
-        s.txt
-      ];
-    });
-
-    doc.autoTable({
-      startY:44,
-      head:[intestazioni],
-      body:righe,
-      styles:{fontSize:6.5,cellPadding:2,valign:'middle'},
-      headStyles:{fillColor:[26,58,92],textColor:255,fontStyle:'bold',halign:'center',fontSize:6},
-      columnStyles:{
-        0:{fontStyle:'bold'},
-        1:{font:'courier',fontSize:6,halign:'center'},
-        6:{halign:'center'},7:{halign:'center'},8:{halign:'center'}
-      },
-      alternateRowStyles:{fillColor:[248,245,241]},
-      didParseCell:(data)=>{
-        if(data.section==='body'&&data.column.index===8){
-          const v=data.cell.raw;
-          if(v==='Scaduto'){data.cell.styles.textColor=[200,80,80];data.cell.styles.fontStyle='bold';}
-          else if(v==='Scade presto'){data.cell.styles.textColor=[212,133,58];data.cell.styles.fontStyle='bold';}
-          else if(v==='Valido'){data.cell.styles.textColor=[74,158,114];}
-        }
-      },
-      margin:{left:8,right:8,bottom:12},
-      didDrawPage:(data)=>{
-        drawFooter(doc,data.pageNumber,'{TOTPAG}');
-      }
-    });
-
-    // aggiorna numero pagine totali
-    const totPag=doc.internal.getNumberOfPages();
-    for(let i=1;i<=totPag;i++){
-      doc.setPage(i);
-      drawFooter(doc,i,totPag);
-    }
-
-    const nomefile=`Certificati_IMAT_${new Date().toISOString().slice(0,10)}.pdf`;
-    doc.save(nomefile);
-    toast('📄 PDF scaricato: '+nomefile);
-  }catch(e){toast('⚠️ Errore PDF: '+e.message,'error');}
-  finally{if(btn){btn.disabled=false;btn.innerHTML='📄 Esporta PDF';}}
 }
 
 function setConnDot(s){const d=document.getElementById('conn-dot');d.className='conn-dot'+(s==='on'?'':s==='off'?' off':' loading');}
@@ -3196,9 +3066,8 @@ async function esportaPdfCertificati(){
     const kpiValidi=filtered.filter(c=>statoScad(c.data_scadenza).txt==='Valido').length;
     const dataOra=new Date().toLocaleString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
     const filtriDesc=[];
-    if(corso)filtriDesc.push(corso);
     if(statoFiltro){const m={'scaduto':'Scaduti','scade':'In scadenza','valido':'Validi'};filtriDesc.push(m[statoFiltro]||'');}
-    [..._certSelCompagnia,..._certSelReparto,..._certSelStato].forEach(v=>filtriDesc.push(v));
+    [..._certSelCorso,..._certSelCompagnia,..._certSelReparto,..._certSelStato].forEach(v=>filtriDesc.push(v));
     const filtriStr=filtriDesc.length?filtriDesc.join(' · '):'Nessun filtro — tutti i certificati';
 
     function drawPage(doc,pag,totPag){
@@ -3808,7 +3677,7 @@ let _ceData = [];
 
 async function loadCorsiEffettuati() {
   const tbodyInit = document.getElementById('ce-tbody-assoc');
-  if (tbodyInit) tbodyInit.innerHTML = '<tr class="empty-row"><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted)">⏳ Caricamento…</td></tr>';
+  if (tbodyInit) tbodyInit.innerHTML = '<tr class="empty-row"><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted)">⏳ Caricamento…</td></tr>';
   try {
     const oggi = new Date().toISOString().slice(0, 10);
 
@@ -3947,7 +3816,7 @@ async function loadCorsiEffettuati() {
     const cbCorsi = document.getElementById('ce-cb-corsi');
     if (cbCorsi) {
       cbCorsi.innerHTML = corsiAssociati.map(c =>
-        `<label class="ce-cb-item" data-val="${c.trim().toLowerCase()}"><input type="checkbox" onchange="renderCorsiEffettuati()"> ${c}</label>`
+        `<label class="ce-cb-item" data-val="${c.trim().toLowerCase()}"><input type="checkbox" onchange="renderCorsiEffettuati()"> ${c}<span class="ce-cb-cnt">0</span></label>`
       ).join('') || '<span style="font-size:.78rem;color:var(--muted)">Nessun corso associato</span>';
     }
 
@@ -3965,15 +3834,22 @@ async function loadCorsiEffettuati() {
   } catch (e) {
     setConnDot('off');
     const tbErr = document.getElementById('ce-tbody-assoc');
-    if (tbErr) tbErr.innerHTML = `<tr class="empty-row"><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted)">⚠️ ${e.message}</td></tr>`;
+    if (tbErr) tbErr.innerHTML = `<tr class="empty-row"><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted)">⚠️ ${e.message}</td></tr>`;
     toast('Errore: ' + e.message, 'error');
   }
 }
 
 let _ceTab = 'assoc';
+let _ceSubTab = 'dainviare';
 let _ceSolleciti = {};
-let _ceListaRender = [];
+let _ceGroupRender = [];
 let _ceSort = { key: 'nome', dir: 1 };
+
+function ceFmtData(d) {
+  if (!d) return '—';
+  const p = d.slice(0, 10).split('-');
+  return p[2] + '/' + p[1] + '/' + p[0].slice(2);
+}
 
 function ceSetSort(key) {
   if (_ceSort.key === key) _ceSort.dir *= -1;
@@ -3992,12 +3868,60 @@ function ceUpdateSortBtns() {
   bd.textContent = '📅 Data' + (_ceSort.key === 'data' ? arrow : '');
 }
 
+function setCeSubTab(tab) {
+  _ceSubTab = tab;
+  document.getElementById('ce-subpill-dainviare').classList.toggle('active', tab === 'dainviare');
+  document.getElementById('ce-subpill-inviate').classList.toggle('active', tab === 'inviate');
+  document.getElementById('ce-subpill-tutti').classList.toggle('active', tab === 'tutti');
+  renderCorsiEffettuati();
+}
+
+function ceUpdateFacetCounts() {
+  const annoSel = document.getElementById('ce-f-anno');
+  const fAnno = annoSel ? annoSel.value : '';
+  const corsiSel = ceGetChecked('ce-cb-corsi');
+  const repartiSel = ceGetChecked('ce-cb-reparti');
+  const mesiSel = ceGetChecked('ce-cb-mesi');
+  const sollOf = r => _ceSolleciti[r.matricola + '||' + (r.corso || '').trim().toLowerCase()] || null;
+
+  let base = _ceTab === 'assoc' ? _ceData.filter(r => r.associato) : _ceData.filter(r => !r.associato);
+  if (_ceTab === 'assoc') {
+    if (_ceSubTab === 'dainviare') base = base.filter(r => !sollOf(r));
+    else if (_ceSubTab === 'inviate') base = base.filter(r => sollOf(r));
+  }
+
+  // Applica tutti i filtri attivi tranne quello indicato in "except" (conteggio a faccette)
+  const applyExcept = except => {
+    let l = base;
+    if (fAnno && except !== 'anno') l = l.filter(r => r.data_sessione.startsWith(fAnno));
+    if (mesiSel.length && except !== 'mese') l = l.filter(r => mesiSel.includes(r.data_sessione.slice(5, 7)));
+    if (repartiSel.length && except !== 'reparto') l = l.filter(r => repartiSel.includes((r.reparto || '').trim().toLowerCase()));
+    if (corsiSel.length && except !== 'corso') l = l.filter(r => corsiSel.includes((r.corso || '').trim().toLowerCase()));
+    return l;
+  };
+
+  document.querySelectorAll('#ce-cb-reparti .ce-cb-item').forEach(el => {
+    const val = el.dataset.val;
+    const cnt = applyExcept('reparto').filter(r => (r.reparto || '').trim().toLowerCase() === val).length;
+    const span = el.querySelector('.ce-cb-cnt');
+    if (span) span.textContent = cnt;
+  });
+  document.querySelectorAll('#ce-cb-corsi .ce-cb-item').forEach(el => {
+    const val = el.dataset.val;
+    const cnt = applyExcept('corso').filter(r => (r.corso || '').trim().toLowerCase() === val).length;
+    const span = el.querySelector('.ce-cb-cnt');
+    if (span) span.textContent = cnt;
+  });
+}
+
 function setCeTab(tab) {
   _ceTab = tab;
   document.getElementById('ce-pill-assoc').classList.toggle('active', tab === 'assoc');
   document.getElementById('ce-pill-noassoc').classList.toggle('active', tab === 'noassoc');
   document.getElementById('ce-tbl-assoc').style.display = tab === 'assoc' ? '' : 'none';
   document.getElementById('ce-tbl-noassoc').style.display = tab === 'noassoc' ? '' : 'none';
+  const subpills = document.getElementById('ce-subpills');
+  if (subpills) subpills.style.display = tab === 'assoc' ? '' : 'none';
   renderCorsiEffettuati();
 }
 
@@ -4039,12 +3963,6 @@ function renderCorsiEffettuati() {
   const repartiSel = ceGetChecked('ce-cb-reparti');
   const mesiSel = ceGetChecked('ce-cb-mesi');
 
-  const fmtData = d => {
-    if (!d) return '—';
-    const p = d.slice(0, 10).split('-');
-    return p[2] + '/' + p[1] + '/' + p[0].slice(2);
-  };
-
   const filtra = lista => {
     if (fAnno) lista = lista.filter(r => r.data_sessione.startsWith(fAnno));
     // Se nessun checkbox selezionato = mostra tutti (nessun filtro attivo)
@@ -4064,40 +3982,89 @@ function renderCorsiEffettuati() {
     return l;
   };
 
-  // Contatori pill (sempre aggiornati)
+  const sollOf = r => _ceSolleciti[r.matricola + '||' + (r.corso || '').trim().toLowerCase()] || null;
+
+  // Contatori pill principali (sempre aggiornati, a livello di record)
   document.getElementById('ce-cnt-assoc').textContent = _ceData.filter(r => r.associato).length;
   document.getElementById('ce-cnt-noassoc').textContent = _ceData.filter(r => !r.associato).length;
 
   if (_ceTab === 'assoc') {
-    const lista = ordina(filtra(_ceData.filter(r => r.associato)));
-    document.getElementById('ce-count').textContent = lista.length ? lista.length + ' record' : '';
+    const baseFiltrata = filtra(_ceData.filter(r => r.associato));
+
+    // Contatori sub-pill (persone distinte, in base ai filtri corso/reparto/periodo attivi)
+    const matDaInv = new Set(baseFiltrata.filter(r => !sollOf(r)).map(r => r.matricola));
+    const matInv = new Set(baseFiltrata.filter(r => sollOf(r)).map(r => r.matricola));
+    const matTutti = new Set(baseFiltrata.map(r => r.matricola));
+    document.getElementById('ce-cnt-dainviare').textContent = matDaInv.size;
+    document.getElementById('ce-cnt-inviate').textContent = matInv.size;
+    document.getElementById('ce-cnt-tutti').textContent = matTutti.size;
+
+    let righeSub;
+    if (_ceSubTab === 'dainviare') righeSub = baseFiltrata.filter(r => !sollOf(r));
+    else if (_ceSubTab === 'inviate') righeSub = baseFiltrata.filter(r => sollOf(r));
+    else righeSub = baseFiltrata;
+
+    // Raggruppo per matricola: una riga per persona con tutti i corsi pendenti/inviati
+    const groupsMap = {};
+    righeSub.forEach(r => {
+      if (!groupsMap[r.matricola]) {
+        groupsMap[r.matricola] = {
+          matricola: r.matricola, cognome_nome: r.cognome_nome, qualifica: r.qualifica,
+          reparto: r.reparto, email: r.email, corsi: []
+        };
+      }
+      groupsMap[r.matricola].corsi.push({ corso: r.corso, data_sessione: r.data_sessione, sessione_id: r.sessione_id, soll: sollOf(r) });
+    });
+    let groups = Object.values(groupsMap);
+    groups.forEach(g => g.corsi.sort((a, b) => (a.data_sessione || '').localeCompare(b.data_sessione || '')));
+
+    groups.sort((a, b) => {
+      if (_ceSort.key === 'data') {
+        const da = a.corsi[0] ? a.corsi[0].data_sessione : '';
+        const db = b.corsi[0] ? b.corsi[0].data_sessione : '';
+        return _ceSort.dir * da.localeCompare(db) || (a.cognome_nome || '').localeCompare(b.cognome_nome || '', 'it');
+      }
+      return _ceSort.dir * (a.cognome_nome || '').localeCompare(b.cognome_nome || '', 'it');
+    });
+
+    document.getElementById('ce-count').textContent = groups.length ? groups.length + ' persone' : '';
     const tbody = document.getElementById('ce-tbody-assoc');
-    _ceListaRender = lista;
-    if (!lista.length) {
-      tbody.innerHTML = '<tr class="empty-row"><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted)">Nessun risultato con i filtri selezionati</td></tr>';
+    _ceGroupRender = groups;
+    if (!groups.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted)">Nessun risultato con i filtri selezionati</td></tr>';
     } else {
-      tbody.innerHTML = lista.map((r, idx) => {
-        const sKey = r.matricola + '||' + (r.corso || '').trim().toLowerCase();
-        const soll = _ceSolleciti[sKey];
+      tbody.innerHTML = groups.map((g, idx) => {
+        const total = g.corsi.length;
+        const sentCount = g.corsi.filter(c => c.soll).length;
+        const allSent = sentCount === total;
+        const corsiHtml = g.corsi.map(c =>
+          `<div class="ce-corso-line"><span>${c.corso}</span><span class="ce-corso-date">${ceFmtData(c.data_sessione)}</span>` +
+          (c.soll ? `<span class="ce-corso-sent-tag">✓ ${fmtSollTs(c.soll.il)} · ${c.soll.da || ''}</span>` : '') +
+          `</div>`
+        ).join('');
         let emailCell;
-        if (!r.email) {
+        if (!g.email) {
           emailCell = '<button class="btn-email disabled" title="Email non disponibile" disabled>✉️</button>';
-        } else if (soll) {
-          emailCell = `<div style="display:inline-flex;flex-direction:column;align-items:center;gap:2px;">` +
-            `<button class="btn-email" onclick="ceSollecito(${idx})" title="Reinvia sollecito">✉️</button>` +
-            `<span class="ce-soll-info">${fmtSollTs(soll.il)}</span>` +
-            `<span class="ce-soll-info" style="color:#639922;font-weight:500">${soll.da || ''}</span>` +
-            `</div>`;
         } else {
-          emailCell = `<button class="btn-email" onclick="ceSollecito(${idx})" title="Invia sollecito">✉️</button>`;
+          const btn = `<button class="btn-email" onclick="ceSollecitoGroup(${idx})" title="${allSent ? 'Reinvia sollecito' : 'Invia sollecito'}">✉️</button>`;
+          if (allSent) {
+            const last = g.corsi.reduce((acc, c) => (!acc || c.soll.il > acc.soll.il) ? c : acc, null);
+            emailCell = `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;">${btn}` +
+              `<span class="ce-soll-info">${fmtSollTs(last.soll.il)}</span>` +
+              `<span class="ce-soll-info" style="color:#639922;font-weight:500">${last.soll.da || ''}</span></div>`;
+          } else if (sentCount > 0) {
+            emailCell = `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;">${btn}` +
+              `<span class="ce-soll-info" style="color:var(--muted)">${sentCount}/${total} inviati</span></div>`;
+          } else {
+            emailCell = btn;
+          }
         }
-        return `<tr${soll ? ' class="ce-row-sent"' : ''}>` +
-          '<td style="padding:9px 14px;font-weight:600;font-size:.84rem">' + (r.cognome_nome||'—') + '</td>' +
-          `<td style="padding:9px 14px;font-family:'DM Mono',monospace;font-size:.78rem">${r.matricola}</td>` +
-          `<td style="padding:9px 14px;font-size:.8rem;color:var(--muted)">${r.qualifica}</td>` +
-          `<td style="padding:9px 14px;font-size:.8rem">${r.reparto}</td>` +
-          `<td style="padding:9px 14px;font-size:.82rem;font-weight:600">${r.corso}</td>` +
-          `<td style="padding:9px 14px;font-size:.82rem;white-space:nowrap">${fmtData(r.data_sessione)}</td>` +
+        return `<tr${allSent ? ' class="ce-row-sent"' : ''}>` +
+          '<td style="padding:9px 14px;font-weight:600;font-size:.84rem">' + (g.cognome_nome||'—') + '</td>' +
+          `<td style="padding:9px 14px;font-family:'DM Mono',monospace;font-size:.78rem">${g.matricola}</td>` +
+          `<td style="padding:9px 14px;font-size:.8rem;color:var(--muted)">${g.qualifica}</td>` +
+          `<td style="padding:9px 14px;font-size:.8rem">${g.reparto}</td>` +
+          `<td style="padding:9px 14px">${corsiHtml}</td>` +
           `<td style="padding:6px 14px;text-align:center">${emailCell}</td>` +
           '</tr>';
       }).join('');
@@ -4109,18 +4076,23 @@ function renderCorsiEffettuati() {
     if (!lista.length) {
       tbody.innerHTML = '<tr class="empty-row"><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted)">Nessun risultato</td></tr>';
     } else {
-      tbody.innerHTML = lista.map(r =>
-        '<tr>' +
+      tbody.innerHTML = lista.map(r => {
+        const soll = sollOf(r);
+        return '<tr' + (soll ? ' class="ce-row-sent"' : '') + '>' +
         '<td style="padding:9px 14px;font-weight:600;font-size:.84rem">' + (r.cognome_nome||'—') + '</td>' +
         `<td style="padding:9px 14px;font-family:'DM Mono',monospace;font-size:.78rem">${r.matricola}</td>` +
         `<td style="padding:9px 14px;font-size:.8rem;color:var(--muted)">${r.qualifica}</td>` +
         `<td style="padding:9px 14px;font-size:.8rem">${r.reparto}</td>` +
-        `<td style="padding:9px 14px;font-size:.82rem;font-weight:600;color:var(--orange)">${r.corso}</td>` +
-        `<td style="padding:9px 14px;font-size:.82rem;white-space:nowrap">${fmtData(r.data_sessione)}</td>` +
-        '</tr>'
-      ).join('');
+        `<td style="padding:9px 14px;font-size:.82rem;font-weight:600;color:var(--orange)">${r.corso}` +
+        (soll ? `<div class="ce-corso-sent-tag" style="margin-top:2px">✓ incluso nel sollecito del ${fmtSollTs(soll.il)} · ${soll.da || ''}</div>` : '') +
+        `</td>` +
+        `<td style="padding:9px 14px;font-size:.82rem;white-space:nowrap">${ceFmtData(r.data_sessione)}</td>` +
+        '</tr>';
+      }).join('');
     }
   }
+
+  ceUpdateFacetCounts();
 }
 
 function fmtSollTs(iso) {
@@ -4131,33 +4103,46 @@ function fmtSollTs(iso) {
   return p(d.getDate()) + '/' + p(d.getMonth() + 1) + '/' + String(d.getFullYear()).slice(2) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
 }
 
-async function ceSollecito(idx) {
-  const r = _ceListaRender[idx];
-  if (!r || !r.email) return;
-  const nomeFormattato = (r.cognome_nome || '').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-  const d = r.data_sessione ? r.data_sessione.slice(0, 10).split('-').reverse().join('/') : '—';
-  const subject = 'Sollecito certificato — ' + r.corso;
+async function ceSollecitoGroup(idx) {
+  const g = _ceGroupRender[idx];
+  if (!g || !g.email || !g.corsi.length) return;
+  const nomeFormattato = (g.cognome_nome || '').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+  // Aggiungo anche i corsi non associati dello stesso marittimo (stesso elenco, stessa email)
+  const extraNonAssoc = _ceData
+    .filter(r => !r.associato && r.matricola === g.matricola)
+    .map(r => ({ corso: r.corso, data_sessione: r.data_sessione, sessione_id: r.sessione_id }));
+  const corsi = g.corsi.concat(extraNonAssoc);
+  const multi = corsi.length > 1;
+  const corsoStr = multi
+    ? corsi.map(c => '- ' + c.corso + ' (' + ceFmtData(c.data_sessione) + ')').join('\n')
+    : corsi[0].corso;
+  const dataStr = multi ? '' : ceFmtData(corsi[0].data_sessione);
+  const subject = multi
+    ? 'Sollecito certificati — ' + corsi.map(c => c.corso).join(', ')
+    : 'Sollecito certificato — ' + corsi[0].corso;
   const template = _emailDest['body_sollecito'] || CFG_SOLLECITO_BASE;
   const body = template
     .replace(/\[NOME\]/g, nomeFormattato)
-    .replace(/\[CORSO\]/g, r.corso || '')
-    .replace(/\[DATA\]/g, d)
+    .replace(/\[CORSO\]/g, corsoStr)
+    .replace(/\[DATA\]/g, dataStr)
     .replace(/\[FIRMA\]/g, currentUser || '');
   // CC dalla Gestione Destinatari Email dell'utente loggato, in base al reparto del marittimo
-  const reparto = (r.reparto || '').trim().toLowerCase();
+  const reparto = (g.reparto || '').trim().toLowerCase();
   const isHotel = reparto === 'camera' || reparto === 'cucina';
   const ccRaw = _currentUserData
     ? (isHotel ? (_currentUserData.email_mar_cc_hotel || '') : (_currentUserData.email_mar_cc_copmac || ''))
     : (isHotel ? (_emailDest.cc_hotel || '') : (_emailDest.cc_copmac || ''));
   const cc = ccRaw.split(/[;,]+/).map(s => s.trim()).filter(Boolean);
   const ccParams = cc.length ? 'cc=' + cc.map(s => encodeURIComponent(s)).join('%3B') + '&' : '';
-  window.location.href = 'mailto:' + r.email + '?' + ccParams + 'subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-  // Registra il sollecito su Supabase (timestamp + utente)
+  window.location.href = 'mailto:' + g.email + '?' + ccParams + 'subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  // Registra un sollecito per ciascun corso incluso nell'email (associati + non associati)
   try {
-    await sbPost('corsi_solleciti', { matricola: r.matricola, sessione_id: r.sessione_id || null, corso: r.corso, inviato_da: currentUser || '' });
-    _ceSolleciti[r.matricola + '||' + (r.corso || '').trim().toLowerCase()] = { da: currentUser || '', il: new Date().toISOString() };
+    for (const c of corsi) {
+      await sbPost('corsi_solleciti', { matricola: g.matricola, sessione_id: c.sessione_id || null, corso: c.corso, inviato_da: currentUser || '' });
+      _ceSolleciti[g.matricola + '||' + (c.corso || '').trim().toLowerCase()] = { da: currentUser || '', il: new Date().toISOString() };
+    }
     renderCorsiEffettuati();
-    toast('✉️ Sollecito registrato');
+    toast(multi ? `✉️ Sollecito registrato per ${corsi.length} corsi` : '✉️ Sollecito registrato');
   } catch(e) {
     toast('⚠️ Sollecito non registrato: ' + e.message, 'error');
   }
