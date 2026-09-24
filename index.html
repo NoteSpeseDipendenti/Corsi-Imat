@@ -1710,10 +1710,11 @@ async function impCaricaCsv(){
   try{
     const testo=await file.text();
     const linee=testo.split('\n').filter(l=>l.trim());
-    const header=linee[0].replace(/^\uFEFF/,'').split(';').map(h=>h.trim().toLowerCase());
+    const sep=linee[0].includes('\t')?'\t':';';
+    const header=linee[0].replace(/^\uFEFF/,'').split(sep).map(h=>h.trim().toLowerCase());
     _impRigheCSV=[];
     for(let i=1;i<linee.length;i++){
-      const vals=linee[i].split(';').map(v=>v.trim());
+      const vals=linee[i].split(sep).map(v=>v.trim());
       if(vals.length<5)continue;
       const row={};header.forEach((h,idx)=>{row[h]=vals[idx]||'';});
       if(!row.matricola_aziendale)continue;
@@ -1768,7 +1769,7 @@ function impElabora(){
       data_rilascio:ris.rilascio,data_scadenza:ris.scadenza,id_usato:ris.idUsato,
       qualifica:ref.qualifica||null,reparto:ref.reparto||null,
       stato:ref['Stato']||ref.stato||null,compagnia:ref['Compagnia']||ref.compagnia||null,
-      attuale:ref.attuale||null,data_sbarco:impIsDataValida(ref.data_sbarco)?ref.data_sbarco:null
+      attuale:ref.attuale||null,data_sbarco:impIsDataValida(ref.data_sbarco)?impNormalizzaData(ref.data_sbarco):null
     });
   });
   const marittimi=new Set(_impRecordElaborati.map(r=>r.matricola_aziendale)).size;
@@ -1779,15 +1780,31 @@ function impElabora(){
   document.getElementById('imp-st-corsi').textContent=corsiMappati;
 }
 
-function impIsDataValida(d){return d&&d!==''&&d!=='1900-01-00'&&!d.startsWith('1900');}
+function impNormalizzaData(d){
+  if(!d||d===''||d==='0')return null;
+  // Numero seriale Excel → AAAA-MM-GG
+  if(/^\d{4,6}$/.test(d)){
+    const n=parseInt(d);
+    if(n>1000&&n<100000){
+      const dt=new Date(Date.UTC(1899,11,30)+n*86400000);
+      return dt.toISOString().slice(0,10);
+    }
+  }
+  // GG/MM/AAAA → AAAA-MM-GG
+  const m=d.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if(m)return`${m[3]}-${m[2]}-${m[1]}`;
+  return d;
+}
+function impIsDataValida(d){const n=impNormalizzaData(d);return n&&n!=='1900-01-00'&&!n.startsWith('1900');}
 function impLogicaDate(righe){
-  const conScad=righe.filter(r=>impIsDataValida(r.data_scadenza));
+  const norm=r=>({...r,data_scadenza:impNormalizzaData(r.data_scadenza),data_rilascio:impNormalizzaData(r.data_rilascio)});
+  const conScad=righe.map(norm).filter(r=>impIsDataValida(r.data_scadenza));
   if(conScad.length){
     conScad.sort((a,b)=>b.data_scadenza.localeCompare(a.data_scadenza));
     const m=conScad[0];
     return{rilascio:impIsDataValida(m.data_rilascio)?m.data_rilascio:null,scadenza:m.data_scadenza,idUsato:m.id_corso};
   }
-  const conRil=righe.filter(r=>impIsDataValida(r.data_rilascio));
+  const conRil=righe.map(norm).filter(r=>impIsDataValida(r.data_rilascio));
   if(conRil.length){
     conRil.sort((a,b)=>b.data_rilascio.localeCompare(a.data_rilascio));
     return{rilascio:conRil[0].data_rilascio,scadenza:null,idUsato:conRil[0].id_corso};
@@ -1947,6 +1964,7 @@ async function impAvvia(){
       qualifica:r.qualifica||null,reparto:r.reparto||null,stato:r.stato||null,compagnia:r.compagnia||null,
       attuale:r.attuale||null,data_sbarco:r.data_sbarco||null
     }));
+    if(i===0)impLog(`[DEBUG] primo record: ${JSON.stringify(records[0])}`,'info');
     try{
       const resp=await fetch(`${SB_URL}/rest/v1/corsi_certificati?on_conflict=matricola_aziendale,nome_corso`,{
         method:'POST',headers:{...HDR,'Prefer':'resolution=merge-duplicates,return=representation'},
