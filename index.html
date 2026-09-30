@@ -1112,6 +1112,7 @@ if(new URLSearchParams(window.location.search).get('al')) {
       <button class="btn btn-ghost btn-lg" onclick="showAdmPanel('utenti',event)">👥 Utenti</button>
       <button class="btn btn-ghost btn-lg" onclick="showAdmPanel('pin',event)">🔑 PIN</button>
       <button class="btn btn-ghost btn-lg" onclick="showAdmPanel('import',event)">⬆ Importa CSV</button>
+      <button class="btn btn-ghost btn-lg" onclick="showAdmPanel('malattia',event)">🏥 Malattia</button>
       <button class="btn btn-ghost btn-lg" onclick="showAdmPanel('mapping',event)">🔗 Associazioni Nomi</button>
       <button class="btn btn-ghost btn-lg" onclick="showAdmPanel('config',event)">⚙️ Configurazione</button>
     </div>
@@ -1343,6 +1344,30 @@ if(new URLSearchParams(window.location.search).get('al')) {
         <div class="adm-card-title">🔑 Gestione PIN</div>
         <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.2rem">PIN per accesso amministratore. Minimo 4 cifre.</p>
         <div id="adm-pin-list"></div>
+      </div>
+    </div>
+
+    <!-- PANEL MALATTIA -->
+    <div class="adm-panel" id="adm-panel-malattia">
+      <div class="adm-card">
+        <div class="adm-card-title">🏥 Import Malattia / Infortunio</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:.8rem">
+          Importa da CSV (separatore <code>;</code>) i dipendenti in stato <strong>mai</strong> (malattia) o <strong>inf</strong> (infortunio).<br>
+          Ogni import <strong>cancella il precedente</strong> e inserisce solo le righe filtrate.
+        </div>
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:.8rem">
+          Colonne attese: <span style="font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 6px;border-radius:4px;font-size:.7rem">Nome;Qualifica;Anno Assunzione;Reparto;Status;...;matricola aziendale</span><br>
+          (la colonna <em>Status</em> è la 5ª, <em>matricola aziendale</em> è l'ultima — indice 14)
+        </div>
+        <input type="file" id="mal-csv-file" accept=".csv"
+          style="width:100%;padding:10px;background:var(--bg);border:1.5px dashed var(--border);border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.85rem;cursor:pointer;margin-bottom:.8rem">
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:1rem">
+          <button class="btn btn-primary" onclick="malImport()">🚀 Importa</button>
+          <span id="mal-status" style="font-size:.78rem"></span>
+        </div>
+        <div id="mal-risultato" style="display:none;margin-top:.5rem"></div>
+        <div id="mal-log-wrap" style="margin-top:1rem"></div>
+        <div id="mal-lista-wrap" style="margin-top:1rem"></div>
       </div>
     </div>
 
@@ -1710,11 +1735,10 @@ async function impCaricaCsv(){
   try{
     const testo=await file.text();
     const linee=testo.split('\n').filter(l=>l.trim());
-    const sep=linee[0].includes('\t')?'\t':';';
-    const header=linee[0].replace(/^\uFEFF/,'').split(sep).map(h=>h.trim().toLowerCase());
+    const header=linee[0].replace(/^\uFEFF/,'').split(';').map(h=>h.trim().toLowerCase());
     _impRigheCSV=[];
     for(let i=1;i<linee.length;i++){
-      const vals=linee[i].split(sep).map(v=>v.trim());
+      const vals=linee[i].split(';').map(v=>v.trim());
       if(vals.length<5)continue;
       const row={};header.forEach((h,idx)=>{row[h]=vals[idx]||'';});
       if(!row.matricola_aziendale)continue;
@@ -1769,7 +1793,7 @@ function impElabora(){
       data_rilascio:ris.rilascio,data_scadenza:ris.scadenza,id_usato:ris.idUsato,
       qualifica:ref.qualifica||null,reparto:ref.reparto||null,
       stato:ref['Stato']||ref.stato||null,compagnia:ref['Compagnia']||ref.compagnia||null,
-      attuale:ref.attuale||null,data_sbarco:impIsDataValida(ref.data_sbarco)?impNormalizzaData(ref.data_sbarco):null
+      attuale:ref.attuale||null,data_sbarco:impIsDataValida(ref.data_sbarco)?ref.data_sbarco:null
     });
   });
   const marittimi=new Set(_impRecordElaborati.map(r=>r.matricola_aziendale)).size;
@@ -1780,31 +1804,15 @@ function impElabora(){
   document.getElementById('imp-st-corsi').textContent=corsiMappati;
 }
 
-function impNormalizzaData(d){
-  if(!d||d===''||d==='0')return null;
-  // Numero seriale Excel → AAAA-MM-GG
-  if(/^\d{4,6}$/.test(d)){
-    const n=parseInt(d);
-    if(n>1000&&n<100000){
-      const dt=new Date(Date.UTC(1899,11,30)+n*86400000);
-      return dt.toISOString().slice(0,10);
-    }
-  }
-  // GG/MM/AAAA → AAAA-MM-GG
-  const m=d.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-  if(m)return`${m[3]}-${m[2]}-${m[1]}`;
-  return d;
-}
-function impIsDataValida(d){const n=impNormalizzaData(d);return n&&n!=='1900-01-00'&&!n.startsWith('1900');}
+function impIsDataValida(d){return d&&d!==''&&d!=='1900-01-00'&&!d.startsWith('1900');}
 function impLogicaDate(righe){
-  const norm=r=>({...r,data_scadenza:impNormalizzaData(r.data_scadenza),data_rilascio:impNormalizzaData(r.data_rilascio)});
-  const conScad=righe.map(norm).filter(r=>impIsDataValida(r.data_scadenza));
+  const conScad=righe.filter(r=>impIsDataValida(r.data_scadenza));
   if(conScad.length){
     conScad.sort((a,b)=>b.data_scadenza.localeCompare(a.data_scadenza));
     const m=conScad[0];
     return{rilascio:impIsDataValida(m.data_rilascio)?m.data_rilascio:null,scadenza:m.data_scadenza,idUsato:m.id_corso};
   }
-  const conRil=righe.map(norm).filter(r=>impIsDataValida(r.data_rilascio));
+  const conRil=righe.filter(r=>impIsDataValida(r.data_rilascio));
   if(conRil.length){
     conRil.sort((a,b)=>b.data_rilascio.localeCompare(a.data_rilascio));
     return{rilascio:conRil[0].data_rilascio,scadenza:null,idUsato:conRil[0].id_corso};
@@ -1964,7 +1972,6 @@ async function impAvvia(){
       qualifica:r.qualifica||null,reparto:r.reparto||null,stato:r.stato||null,compagnia:r.compagnia||null,
       attuale:r.attuale||null,data_sbarco:r.data_sbarco||null
     }));
-    if(i===0)impLog(`[DEBUG] primo record: ${JSON.stringify(records[0])}`,'info');
     try{
       const resp=await fetch(`${SB_URL}/rest/v1/corsi_certificati?on_conflict=matricola_aziendale,nome_corso`,{
         method:'POST',headers:{...HDR,'Prefer':'resolution=merge-duplicates,return=representation'},
@@ -2059,6 +2066,7 @@ function showAdmPanel(id,evt){
   evt.currentTarget.classList.remove('btn-ghost');evt.currentTarget.classList.add('btn-primary');
   if(id==='mapping')loadMapping();
   if(id==='config')admCaricaConfig();
+  if(id==='malattia'){malRenderLog();malRenderLista();}
 }
 
 async function admCaricaConfig() {
@@ -3324,20 +3332,28 @@ async function apriModalEmail(sessId){
     if(!iscritti.length){document.getElementById('me-tbody').innerHTML=`<tr><td colspan="11" style="text-align:center;padding:1rem;color:var(--muted)">Nessun iscritto.</td></tr>`;return;}
     const mats=iscritti.map(i=>i.matricola_aziendale).filter(Boolean);
     let dipMap={};
+    let malMap={};
     if(mats.length){
       const dips=await sbGet('Dipendenti','Matricola_Aziendale=in.('+mats.map(m=>encodeURIComponent(m)).join(',')+')'+'&select=Matricola_Aziendale,Cognome,Nome,Qualifica,Compartimento,Matricola,Luogo_di_Nascita,Data_di_Nascita,Telefono,Email,compagnia,reparto');
       dips.forEach(d=>{dipMap[String(d.Matricola_Aziendale)]=d;});
-      // compagnia già inclusa nel fetch Dipendenti
+      // carica stato malattia/infortunio per le stesse matricole
+      try{
+        const malRows=await sbGet('corsi_malattia','matricola_aziendale=in.('+mats.join(',')+')'+'&select=matricola_aziendale,status');
+        malRows.forEach(r=>{malMap[String(r.matricola_aziendale)]=r.status;});
+      }catch(e){console.warn('[malMap]',e);}
     }
     const td='style="padding:6px 8px;vertical-align:middle;white-space:nowrap;font-size:.74rem"';
     document.getElementById('me-tbody').innerHTML=iscritti.map(i=>{
       const d=dipMap[i.matricola_aziendale]||{};
       const nome=d.Cognome&&d.Nome?d.Cognome+' '+d.Nome:i.cognome_nome||'—';
+      const malStatus=malMap[i.matricola_aziendale]||'';
+      const notaVal=malStatus?malStatus.toUpperCase():(i.note||'—');
+      const notaStyle=malStatus==='mai'?'color:#c85050;font-weight:700':malStatus==='inf'?'color:#d97706;font-weight:700':'';
       return`<tr>
         <td ${td}>${i.matricola_aziendale||'—'}</td>
         <td ${td}>${nome}</td>
         <td ${td}>${d.Qualifica||i.qualifica||'—'}</td>
-        <td ${td}>${i.note||'—'}</td>
+        <td ${td}><span style="${notaStyle}">${notaVal}</span></td>
         <td ${td}>${d.compagnia||'—'}</td>
         <td ${td}>${d.Compartimento||'—'}</td>
         <td ${td}>${d.Matricola||'—'}</td>
@@ -4138,6 +4154,176 @@ async function eliminaSnapshot31dic(id){
     toast('Snapshot eliminato');
     renderStorico31dic();
   }catch(e){toast('Errore: '+e.message,'error');}
+}
+
+
+
+// ══ MALATTIA LOG + LISTA ═══════════════════════════════════════════════════
+async function malRenderLog(){
+  var wrap=document.getElementById('mal-log-wrap');
+  if(!wrap)return;
+  var rows=[];
+  try{rows=await sbGet('corsi_malattia_log','order=imported_at.desc&limit=20');}
+  catch(e){wrap.innerHTML='';return;}
+  if(!rows||!rows.length){wrap.innerHTML='<div style="font-size:.72rem;color:var(--muted);font-style:italic">Nessun import registrato.</div>';return;}
+  function fmtDt(iso){if(!iso)return'—';var d=new Date(iso);return('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+d.getFullYear()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);}
+  var th='style="padding:5px 10px;font-size:.63rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:right;white-space:nowrap"';
+  var html='<details style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;overflow:hidden">'
+    +'<summary style="padding:10px 14px;cursor:pointer;font-size:.78rem;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;list-style:none">'
+    +'<i class="ti ti-history" style="font-size:15px;color:var(--muted)"></i>'
+    +' Storico import <span style="font-size:.7rem;font-weight:400;color:var(--muted);margin-left:4px">('+rows.length+' registraz.)</span>'
+    +'</summary>'
+    +'<div style="overflow-x:auto;border-top:0.5px solid var(--border)">'
+    +'<table style="width:100%;border-collapse:collapse">'
+    +'<thead><tr style="border-bottom:0.5px solid var(--border)">'
+    +'<th style="'+th.slice(7,-1)+';text-align:left">Data</th>'
+    +'<th '+th+'>Utente</th>'
+    +'<th '+th+'>Totale</th>'
+    +'<th '+th+';color:#c85050">MAI</th>'
+    +'<th '+th+';color:#d97706">INF</th>'
+    +'</tr></thead><tbody>';
+  rows.forEach(function(r){
+    html+='<tr style="border-bottom:0.5px solid var(--border)">'
+      +'<td style="padding:5px 10px;font-size:.75rem"><span style="background:var(--surface2,#f3f0eb);color:var(--muted);border-radius:4px;padding:2px 8px;font-size:.7rem">'+fmtDt(r.imported_at)+'</span></td>'
+      +'<td style="padding:5px 10px;font-size:.75rem;text-align:right">'+(r.utente||'—')+'</td>'
+      +'<td style="padding:5px 10px;font-size:.78rem;font-weight:600;text-align:right">'+r.tot+'</td>'
+      +'<td style="padding:5px 10px;font-size:.78rem;font-weight:700;color:#c85050;text-align:right">'+r.mai+'</td>'
+      +'<td style="padding:5px 10px;font-size:.78rem;font-weight:700;color:#d97706;text-align:right">'+r.inf+'</td>'
+      +'</tr>';
+  });
+  html+='</tbody></table></div></details>';
+  wrap.innerHTML=html;
+}
+
+async function malRenderLista(){
+  var wrap=document.getElementById('mal-lista-wrap');
+  if(!wrap)return;
+  wrap.innerHTML='<div style="font-size:.75rem;color:var(--muted);padding:8px 0"><span class="spinner"></span> Carico lista...</div>';
+  var malRows=[];
+  try{malRows=await sbGet('corsi_malattia','select=matricola_aziendale,status');}
+  catch(e){wrap.innerHTML='<div style="font-size:.72rem;color:var(--muted)">Errore caricamento lista</div>';return;}
+  if(!malRows||!malRows.length){wrap.innerHTML='<div style="font-size:.72rem;color:var(--muted);font-style:italic">Nessun record presente.</div>';return;}
+  // carica dati dipendenti
+  var mats=malRows.map(r=>r.matricola_aziendale).filter(Boolean);
+  var dipMap={};
+  try{
+    var dips=await sbGet('Dipendenti','Matricola_Aziendale=in.('+mats.join(',')+')'+'&select=Matricola_Aziendale,Cognome,Nome,Qualifica,reparto,compagnia');
+    dips.forEach(function(d){dipMap[String(d.Matricola_Aziendale)]=d;});
+  }catch(e){console.warn('[malLista dips]',e);}
+  // ordina per cognome alfabetico
+  malRows.sort(function(a,b){
+    var da=dipMap[a.matricola_aziendale]||{};
+    var db=dipMap[b.matricola_aziendale]||{};
+    var ca=(da.Cognome||'').toUpperCase();
+    var cb=(db.Cognome||'').toUpperCase();
+    return ca<cb?-1:ca>cb?1:0;
+  });
+  var nMai=malRows.filter(r=>r.status==='mai').length;
+  var nInf=malRows.filter(r=>r.status==='inf').length;
+  var th='padding:6px 10px;font-size:.63rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;white-space:nowrap;background:var(--surface)';
+  var html='<div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;overflow:hidden">'
+    +'<div style="padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:0.5px solid var(--border)">'
+    +'<span style="font-size:.78rem;font-weight:600;color:var(--text)">👥 Personale in Malattia / Infortunio</span>'
+    +'<span style="font-size:.7rem;background:#fde8e8;color:#c85050;padding:2px 8px;border-radius:4px;font-weight:700">MAI: '+nMai+'</span>'
+    +'<span style="font-size:.7rem;background:#fef3e2;color:#d97706;padding:2px 8px;border-radius:4px;font-weight:700">INF: '+nInf+'</span>'
+    +'</div>'
+    +'<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse">'
+    +'<thead><tr style="border-bottom:0.5px solid var(--border)">'
+    +'<th style="'+th+'">Matricola</th>'
+    +'<th style="'+th+'">Cognome Nome</th>'
+    +'<th style="'+th+'">Qualifica</th>'
+    +'<th style="'+th+'">Reparto</th>'
+    +'<th style="'+th+'">Compagnia</th>'
+    +'<th style="'+th+'">Status</th>'
+    +'</tr></thead><tbody>';
+  malRows.forEach(function(r){
+    var d=dipMap[r.matricola_aziendale]||{};
+    var nome=d.Cognome&&d.Nome?(d.Cognome+' '+d.Nome):'—';
+    var isMai=r.status==='mai';
+    var badgeStyle=isMai?'background:#fde8e8;color:#c85050':'background:#fef3e2;color:#d97706';
+    html+='<tr style="border-bottom:0.5px solid var(--border)">'
+      +'<td style="padding:5px 10px;font-size:.75rem;font-family:monospace">'+r.matricola_aziendale+'</td>'
+      +'<td style="padding:5px 10px;font-size:.78rem;font-weight:500">'+nome+'</td>'
+      +'<td style="padding:5px 10px;font-size:.75rem;color:var(--muted)">'+( d.Qualifica||'—')+'</td>'
+      +'<td style="padding:5px 10px;font-size:.75rem;color:var(--muted)">'+(d.reparto||'—')+'</td>'
+      +'<td style="padding:5px 10px;font-size:.75rem;color:var(--muted)">'+(d.compagnia||'—')+'</td>'
+      +'<td style="padding:5px 10px"><span style="'+badgeStyle+';font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:4px">'+r.status.toUpperCase()+'</span></td>'
+      +'</tr>';
+  });
+  html+='</tbody></table></div></div>';
+  wrap.innerHTML=html;
+}
+
+// ══ IMPORT MALATTIA ════════════════════════════════════════════════════════
+async function malImport(){
+  var fileInput=document.getElementById('mal-csv-file');
+  var statusEl=document.getElementById('mal-status');
+  var risultatoEl=document.getElementById('mal-risultato');
+  if(!fileInput||!fileInput.files||!fileInput.files[0]){
+    toast('Seleziona un file CSV','error');return;
+  }
+  statusEl.textContent='Lettura file...';
+  risultatoEl.style.display='none';
+  var text=await fileInput.files[0].text();
+  // parsing — separatore ;
+  var lines=text.split(/\r?\n/).filter(l=>l.trim()!=='');  if(lines.length<2){toast('File vuoto o non valido','error');statusEl.textContent='';return;}
+  // skip header (riga 0)
+  var righe=[];
+  for(var i=1;i<lines.length;i++){
+    var cols=lines[i].split(';');
+    if(cols.length<15)continue;
+    var status=(cols[4]||'').trim().toLowerCase();
+    var mat=(cols[14]||'').trim();
+    if(!mat)continue;
+    if(status==='mai'||status==='inf'){
+      righe.push({matricola_aziendale:mat,status:status});
+    }
+  }
+  if(righe.length===0){
+    toast('Nessuna riga con status mai/inf trovata','error');
+    statusEl.textContent='';return;
+  }
+  statusEl.textContent='Cancello dati precedenti...';
+  try{
+    // DELETE tutto con filtro che becca tutti i record
+    await fetch(SB_URL+'/rest/v1/corsi_malattia?id=gte.0',{
+      method:'DELETE',
+      headers:{...HDR,'Prefer':'return=minimal'}
+    });
+  }catch(e){toast('Errore cancellazione: '+e.message,'error');statusEl.textContent='';return;}
+  // INSERT a batch di 200
+  statusEl.textContent='Inserimento '+righe.length+' record...';
+  var batchSize=200;var errori=0;
+  for(var s=0;s<righe.length;s+=batchSize){
+    var batch=righe.slice(s,s+batchSize);
+    try{
+      await sbPost('corsi_malattia',batch);
+    }catch(e){errori++;console.error('[malImport] batch',s,e);}
+  }
+  statusEl.textContent='';
+  risultatoEl.style.display='block';
+  var colore=errori===0?'var(--green,#2e7d32)':'var(--orange,#e67e22)';
+  risultatoEl.innerHTML='<div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px">'
+    +'<div style="font-size:.88rem;font-weight:600;color:'+colore+';margin-bottom:4px">'
+    +(errori===0?'✅ Import completato':'⚠️ Import completato con errori')+'</div>'
+    +'<div style="font-size:.78rem;color:var(--muted)">Record importati: <strong>'+righe.length+'</strong>'
+    +' &nbsp;·&nbsp; mai: <strong>'+righe.filter(r=>r.status==='mai').length+'</strong>'
+    +' &nbsp;·&nbsp; inf: <strong>'+righe.filter(r=>r.status==='inf').length+'</strong>'
+    +(errori>0?" &nbsp;&middot;&nbsp; errori batch: <strong style=\"color:var(--red,#c62828)\">"+errori+"</strong>":"")
+    +'</div></div>';
+  if(errori===0)toast('✅ Importati '+righe.length+' record');
+  else toast('Import con '+errori+' errori','error');
+  // salva log su Supabase
+  if(errori===0){
+    try{
+      var nMai=righe.filter(r=>r.status==='mai').length;
+      var nInf=righe.filter(r=>r.status==='inf').length;
+      await sbPost('corsi_malattia_log',{utente:currentUser||'',tot:righe.length,mai:nMai,inf:nInf});
+    }catch(e){console.warn('[malLog]',e);}
+  }
+  // aggiorna log e lista
+  await malRenderLog();
+  await malRenderLista();
 }
 
 function renderStatGrafico(){
