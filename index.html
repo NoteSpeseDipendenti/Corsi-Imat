@@ -1742,6 +1742,7 @@ async function impCaricaCsv(){
       if(vals.length<5)continue;
       const row={};header.forEach((h,idx)=>{row[h]=vals[idx]||'';});
       if(!row.matricola_aziendale)continue;
+      ['data_rilascio','data_scadenza','data_sbarco'].forEach(k=>{if(k in row)row[k]=impNormData(row[k]);});
       _impRigheCSV.push(row);
     }
     // carica corsi da Supabase
@@ -1804,6 +1805,24 @@ function impElabora(){
   document.getElementById('imp-st-corsi').textContent=corsiMappati;
 }
 
+function impNormData(v){
+  // Converte seriale Excel / GG/MM/AAAA / AAAA-MM-GG -> AAAA-MM-GG. Valori non riconosciuti -> ''
+  v=(v||'').trim();
+  if(!v)return '';
+  if(/^\d{4}-\d{2}-\d{2}/.test(v))return v.slice(0,10);
+  if(/^\d+([.,]\d+)?$/.test(v)){
+    const n=Math.floor(parseFloat(v.replace(',','.')));
+    if(n<=60)return '';
+    const d=new Date(Date.UTC(1899,11,30)+n*86400000);
+    return d.toISOString().slice(0,10);
+  }
+  const m=v.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})$/);
+  if(m){
+    let a=m[3];if(a.length===2)a=(+a>50?'19':'20')+a;
+    return `${a}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
+  }
+  return '';
+}
 function impIsDataValida(d){return d&&d!==''&&d!=='1900-01-00'&&!d.startsWith('1900');}
 function impLogicaDate(righe){
   const conScad=righe.filter(r=>impIsDataValida(r.data_scadenza));
@@ -5091,12 +5110,20 @@ async function loadMapping() {
       selCsv.innerHTML = '<option value="">— seleziona tipologia —</option>' +
         tipologie.map(t => `<option value="${t.nome.trim()}">${t.nome}</option>`).join('');
     }
-    // Popola tendina sessioni
-    const nomiSess = await sbGet('corsi_nomi_sessioni', 'order=nome');
+    // Popola tendina sessioni: unione di corsi_nomi_sessioni + tutte le note distinte di corsi_sessioni
+    const [nomiSess, sessAll] = await Promise.all([
+      sbGet('corsi_nomi_sessioni', 'order=nome').catch(() => []),
+      sbGetAll('corsi_sessioni', 'select=nota').catch(() => [])
+    ]);
+    const visti = new Map(); // chiave lowercase -> nome originale
+    nomiSess.forEach(n => { const v = (n.nome || '').trim(); if (v && !visti.has(v.toLowerCase())) visti.set(v.toLowerCase(), v); });
+    sessAll.forEach(s => { const v = (s.nota || '').trim(); if (v && !visti.has(v.toLowerCase())) visti.set(v.toLowerCase(), v); });
+    const elencoSess = [...visti.values()].sort((a, b) => a.localeCompare(b, 'it', { sensitivity: 'base' }));
+    const escAttr = v => v.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
     const selSess = document.getElementById('map-sess');
     if (selSess) {
       selSess.innerHTML = '<option value="">— seleziona sessione —</option>' +
-        nomiSess.map(n => `<option value="${n.nome}">${n.nome}</option>`).join('');
+        elencoSess.map(v => `<option value="${escAttr(v)}">${escAttr(v)}</option>`).join('');
     }
   } catch(e) { toast('Errore caricamento mapping: ' + e.message, 'error'); }
 }
