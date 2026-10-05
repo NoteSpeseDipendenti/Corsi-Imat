@@ -167,6 +167,37 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 .stat-scad-num{background:none;border:none;color:var(--accent);font-weight:700;font-size:.75rem;cursor:pointer;padding:0;}
 .stat-scad-num:hover{text-decoration:underline;}
 .stat-scad-zero{color:var(--muted);}
+.alert-scad-m1{background:#FCEBEB;color:#A32D2D;display:inline-block;padding:2px 8px;border-radius:5px;font-size:.72rem;font-weight:700;white-space:nowrap}
+.alert-scad-m2{background:#FAECE7;color:#993C1D;display:inline-block;padding:2px 8px;border-radius:5px;font-size:.72rem;font-weight:700;white-space:nowrap}
+.alert-scad-m3{background:#FAEEDA;color:#854F0B;display:inline-block;padding:2px 8px;border-radius:5px;font-size:.72rem;font-weight:700;white-space:nowrap}
+.alert-scad-m4{background:#F1EFE8;color:#5F5E5A;display:inline-block;padding:2px 8px;border-radius:5px;font-size:.72rem;font-weight:700;white-space:nowrap}
+.alert-scad-past{background:#FCEBEB;color:#A32D2D;display:inline-block;padding:2px 8px;border-radius:5px;font-size:.72rem;font-weight:700;white-space:nowrap}
+.alert-st-mai{background:#FCEBEB;color:#A32D2D;display:inline-block;padding:2px 7px;border-radius:5px;font-size:.72rem;font-weight:700}
+.alert-st-inf{background:#FAEEDA;color:#854F0B;display:inline-block;padding:2px 7px;border-radius:5px;font-size:.72rem;font-weight:700}
+.alert-kpi-btn{cursor:pointer;transition:all .15s;user-select:none;position:relative;overflow:hidden;}
+.alert-kpi-btn::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#888780;border-radius:0;}
+.alert-kpi-btn:hover{transform:translateY(-1px);border-color:var(--border-strong);}
+.alert-kpi-btn .stat-kpi-n{color:#5F5E5A !important;}
+.alert-kpi-btn.kpi-active{background:#FAECE7 !important;border-color:#D85A30 !important;}
+.alert-kpi-btn.kpi-active::before{background:#D85A30;width:4px;}
+.alert-kpi-btn.kpi-active .stat-kpi-n{color:#D85A30 !important;}
+.alert-kpi-btn.kpi-active .stat-kpi-l{color:#993C1D !important;}
+/* INVII ALERT */
+.ia-pill{border-radius:20px;padding:6px 18px;font-size:.78rem;font-weight:500;border:.5px solid var(--border);cursor:pointer;background:var(--surface);color:var(--muted);transition:all .15s;position:relative;}
+.ia-pill.gray{background:var(--surface);color:var(--muted);border-color:var(--border);}
+.ia-pill.amber{background:#FAEEDA;border-color:#D85A30;color:#633806;font-weight:600;}
+.ia-pill.red{background:#FCEBEB;border-color:#E24B4A;color:#791F1F;font-weight:600;}
+.ia-pill.active-sel{box-shadow:0 0 0 2px #D85A30;}
+.ia-ritardo{font-size:.6rem;font-weight:700;background:#E24B4A;color:#fff;border-radius:8px;padding:1px 5px;margin-left:4px;vertical-align:middle;}
+.ia-corso-card{background:var(--surface);border:.5px solid var(--border);border-radius:10px;padding:.7rem 1rem;cursor:pointer;transition:border-color .15s;}
+.ia-corso-card:hover{border-color:var(--border-strong);}
+.ia-corso-card.active{border:1.5px solid #D85A30;background:#FAECE7;}
+.ia-corso-nome{font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:3px;}
+.ia-corso-cnt{font-size:.72rem;color:var(--muted);}
+.ia-corso-cnt strong{color:#D85A30;}
+.storico-data{font-size:.72rem;font-weight:500;color:#3B6D11;}
+.storico-chi{font-size:.62rem;color:var(--muted);}
+.storico-empty{font-size:.72rem;color:var(--muted);text-align:center;}
 /* SIDEBAR */
 #app-layout{display:flex;min-height:100vh;}
 #app-sidebar{width:210px;background:#2C2A25;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;}
@@ -484,6 +515,7 @@ flex-shrink:0;display:flex;align-items:center;padding:.4rem .85rem;border-radius
 .cert-cb-item input[type=checkbox]{width:13px;height:13px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;}
 .cert-cb-item label{font-size:.82rem;color:var(--text);cursor:pointer;flex:1;}
 .cert-cb-count{font-size:.68rem;color:var(--muted);background:var(--surface2);padding:1px 7px;border-radius:20px;flex-shrink:0;}
+.alert-cb-count{font-size:.68rem;color:var(--muted);flex-shrink:0;margin-left:auto;}
 .cert-filtri-footer{display:flex;align-items:center;justify-content:space-between;padding-top:.8rem;border-top:1px solid var(--border);margin-top:.8rem;}
 .cert-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:20px;font-size:.7rem;font-weight:700;background:var(--accent-l);border:.5px solid #f5d9b0;color:var(--accent-d);margin-right:4px;}
 .cert-tag-x{cursor:pointer;opacity:.7;font-size:.65rem;}
@@ -602,6 +634,8 @@ if(new URLSearchParams(window.location.search).get('al')) {
   <div class="sb-section">Analisi</div>
   <button class="sb-item" onclick="showPage('statistiche',this)"><span class="sb-icon">📊</span> Statistiche</button>
   <button class="sb-item" onclick="showPage('email-riepilogo',this)"><span class="sb-icon">📬</span> Riepilogo Email</button>
+  <button class="sb-item" onclick="showPage('alert',this)"><span class="sb-icon">🔔</span> Alert</button>
+  <button class="sb-item" id="sb-invii-alert" onclick="showPage('invii-alert',this)"><span class="sb-icon">📧</span> Invii ALERT</button>
   <div class="sb-section">Archivio</div>
   <!-- <button class="sb-item" onclick="showPage('ex-organico',this)"><span class="sb-icon">👥</span> Ex Organico</button> -->
   <button class="sb-item" onclick="showPage('ex-organico-sessioni',this)"><span class="sb-icon">🗄️</span> Ex Organico Sessioni</button>
@@ -1045,6 +1079,11 @@ if(new URLSearchParams(window.location.search).get('al')) {
         <div class="cfg-hint">Variabili: <code>[NOME]</code> <code>[CORSO]</code> <code>[DATA]</code> <code>[FIRMA]</code></div>
         <textarea id="cfg-body-sollecito" class="cfg-textarea" rows="9"></textarea>
       </div>
+      <div class="card-section">
+        <div class="cfg-label">🔔 Corpo email alert scadenza certificato</div>
+        <div class="cfg-hint">Variabili: <code>[NOME]</code> <code>[CORSO]</code> <code>[SCADENZA]</code> <code>[GIORNI]</code> <code>[FIRMA]</code></div>
+        <textarea id="cfg-body-alert" class="cfg-textarea" rows="9"></textarea>
+      </div>
       <div style="display:flex;gap:10px;justify-content:flex-end">
         <button class="btn btn-ghost" onclick="resetCfgEmail()">↺ Ripristina</button>
         <button class="btn btn-primary" onclick="salvaCfgEmail()">💾 Salva configurazione</button>
@@ -1311,6 +1350,23 @@ if(new URLSearchParams(window.location.search).get('al')) {
               <input class="form-input" type="text" id="eu-imat-cc" placeholder="es. responsabile@tirrenia.it" style="width:100%;font-family:'DM Mono',monospace;font-size:.82rem;margin-top:4px">
             </div>
           </div>
+          <!-- Alert Scadenza -->
+          <div style="display:flex;align-items:center;gap:8px;margin:1rem 0 12px">
+            <div style="flex:1;height:1px;background:var(--border)"></div>
+            <span style="font-size:.7rem;font-weight:700;color:#993C1D;text-transform:uppercase;letter-spacing:.06em;background:#FAECE7;padding:2px 10px;border-radius:6px">🔔 Alert Scadenza Certificati</span>
+            <div style="flex:1;height:1px;background:var(--border)"></div>
+          </div>
+          <div style="font-size:.72rem;color:var(--muted);margin-bottom:.8rem">Indirizzi utilizzati negli invii automatici dal tab <strong>Invii ALERT</strong></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem">
+            <div class="form-group">
+              <label style="font-weight:700;color:var(--accent)">A: — Ufficio armamento</label>
+              <input class="form-input" type="text" id="eu-alert-to" placeholder="es. armamento@moby.it" style="width:100%;margin-top:4px">
+            </div>
+            <div class="form-group">
+              <label style="font-weight:700;color:var(--amm)">CC:</label>
+              <input class="form-input" type="text" id="eu-alert-cc" placeholder="es. responsabile@moby.it" style="width:100%;font-family:'DM Mono',monospace;font-size:.82rem;margin-top:4px">
+            </div>
+          </div>
           <div style="margin-top:1rem">
             <button class="btn btn-primary" onclick="salvaEmailUtente()" style="height:40px;padding:0 20px">💾 Salva tutto</button>
           </div>
@@ -1459,6 +1515,156 @@ if(new URLSearchParams(window.location.search).get('al')) {
     </div>
 
   </div>
+
+  <!-- ===== ALERT ===== -->
+  <div class="page" id="page-alert">
+    <div class="page-hdr">
+      <div><div class="page-title">🔔 Alert Scadenze</div><div class="page-sub">Certificati validi in scadenza nei prossimi 4 mesi</div></div>
+      <button class="btn btn-primary" onclick="loadAlert()" style="display:flex;align-items:center;gap:6px">&#8635; Aggiorna</button>
+    </div>
+    <!-- Filtri checkbox -->
+    <div class="cert-cb-groups" style="margin-bottom:1rem;background:var(--surface);border:.5px solid var(--border);border-radius:12px;padding:1rem">
+      <div>
+        <div class="cert-cb-title">Compagnia <span class="cert-cb-reset" onclick="alertResetCb('compagnia')">reset</span></div>
+        <div id="alert-cb-compagnia"></div>
+      </div>
+      <div>
+        <div class="cert-cb-title">Reparto <span class="cert-cb-reset" onclick="alertResetCb('reparto')">reset</span></div>
+        <div id="alert-cb-reparto"></div>
+      </div>
+      <div>
+        <div class="cert-cb-title">Nazionalità <span class="cert-cb-reset" onclick="alertResetCb('stato')">reset</span></div>
+        <div id="alert-cb-stato"></div>
+      </div>
+      <div>
+        <div class="cert-cb-title">Corso <span class="cert-cb-reset" onclick="alertResetCb('corso')">reset</span></div>
+        <div id="alert-cb-corso"></div>
+      </div>
+    </div>
+    <!-- KPI 4 box fasce esatte -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.2rem" id="alert-kpi-grid">
+      <div class="stat-kpi alert-kpi-btn" id="alert-kpi-box-1" onclick="toggleAlertKpi(1)"><div class="stat-kpi-n" id="alert-kpi-1">—</div><div class="stat-kpi-l">Entro 1 mese</div><div id="alert-kpi-hint-1" style="font-size:.62rem;color:var(--muted);font-style:italic;margin-top:2px"></div></div>
+      <div class="stat-kpi alert-kpi-btn" id="alert-kpi-box-2" onclick="toggleAlertKpi(2)"><div class="stat-kpi-n" id="alert-kpi-2">—</div><div class="stat-kpi-l">Entro 2 mesi</div><div id="alert-kpi-hint-2" style="font-size:.62rem;color:var(--muted);font-style:italic;margin-top:2px"></div></div>
+      <div class="stat-kpi alert-kpi-btn" id="alert-kpi-box-3" onclick="toggleAlertKpi(3)"><div class="stat-kpi-n" id="alert-kpi-3">—</div><div class="stat-kpi-l">Entro 3 mesi</div><div id="alert-kpi-hint-3" style="font-size:.62rem;color:var(--muted);font-style:italic;margin-top:2px"></div></div>
+      <div class="stat-kpi alert-kpi-btn" id="alert-kpi-box-4" onclick="toggleAlertKpi(4)"><div class="stat-kpi-n" id="alert-kpi-4">—</div><div class="stat-kpi-l">Entro 4 mesi</div><div id="alert-kpi-hint-4" style="font-size:.62rem;color:var(--muted);font-style:italic;margin-top:2px"></div></div>
+    </div>
+    <!-- Toolbar -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;gap:8px;flex-wrap:wrap">
+      <div style="font-size:.72rem;color:var(--muted)" id="alert-tbl-count">—</div>
+      <div style="display:flex;gap:6px">
+        <button id="alert-sort-scad" class="btn btn-primary" onclick="setAlertSort('scad')" style="font-size:.78rem;padding:5px 14px">📅 Ordine scadenza</button>
+        <button id="alert-sort-alfa" class="btn btn-ghost" onclick="setAlertSort('alfa')" style="font-size:.78rem;padding:5px 14px">🔤 Ordine alfabetico</button>
+        <button class="btn btn-danger" onclick="alertEsportaPDF()" style="font-size:.78rem;padding:5px 14px">📄 Esporta PDF</button>
+      </div>
+    </div>
+    <!-- Tabella -->
+    <div class="table-wrap">
+      <table id="alert-table" style="width:100%;min-width:700px">
+        <thead>
+          <tr>
+            <th style="width:28px"></th>
+            <th>Matricola</th>
+            <th>Nominativo</th>
+            <th>Qualifica</th>
+            <th>Corso</th>
+            <th>Scadenza</th>
+            <th>Ultimo sbarco</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="alert-tbody">
+          <tr class="empty-row"><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted)">Clicca Aggiorna per caricare i dati</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- ===== FINE ALERT ===== -->
+
+  <!-- ===== INVII ALERT ===== -->
+  <div class="page" id="page-invii-alert">
+    <div class="page-hdr">
+      <div><div class="page-title">📧 Invii ALERT</div><div class="page-sub">Gestione invii email scadenza certificati — 120 / 90 / 60 / 30 giorni</div></div>
+      <button class="btn btn-primary" onclick="loadInviiAlert()" style="display:flex;align-items:center;gap:6px">&#8635; Aggiorna</button>
+    </div>
+    <!-- Sub-tab: Invio | Storico | Esclusi -->
+    <div style="display:flex;gap:6px;margin-bottom:1.2rem;border-bottom:.5px solid var(--border);padding-bottom:.6rem">
+      <button id="ia-tab-invio" class="btn btn-primary" onclick="switchIaTab('invio')" style="font-size:.78rem;padding:5px 16px">📤 Invio</button>
+      <button id="ia-tab-storico" class="btn btn-ghost" onclick="switchIaTab('storico')" style="font-size:.78rem;padding:5px 16px">📋 Storico</button>
+      <button id="ia-tab-esclusi" class="btn btn-ghost" onclick="switchIaTab('esclusi')" style="font-size:.78rem;padding:5px 16px">🚫 Esclusi</button>
+    </div>
+
+    <!-- ===== PANNELLO INVIO ===== -->
+    <div id="ia-panel-invio">
+      <!-- 4 pill fasce -->
+      <div style="font-size:.7rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.6rem">Fascia di scadenza</div>
+      <div style="display:flex;gap:8px;margin-bottom:1.2rem" id="ia-pills-row">
+        <button id="ia-pill-120" class="ia-pill" onclick="selectIaPill(120)">120 giorni</button>
+        <button id="ia-pill-90"  class="ia-pill" onclick="selectIaPill(90)">90 giorni</button>
+        <button id="ia-pill-60"  class="ia-pill" onclick="selectIaPill(60)">60 giorni</button>
+        <button id="ia-pill-30"  class="ia-pill" onclick="selectIaPill(30)">30 giorni</button>
+      </div>
+      <!-- Card corsi per fascia selezionata -->
+      <div id="ia-corsi-wrap" style="display:none">
+        <div style="font-size:.7rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.6rem" id="ia-corsi-label">Corsi</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:1.2rem" id="ia-corsi-grid"></div>
+      </div>
+      <!-- Tabella destinatari -->
+      <div id="ia-dest-wrap" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;flex-wrap:wrap;gap:8px">
+          <div style="font-size:.78rem;color:var(--muted)" id="ia-dest-label">—</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <button id="ia-sort-sbarco" class="btn btn-primary" onclick="sortIaDest('sbarco')" style="font-size:.75rem;padding:4px 12px" title="Ordina per data sbarco">⚓ Sbarco ↑</button>
+            <button id="ia-sort-alfa" class="btn btn-ghost" onclick="sortIaDest('alfa')" style="font-size:.75rem;padding:4px 12px" title="Ordina alfabeticamente">🔤 A→Z</button>
+            <button class="btn btn-primary" onclick="inviaAlertEmail()" style="font-size:.78rem;padding:5px 16px;display:flex;align-items:center;gap:6px">📧 Invia Email</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table style="width:100%;min-width:600px">
+            <thead>
+              <tr>
+                <th style="width:34px"><input type="checkbox" id="ia-cb-all" onchange="toggleAllIaDest(this.checked)" title="Seleziona/deseleziona tutti"></th>
+                <th>Matricola</th>
+                <th>Nominativo</th>
+                <th>Qualifica</th>
+                <th style="text-align:center">Naz.</th>
+                <th>Scadenza</th>
+                <th>Ultimo sbarco</th>
+              </tr>
+            </thead>
+            <tbody id="ia-dest-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="ia-empty-msg" style="text-align:center;padding:2.5rem;color:var(--muted);font-size:.85rem">Seleziona una fascia per visualizzare i corsi da notificare</div>
+    </div>
+
+    <!-- ===== PANNELLO STORICO ===== -->
+    <div id="ia-panel-storico" style="display:none">
+      <!-- Selezione corso -->
+      <div style="font-size:.7rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.6rem">Filtra per corso</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem" id="ia-storico-pills"></div>
+      <!-- Toolbar -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;gap:8px">
+        <input id="ia-storico-search" class="form-input" style="max-width:240px;font-size:.78rem;padding:5px 10px" placeholder="Cerca matricola o nome…" oninput="renderStorico()">
+        <button class="btn btn-ghost" onclick="esportaStoricoPDF()" style="font-size:.78rem;padding:5px 12px">📄 Esporta PDF</button>
+      </div>
+      <div class="table-wrap" id="ia-storico-wrap">
+        <div style="text-align:center;padding:2rem;color:var(--muted);font-size:.85rem">Nessun dato disponibile</div>
+      </div>
+    </div>
+
+    <!-- ===== PANNELLO ESCLUSI ===== -->
+    <div id="ia-panel-esclusi" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;gap:8px">
+        <input id="ia-esclusi-search" class="form-input" style="max-width:240px;font-size:.78rem;padding:5px 10px" placeholder="Cerca matricola o nome…" oninput="renderEsclusi()">
+        <button class="btn btn-ghost" onclick="esportaEsclusipDF()" style="font-size:.78rem;padding:5px 12px">📄 Esporta PDF</button>
+      </div>
+      <div class="table-wrap" id="ia-esclusi-wrap">
+        <div style="text-align:center;padding:2rem;color:var(--muted);font-size:.85rem">Nessun marittimo escluso</div>
+      </div>
+    </div>
+  </div>
+  <!-- ===== FINE INVII ALERT ===== -->
 
   <div class="page" id="page-ex-organico">
     <div class="page-hdr">
@@ -2074,9 +2280,11 @@ async function showPage(id,tab){
   if(id==='note-personale')await loadNotePersonale();
   if(id==='email-riepilogo')await loadEmailRiepilogo();
   if(id==='config-email')loadCfgEmail();
+  if(id==='invii-alert')loadInviiAlertPage();
   if(id==='admin')await loadAdmin();
   if(id==='ex-organico')await loadExOrganico();
   if(id==='ex-organico-sessioni')await loadExOrganicoSessioni();
+  if(id==='alert')await loadAlert();
 }
 function showAdmPanel(id,evt){
   document.querySelectorAll('.adm-panel').forEach(p=>p.classList.remove('active'));
@@ -3115,10 +3323,12 @@ function esportaImpRiepilogoPDF(){
 
 const CFG_EMAIL_BASE=`Buongiorno [NOME],\nLa convochiamo per i seguenti corsi che si terranno presso [CENTRO] :\n[CORSO]\nSi prega di presentarsi puntualmente con i documenti originali, libretto e documento d'identità.\nVI RICORDIAMO CHE SVOLGENDO I CORSI SOTTO MALATTIA E' PROIBITO !!!\n>>> SI RICHIEDE CONFERMA RICEZIONE MAIL. <<<\nCordiali saluti,\n\n[FIRMA]`;
 const CFG_SOLLECITO_BASE=`Gentile [NOME],\n\nci risulta che in data [DATA] hai effettuato il corso "[CORSO]".\n\nTi ricordiamo che non abbiamo ancora ricevuto il relativo certificato nel nostro sistema.\n\nTi preghiamo di provvedere al più presto all'invio della documentazione.\n\nGrazie per la collaborazione.\n\nCordiali saluti,\n\n[FIRMA]`;
+const CFG_ALERT_BASE=`Gentile [NOME],\n\nLe scriviamo per informarLa che il Suo certificato [CORSO] è in scadenza tra circa [GIORNI] giorni.\n\nSe ha già effettuato il corso, La preghiamo di inviare copia del certificato all'ufficio armamento di Sua competenza. Se ha già provveduto alla prenotazione, non è necessario alcun ulteriore intervento.\n\nQualora non avesse ancora provveduto, La invitiamo a contattare l'ufficio armamento di Sua competenza per organizzare il rinnovo nei tempi previsti. Si tenga presente che in caso di malattia il corso non potrà essere prenotato.\n\nCordiali saluti,\n\n[FIRMA]`;
 function getCfgKey(f){return'corsi_imat_'+(currentUser||'default')+'_'+f;}
 function loadCfgEmail(){
   const elBody=document.getElementById('cfg-body');if(elBody)elBody.value=_emailDest['body']||CFG_EMAIL_BASE;
   const elSoll=document.getElementById('cfg-body-sollecito');if(elSoll)elSoll.value=_emailDest['body_sollecito']||CFG_SOLLECITO_BASE;
+  const elAlert=document.getElementById('cfg-body-alert');if(elAlert)elAlert.value=_emailDest['body_alert']||CFG_ALERT_BASE;
   const elH=document.getElementById('cfg-cc-hotel');if(elH)elH.value=_emailDest['cc_hotel']||'';
   const elC=document.getElementById('cfg-cc-copmac');if(elC)elC.value=_emailDest['cc_copmac']||'';
 }
@@ -3126,6 +3336,7 @@ async function salvaCfgEmail(){
   const coppie=[];
   const elBody=document.getElementById('cfg-body');if(elBody)coppie.push(['body',elBody.value]);
   const elSoll=document.getElementById('cfg-body-sollecito');if(elSoll)coppie.push(['body_sollecito',elSoll.value]);
+  const elAlertCfg=document.getElementById('cfg-body-alert');if(elAlertCfg)coppie.push(['body_alert',elAlertCfg.value]);
   const elH=document.getElementById('cfg-cc-hotel');if(elH)coppie.push(['cc_hotel',elH.value.trim()]);
   const elC=document.getElementById('cfg-cc-copmac');if(elC)coppie.push(['cc_copmac',elC.value.trim()]);
   try{
@@ -3140,6 +3351,7 @@ function resetCfgEmail(){
   if(!confirm('Ripristinare i testi base?'))return;
   const elBody=document.getElementById('cfg-body');if(elBody)elBody.value=CFG_EMAIL_BASE;
   const elSoll=document.getElementById('cfg-body-sollecito');if(elSoll)elSoll.value=CFG_SOLLECITO_BASE;
+  const elAlertReset=document.getElementById('cfg-body-alert');if(elAlertReset)elAlertReset.value=CFG_ALERT_BASE;
   salvaCfgEmail();
 }
 
@@ -3176,6 +3388,8 @@ async function popolaEmailUtenteSel(){
       opt.dataset.mar_cc_copmac=u.email_mar_cc_copmac||'';
       opt.dataset.imat_to=u.email_imat_a||'';
       opt.dataset.imat_cc=u.email_imat_cc||'';
+      opt.dataset.alert_to=u.email_alert_to||'';
+      opt.dataset.alert_cc=u.email_alert_cc||'';
       sel.appendChild(opt);
     });
     if(cur)sel.value=cur;
@@ -3196,6 +3410,8 @@ function caricaEmailUtente(){
   document.getElementById('eu-mar-cc-copmac').value=opt.dataset.mar_cc_copmac||'';
   document.getElementById('eu-imat-to').value=opt.dataset.imat_to||'';
   document.getElementById('eu-imat-cc').value=opt.dataset.imat_cc||'';
+  document.getElementById('eu-alert-to').value=opt.dataset.alert_to||'';
+  document.getElementById('eu-alert-cc').value=opt.dataset.alert_cc||'';
   form.style.display='';ph.style.display='none';
   stato.textContent='';
 }
@@ -3208,7 +3424,9 @@ async function salvaEmailUtente(){
     email_mar_a_copmac:document.getElementById('eu-mar-a-copmac').value.trim(),
     email_mar_cc_copmac:document.getElementById('eu-mar-cc-copmac').value.trim(),
     email_imat_a:document.getElementById('eu-imat-to').value.trim(),
-    email_imat_cc:document.getElementById('eu-imat-cc').value.trim()
+    email_imat_cc:document.getElementById('eu-imat-cc').value.trim(),
+    email_alert_to:document.getElementById('eu-alert-to').value.trim(),
+    email_alert_cc:document.getElementById('eu-alert-cc').value.trim()
   };
   try{
     await sbPatch('corsi_utenti',sel.value,patch);
@@ -3220,6 +3438,8 @@ async function salvaEmailUtente(){
     opt.dataset.mar_cc_copmac=patch.email_mar_cc_copmac;
     opt.dataset.imat_to=patch.email_imat_a;
     opt.dataset.imat_cc=patch.email_imat_cc;
+    opt.dataset.alert_to=patch.email_alert_to;
+    opt.dataset.alert_cc=patch.email_alert_cc;
     document.getElementById('email-utente-stato').textContent='✅ Salvato';
     setTimeout(()=>{const s=document.getElementById('email-utente-stato');if(s)s.textContent='';},2500);
     toast('✅ Email utente salvate');
@@ -4286,13 +4506,19 @@ async function malImport(){
   var text=await fileInput.files[0].text();
   // parsing — separatore ;
   var lines=text.split(/\r?\n/).filter(l=>l.trim()!=='');  if(lines.length<2){toast('File vuoto o non valido','error');statusEl.textContent='';return;}
-  // skip header (riga 0)
+  // individua le colonne dall'intestazione (status / matricola aziendale); fallback sul vecchio tracciato (5ª e 15ª colonna)
+  var hdr=lines[0].replace(/^\uFEFF/,'').split(';').map(function(h){return h.trim().toLowerCase().replace(/\s+/g,' ');});
+  var iStatus=hdr.indexOf('status');
+  var iMat=hdr.findIndex(function(h){return h==='matricola aziendale'||h==='matricola_aziendale'||h==='matricola';});
+  if(iStatus<0)iStatus=4;
+  if(iMat<0)iMat=14;
+  var minCols=Math.max(iStatus,iMat)+1;
   var righe=[];
   for(var i=1;i<lines.length;i++){
     var cols=lines[i].split(';');
-    if(cols.length<15)continue;
-    var status=(cols[4]||'').trim().toLowerCase();
-    var mat=(cols[14]||'').trim();
+    if(cols.length<minCols)continue;
+    var status=(cols[iStatus]||'').trim().toLowerCase();
+    var mat=(cols[iMat]||'').trim();
     if(!mat)continue;
     if(status==='mai'||status==='inf'){
       righe.push({matricola_aziendale:mat,status:status});
@@ -5488,6 +5714,8 @@ function ceUpdateFacetCounts() {
     const cnt = applyExcept('corso').filter(r => (r.corso || '').trim().toLowerCase() === val).length;
     const span = el.querySelector('.ce-cb-cnt');
     if (span) span.textContent = cnt;
+    // Nasconde il corso se cnt=0 e non è attivo (selezionato)
+    el.style.display = (cnt === 0 && !el.classList.contains('active')) ? 'none' : '';
   });
 }
 
@@ -5955,6 +6183,1003 @@ function chiudiEosDetail() {
   document.getElementById('eos-list').style.display = '';
 }
 // ========== FINE EX ORGANICO SESSIONI ==========
+
+/* ===== ALERT ===== */
+let _alertData=[];
+let _alertSort='scad';
+let _alertMalattia={};
+let _alertFiltered=[];
+let _alertKpiFascia=0;
+let _alertSelCompagnia=new Set();
+let _alertSelReparto=new Set();
+let _alertSelStato=new Set();
+let _alertSelCorso=new Set();
+let _alertPrenotati={}; // key: "matricola|nome_corso" → true
+let _alertSenzaCert={}; // key: "matricola|nome_corso" → true
+let _alertAlfaDir=1; // 1=A→Z, -1=Z→A
+
+function toggleAlertKpi(n){
+  const wasActive=_alertKpiFascia===n;
+  _alertKpiFascia=wasActive?0:n;
+  [1,2,3,4].forEach(i=>{
+    const box=document.getElementById('alert-kpi-box-'+i);
+    if(box) box.classList.toggle('kpi-active',_alertKpiFascia===i);
+  });
+  renderAlert();
+}
+
+function alertToggleCb(group,val,checked){
+  if(group==='compagnia'){checked?_alertSelCompagnia.add(val):_alertSelCompagnia.delete(val);}
+  if(group==='reparto'){checked?_alertSelReparto.add(val):_alertSelReparto.delete(val);}
+  if(group==='stato'){checked?_alertSelStato.add(val):_alertSelStato.delete(val);}
+  if(group==='corso'){checked?_alertSelCorso.add(val):_alertSelCorso.delete(val);}
+  renderAlert();
+}
+
+function alertResetCb(group){
+  if(group==='compagnia'){_alertSelCompagnia.clear();document.querySelectorAll('#alert-cb-compagnia input').forEach(i=>i.checked=false);}
+  if(group==='reparto'){_alertSelReparto.clear();document.querySelectorAll('#alert-cb-reparto input').forEach(i=>i.checked=false);}
+  if(group==='stato'){_alertSelStato.clear();document.querySelectorAll('#alert-cb-stato input').forEach(i=>i.checked=false);}
+  if(group==='corso'){_alertSelCorso.clear();document.querySelectorAll('#alert-cb-corso input').forEach(i=>i.checked=false);}
+  renderAlert();
+}
+
+function alertBuildCb(containerId,counts,selSet,group){
+  const cont=document.getElementById(containerId);
+  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  if(!sorted.length){cont.innerHTML='<div style="font-size:.75rem;color:var(--muted);font-style:italic">Nessun dato</div>';return;}
+  cont.innerHTML=sorted.map(([val,cnt])=>`
+    <label class="cert-cb-item">
+      <input type="checkbox" ${selSet.has(val)?'checked':''} onchange="alertToggleCb('${group}','${val.replace(/'/g,"\\'")}',this.checked)">
+      <label>${val}</label>
+      <span class="alert-cb-count" style="${cnt===0?'opacity:.35':''}">${cnt.toLocaleString('it-IT')}</span>
+    </label>`).join('');
+}
+
+async function loadAlert(){
+  const today=new Date(); today.setHours(0,0,0,0);
+  _alertSort='scad';
+  _alertKpiFascia=0;
+  _alertAlfaDir=1;
+  _alertSelCompagnia.clear();_alertSelReparto.clear();_alertSelStato.clear();_alertSelCorso.clear();
+  [1,2,3,4].forEach(i=>{const b=document.getElementById('alert-kpi-box-'+i);if(b)b.classList.remove('kpi-active');});
+  document.getElementById('alert-sort-scad').className='btn btn-primary';
+  document.getElementById('alert-sort-alfa').className='btn btn-ghost';
+  document.getElementById('alert-sort-alfa').textContent='🔤 Ordine alfabetico';
+  toast('Caricamento Alert…');
+  try{
+    const addM=(n)=>{const d=new Date(today);d.setMonth(d.getMonth()+n);return d;};
+    const lim4=addM(4);
+    const todayStr=today.toISOString().slice(0,10);
+
+    const [certs,mal,tipologie,mapping,sessioni,iscritti]=await Promise.all([
+      sbGetAll('corsi_certificati','select=matricola_aziendale,cognome_nome,nome_corso,data_scadenza,data_rilascio,qualifica,reparto,compagnia,data_sbarco,stato&order=data_scadenza.asc'),
+      sbGetAll('corsi_malattia','select=matricola_aziendale,status'),
+      sbGetAll('corsi_tipologie','select=id,nome,id_corsi'),
+      sbGetAll('corsi_nome_mapping','select=nome_csv,nome_sessione'),
+      sbGetAll('corsi_sessioni','select=id,corso_id,data_inizio,data_fine,nota'),
+      sbGetAll('corsi_iscritti','select=sessione_id,matricola_aziendale')
+    ]);
+
+    _alertMalattia={};
+    for(const m of mal) _alertMalattia[String(m.matricola_aziendale)]=m.status;
+
+    // Mappa: nome_sessione.toLowerCase() → nome_csv.toLowerCase()
+    // Es: 'refresh addestramento passeggeri' → 'addestramento passeggeri'
+    const mapNotaToTip={};
+    for(const m of mapping){
+      if(m.nome_sessione && m.nome_csv){
+        mapNotaToTip[m.nome_sessione.toLowerCase().trim()]=m.nome_csv.toLowerCase().trim();
+      }
+    }
+    // Fallback: tipologia.nome → se stesso
+    for(const t of tipologie){
+      mapNotaToTip[t.nome.toLowerCase().trim()]=t.nome.toLowerCase().trim();
+    }
+
+    // Mappa nome_csv certificato → tipologia normalizzata (stesso schema)
+    const mapCsvToTip={};
+    for(const t of tipologie){
+      mapCsvToTip[t.nome.toLowerCase().trim()]=t.nome.toLowerCase().trim();
+    }
+    for(const m of mapping){
+      if(m.nome_csv){
+        mapCsvToTip[m.nome_csv.toLowerCase().trim()]=m.nome_csv.toLowerCase().trim();
+      }
+    }
+
+    // Mappa sessione_id → {data_inizio, data_fine, tipologia}
+    const sessMap={};
+    for(const s of sessioni){
+      const notaKey=(s.nota||'').toLowerCase().trim();
+      const tip=mapNotaToTip[notaKey]||null;
+      sessMap[s.id]={data_inizio:s.data_inizio,data_fine:s.data_fine,tipologia:tip};
+    }
+
+    // Costruisce lookup prenotati: "matricola|tipologia" → true (sessione futura)
+    // Priorità: se è già in _alertSenzaCert, NON mettere in prenotati
+    _alertPrenotati={};
+    for(const i of iscritti){
+      const s=sessMap[i.sessione_id];
+      if(!s||!s.data_inizio) continue;
+      if(s.data_inizio>todayStr && s.tipologia){
+        const key=String(i.matricola_aziendale)+'|'+s.tipologia.toLowerCase().trim();
+        if(!_alertSenzaCert[key]) _alertPrenotati[key]=true;
+      }
+    }
+
+    // Costruisce lookup senza certificato: "matricola|tipologia" → true
+    // = ha fatto il corso (sessione data_fine < oggi) ma NON ha un certificato
+    //   con data_scadenza > data_fine sessione (cert non aggiornato dopo il corso)
+    _alertSenzaCert={};
+    for(const i of iscritti){
+      const s=sessMap[i.sessione_id];
+      if(!s||!s.data_fine) continue;
+      if(s.data_fine<=todayStr && s.tipologia){
+        const key=String(i.matricola_aziendale)+'|'+s.tipologia.toLowerCase().trim();
+        // Senza cert = non ha un certificato con data_rilascio DOPO la fine sessione
+        const hasCertAggiornato=certs.some(c=>
+          String(c.matricola_aziendale)===String(i.matricola_aziendale)&&
+          (mapCsvToTip[(c.nome_corso||'').toLowerCase().trim()]||'')===s.tipologia.toLowerCase().trim()&&
+          c.data_rilascio&&c.data_rilascio>s.data_fine
+        );
+        if(!hasCertAggiornato) _alertSenzaCert[key]=true;
+      }
+    }
+
+    // Tieni solo validi entro 4 mesi
+    _alertData=certs.filter(r=>{
+      const scad=r.data_scadenza?new Date(r.data_scadenza):null;
+      return scad && scad>=today && scad<=lim4;
+    });
+
+    // Aggiunge tipologia ad ogni record per usarla nei pallini
+    for(const r of _alertData){
+      r._tipologia=(mapCsvToTip[(r.nome_corso||'').toLowerCase().trim()]||r.nome_corso||'').toLowerCase().trim();
+    }
+
+    // Costruisce checkbox una volta sola con conteggi totali
+    const cntComp={},cntRep={},cntStat={},cntCorso={};
+    _alertData.forEach(r=>{
+      if(r.compagnia)  cntComp[r.compagnia]=(cntComp[r.compagnia]||0)+1;
+      if(r.reparto)    cntRep[r.reparto]=(cntRep[r.reparto]||0)+1;
+      if(r.stato)      cntStat[r.stato]=(cntStat[r.stato]||0)+1;
+      if(r.nome_corso) cntCorso[r.nome_corso]=(cntCorso[r.nome_corso]||0)+1;
+    });
+    alertBuildCb('alert-cb-compagnia',cntComp,_alertSelCompagnia,'compagnia');
+    alertBuildCb('alert-cb-reparto',cntRep,_alertSelReparto,'reparto');
+    alertBuildCb('alert-cb-stato',cntStat,_alertSelStato,'stato');
+    alertBuildCb('alert-cb-corso',cntCorso,_alertSelCorso,'corso');
+    renderAlert();
+    toast('Alert caricato — '+_alertData.length+' certificati in scadenza');
+  }catch(e){toast('Errore: '+e.message);}
+}
+
+function setAlertSort(v){
+  if(v==='alfa' && _alertSort==='alfa'){
+    _alertAlfaDir*=-1;
+  } else {
+    _alertAlfaDir=1;
+  }
+  _alertSort=v;
+  document.getElementById('alert-sort-scad').className='btn '+(v==='scad'?'btn-primary':'btn-ghost');
+  const alfaLabel=v==='alfa'?(_alertAlfaDir===1?'🔤 A → Z':'🔤 Z → A'):'🔤 Ordine alfabetico';
+  document.getElementById('alert-sort-alfa').className='btn '+(v==='alfa'?'btn-primary':'btn-ghost');
+  document.getElementById('alert-sort-alfa').textContent=alfaLabel;
+  renderAlert();
+}
+
+function renderAlert(){
+  const today=new Date(); today.setHours(0,0,0,0);
+  const addM=(n)=>{const d=new Date(today);d.setMonth(d.getMonth()+n);return d;};
+  const lim1=addM(1),lim2=addM(2),lim3=addM(3),lim4=addM(4);
+
+  // Applica filtri checkbox
+  let rows=_alertData.filter(r=>{
+    if(_alertSelCompagnia.size && !_alertSelCompagnia.has(r.compagnia||'')) return false;
+    if(_alertSelReparto.size && !_alertSelReparto.has(r.reparto||'')) return false;
+    if(_alertSelStato.size && r.stato && !_alertSelStato.has(r.stato)) return false;
+    if(_alertSelCorso.size && !_alertSelCorso.has(r.nome_corso||'')) return false;
+    return true;
+  });
+
+  // KPI fasce esatte (calcolati sui rows filtrati, prima del filtro fascia)
+  const kpiRows=rows;
+  const fmtH=d=>d.toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric'});
+
+  const fasceConf=[
+    {n:1,limA:null,limB:lim1,hint:'fino al '+fmtH(lim1)},
+    {n:2,limA:lim1,limB:lim2,hint:fmtH(lim1)+' → '+fmtH(lim2)},
+    {n:3,limA:lim2,limB:lim3,hint:fmtH(lim2)+' → '+fmtH(lim3)},
+    {n:4,limA:lim3,limB:lim4,hint:fmtH(lim3)+' → '+fmtH(lim4)}
+  ];
+
+  fasceConf.forEach(({n,limA,limB,hint})=>{
+    const fasciaRows=kpiRows.filter(r=>{
+      const d=new Date(r.data_scadenza);
+      return (!limA||d>limA)&&d<=limB;
+    });
+    document.getElementById('alert-kpi-'+n).textContent=fasciaRows.length;
+    document.getElementById('alert-kpi-hint-'+n).textContent=hint;
+
+    // Conta prenotati e senza cert per questa fascia
+    let cntPren=0,cntSenza=0;
+    fasciaRows.forEach(r=>{
+      const mat=String(r.matricola_aziendale||'');
+      const tip=(r._tipologia||'');
+      const key=mat+'|'+tip;
+      if(_alertSenzaCert[key]) cntSenza++;
+      else if(_alertPrenotati[key]) cntPren++;
+    });
+
+    // Aggiorna o crea badge nel box
+    const box=document.getElementById('alert-kpi-box-'+n);
+    // Badge "altri" in alto a destra
+    let altriEl=box.querySelector('.kpi-altri');
+    if(!altriEl){
+      altriEl=document.createElement('span');
+      altriEl.className='kpi-altri';
+      altriEl.style.cssText='position:absolute;top:6px;right:8px;font-size:.68rem;font-weight:600;color:#1a1a1a;line-height:1;';
+      box.appendChild(altriEl);
+    }
+    const cntAltri=fasciaRows.length-cntPren-cntSenza;
+    altriEl.textContent=cntAltri>0?cntAltri:'';
+    let badges=box.querySelector('.kpi-badges');
+    if(!badges){
+      badges=document.createElement('div');
+      badges.className='kpi-badges';
+      badges.style.cssText='display:flex;flex-direction:column;gap:3px;margin-top:6px;padding-top:6px;border-top:.5px solid var(--border)';
+      box.appendChild(badges);
+    }
+    badges.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;font-size:.65rem">
+        <span style="display:flex;align-items:center;gap:4px;color:var(--muted)">
+          <span style="width:6px;height:6px;border-radius:50%;background:#4a9e72;flex-shrink:0;display:inline-block"></span>Prenotati
+        </span>
+        <span style="font-weight:500;font-size:.72rem;color:#3B6D11">${cntPren}</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;font-size:.65rem">
+        <span style="display:flex;align-items:center;gap:4px;color:var(--muted)">
+          <span style="width:6px;height:6px;border-radius:50%;background:#D85A30;flex-shrink:0;display:inline-block"></span>Senza cert.
+        </span>
+        <span style="font-weight:500;font-size:.72rem;color:#993C1D">${cntSenza}</span>
+      </div>`;
+  });
+
+  // Filtro fascia KPI se attivo
+  if(_alertKpiFascia>0){
+    const limN=addM(_alertKpiFascia);
+    const limPrec=_alertKpiFascia>1?addM(_alertKpiFascia-1):null;
+    rows=rows.filter(r=>{
+      const d=new Date(r.data_scadenza);
+      return d<=limN&&(!limPrec||d>limPrec);
+    });
+  }
+
+
+
+  // Ordinamento
+  rows.sort((a,b)=>{
+    if(_alertSort==='alfa'){
+      const na=(a.cognome_nome||a.matricola_aziendale||'').toString();
+      const nb=(b.cognome_nome||b.matricola_aziendale||'').toString();
+      return na.localeCompare(nb)*_alertAlfaDir;
+    }
+    const da=a.data_scadenza?new Date(a.data_scadenza):new Date('9999-01-01');
+    const db=b.data_scadenza?new Date(b.data_scadenza):new Date('9999-01-01');
+    return da-db;
+  });
+
+  _alertFiltered=rows;
+  document.getElementById('alert-tbl-count').textContent=`${rows.length} certificat${rows.length===1?'o':'i'}`;
+
+  const tbody=document.getElementById('alert-tbody');
+  if(!rows.length){
+    tbody.innerHTML='<tr class="empty-row"><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted)">Nessun risultato con i filtri selezionati</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML=rows.map(r=>{
+    const scad=r.data_scadenza?new Date(r.data_scadenza):null;
+    let badgeClass='alert-scad-past';
+    if(scad && scad>=today){
+      const lim1=addM(1),lim2=addM(2),lim3=addM(3);
+      if(scad<=lim1) badgeClass='alert-scad-m1';
+      else if(scad<=lim2) badgeClass='alert-scad-m2';
+      else if(scad<=lim3) badgeClass='alert-scad-m3';
+      else badgeClass='alert-scad-m4';
+    }
+    const scadTxt=r.data_scadenza?fmtBreve(r.data_scadenza):'—';
+    const sbarcoTxt=r.data_sbarco?fmtBreve(r.data_sbarco):'—';
+    const mat=String(r.matricola_aziendale||'');
+    const malStatus=_alertMalattia[mat];
+    let stHtml='<span style="color:var(--muted)">—</span>';
+    if(malStatus){
+      const s=malStatus.toLowerCase();
+      if(s==='mai') stHtml='<span class="alert-st-mai">MAI</span>';
+      else if(s==='inf') stHtml='<span class="alert-st-inf">INF</span>';
+    }
+    const tip=(r._tipologia||'');
+    const key=mat+'|'+tip;
+    let pallinoHtml='<td style="text-align:center;vertical-align:middle"></td>';
+    if(_alertSenzaCert[key]) pallinoHtml='<td style="text-align:center;vertical-align:middle"><span title="Corso effettuato, certificato mancante" style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#D85A30"></span></td>';
+    else if(_alertPrenotati[key]) pallinoHtml='<td style="text-align:center;vertical-align:middle"><span title="Prenotato a sessione futura" style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#4a9e72"></span></td>';
+    return `<tr>
+      ${pallinoHtml}
+      <td class="td-num">${mat||'—'}</td>
+      <td style="font-weight:700">${r.cognome_nome||r.nome||'—'}</td>
+      <td style="font-size:.82rem;color:var(--muted)">${r.qualifica||'—'}</td>
+      <td style="font-size:.82rem">${r.nome_corso||'—'}</td>
+      <td><span class="${badgeClass}">${scadTxt}</span></td>
+      <td style="font-size:.82rem;color:var(--muted)">${sbarcoTxt}</td>
+      <td>${stHtml}</td>
+    </tr>`;
+  }).join('');
+}
+
+function alertEsportaPDF(){
+  if(!_alertFiltered||!_alertFiltered.length){toast('Nessun dato da esportare');return;}
+  const today=new Date(); today.setHours(0,0,0,0);
+  const addM=(n)=>{const d=new Date(today);d.setMonth(d.getMonth()+n);return d;};
+
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+
+  const titoloRadio='Corsi in Scadenza (prossimi 4 mesi)';
+  const dataOggi=new Date().toLocaleDateString('it-IT');
+  doc.setFontSize(13);doc.setFont(undefined,'bold');
+  doc.text('🔔 Alert Scadenze — '+titoloRadio,14,14);
+  doc.setFontSize(8);doc.setFont(undefined,'normal');
+  doc.text('Esportato il '+dataOggi+' · '+_alertFiltered.length+' certificati',14,20);
+
+  const head=[['Matricola','Nominativo','Qualifica','Corso','Scadenza','Ultimo sbarco','Status']];
+  const body=_alertFiltered.map(r=>{
+    const mat=String(r.matricola_aziendale||'');
+    const malStatus=_alertMalattia[mat];
+    let st=malStatus?(malStatus.toLowerCase()==='mai'?'MAI':malStatus.toLowerCase()==='inf'?'INF':malStatus):'—';
+    return[
+      mat||'—',
+      r.cognome_nome||r.nome||'—',
+      r.qualifica||'—',
+      r.nome_corso||'—',
+      r.data_scadenza?fmtBreve(r.data_scadenza):'—',
+      r.data_sbarco?fmtBreve(r.data_sbarco):'—',
+      st
+    ];
+  });
+
+  doc.autoTable({
+    head,body,
+    startY:25,
+    styles:{fontSize:7,cellPadding:2},
+    headStyles:{fillColor:[192,86,26],textColor:255,fontStyle:'bold'},
+    alternateRowStyles:{fillColor:[250,247,242]},
+    columnStyles:{
+      0:{cellWidth:22},
+      1:{cellWidth:42},
+      2:{cellWidth:38},
+      3:{cellWidth:38},
+      4:{cellWidth:24},
+      5:{cellWidth:24},
+      6:{cellWidth:16}
+    },
+    didParseCell:(data)=>{
+      if(data.section==='body' && data.column.index===4){
+        const v=data.cell.raw;
+        if(v&&v!=='—'){
+          const d=new Date((_alertFiltered[data.row.index]||{}).data_scadenza);
+          if(d<today) data.cell.styles.textColor=[162,45,45];
+          else if(d<=addM(1)) data.cell.styles.textColor=[162,45,45];
+          else if(d<=addM(2)) data.cell.styles.textColor=[153,60,29];
+          else if(d<=addM(3)) data.cell.styles.textColor=[133,79,11];
+          else data.cell.styles.textColor=[95,94,90];
+          data.cell.styles.fontStyle='bold';
+        }
+      }
+    }
+  });
+
+  doc.save('Alert_Scadenze_'+dataOggi.replace(/\//g,'-')+'.pdf');
+}
+/* ===== FINE ALERT ===== */
+
+/* ===== INVII ALERT ===== */
+let _iaFasciaSelezionata=0; // 120|90|60|30
+let _iaCorsoSelezionato=''; // nome_corso selezionato
+let _iaSortMode='sbarco'; // 'sbarco'|'sbarco_desc'|'alfa'|'alfa_desc'
+let _iaData={}; // {fascia: [{nome_corso, scadenze:[{mat,nome,qualifica,scadenza,sbarco,email}]}]}
+let _iaStoricoCorso=''; // pill storico corso selezionato
+let _iaStoricoData=[]; // righe storico corrente
+let _iaEsclusData=[]; // righe esclusi
+
+function switchIaTab(tab){
+  document.getElementById('ia-panel-invio').style.display=tab==='invio'?'':'none';
+  document.getElementById('ia-panel-storico').style.display=tab==='storico'?'':'none';
+  document.getElementById('ia-panel-esclusi').style.display=tab==='esclusi'?'':'none';
+  document.getElementById('ia-tab-invio').className='btn '+(tab==='invio'?'btn-primary':'btn-ghost');
+  document.getElementById('ia-tab-storico').className='btn '+(tab==='storico'?'btn-primary':'btn-ghost');
+  document.getElementById('ia-tab-esclusi').className='btn '+(tab==='esclusi'?'btn-primary':'btn-ghost');
+  if(tab==='storico') renderStorico();
+  if(tab==='esclusi') renderEsclusi();
+}
+
+async function loadInviiAlert(){
+  toast('Caricamento Invii ALERT…');
+  try{
+    const today=new Date(); today.setHours(0,0,0,0);
+    const todayStr=today.toISOString().slice(0,10);
+
+    // Carica certificati in scadenza nei prossimi 4 mesi
+    const addG=(n)=>{const d=new Date(today);d.setDate(d.getDate()+n);return d;};
+    const lim4M=new Date(today);lim4M.setMonth(lim4M.getMonth()+4);
+    const lim4Str=lim4M.toISOString().slice(0,10);
+
+    const [certs,storico,esclusi,tipologie,mapping]=await Promise.all([
+      sbGetAll('corsi_certificati','select=matricola_aziendale,cognome_nome,nome_corso,data_scadenza,qualifica,data_sbarco&order=data_scadenza.asc'),
+      sbGetAll('alert_email_storico','select=*&order=matricola,corso_tipo'),
+      sbGetAll('alert_email_esclusi','select=*&order=corso_tipo,fascia_gg,nome'),
+      sbGetAll('corsi_tipologie','select=id,nome'),
+      sbGetAll('corsi_nome_mapping','select=nome_csv,nome_sessione')
+    ]);
+
+    // Matricole da caricare per email + stato nazionalità
+    const mats=[...new Set(certs.map(c=>String(c.matricola_aziendale||'')).filter(Boolean))];
+    let emailMap={},statoMap={};
+    if(mats.length){
+      const dips=await sbGetAll('Dipendenti','Matricola_Aziendale=in.('+mats.map(m=>encodeURIComponent(m)).join(',')+')'+'&select=Matricola_Aziendale,Email,stato');
+      dips.forEach(d=>{
+        const mat=String(d.Matricola_Aziendale);
+        emailMap[mat]=d.Email||'';
+        statoMap[mat]=d.stato||null;
+      });
+    }
+    // Valori ammessi: Italiani, Comunitari — esclusi Extra EU e NULL
+    const statoAmmesso=(mat)=>{
+      const s=statoMap[mat]||null;
+      return s==='Italiani'||s==='Comunitari';
+    };
+    const statoLabel=(mat)=>{
+      const s=statoMap[mat]||'';
+      if(s==='Italiani') return 'Ita';
+      if(s==='Comunitari') return 'Com';
+      return '—';
+    };
+
+    // Storico ed esclusi in memoria
+    _iaStoricoData=storico;
+    _iaEsclusData=esclusi;
+
+    // Fasce: 120gg=tra 113 e 120gg, 90=tra 83 e 90gg, 60=tra 53 e 60gg, 30=tra 23 e 30gg
+    // Tolleranza 7gg: finestra [gg-7, gg]
+    const fasce=[
+      {gg:120,da:addG(113),a:addG(120)},
+      {gg:90, da:addG(83), a:addG(90)},
+      {gg:60, da:addG(53), a:addG(60)},
+      {gg:30, da:addG(23), a:addG(30)}
+    ];
+
+    // Per ogni fascia raggruppa per corso
+    _iaData={};
+    const fasceSenzaInvio=new Set(); // gg senza storico recente
+    for(const {gg,da,a} of fasce){
+      const daStr=da.toISOString().slice(0,10);
+      const aStr=a.toISOString().slice(0,10);
+      const inFascia=certs.filter(c=>c.data_scadenza&&c.data_scadenza>=daStr&&c.data_scadenza<=aStr);
+      // Raggruppa per corso
+      const byCors={};
+      for(const c of inFascia){
+        const mat=String(c.matricola_aziendale||'');
+        // Escludi Extra EU e NULL
+        if(!statoAmmesso(mat)) continue;
+        const corso=c.nome_corso||'—';
+        if(!byCors[corso]) byCors[corso]=[];
+        byCors[corso].push({
+          mat,
+          nome:c.cognome_nome||'—',
+          qualifica:c.qualifica||'—',
+          scadenza:c.data_scadenza||'',
+          sbarco:c.data_sbarco||'',
+          email:emailMap[mat]||'',
+          naz:statoLabel(mat)
+        });
+      }
+      _iaData[gg]=Object.entries(byCors).map(([nome_corso,dest])=>({nome_corso,dest}));
+
+      // Controlla se esiste storico recente per questa fascia (ultimi 7 giorni)
+      const soglia=addG(-7).toISOString().slice(0,10);
+      const haStorico=storico.some(s=>s['fascia_'+gg]&&s['fascia_'+gg]>=soglia);
+      if(inFascia.length>0 && !haStorico) fasceSenzaInvio.add(gg);
+    }
+
+    // Aggiorna pillole
+    _aggiornaPills(fasceSenzaInvio,storico);
+
+    // Banner apertura app se ci sono fasce attive
+    _checkAlertBanner(fasceSenzaInvio);
+
+    toast('Invii ALERT caricato');
+  }catch(e){toast('Errore: '+e.message,'error');}
+}
+
+function _aggiornaPills(fasceSenzaInvio,storico){
+  const today=new Date();today.setHours(0,0,0,0);
+  const addG=(n)=>{const d=new Date(today);d.setDate(d.getDate()+n);return d;};
+
+  [120,90,60,30].forEach(gg=>{
+    const pill=document.getElementById('ia-pill-'+gg);
+    if(!pill) return;
+    const haCorsi=(_iaData[gg]||[]).length>0;
+
+    // Controlla se "in ritardo": fascia passata (>gg giorni da oggi esiste cert) senza invio
+    // In ritardo = c'erano cert in quella fascia ma finestra scaduta (oltre 7gg fa) e nessun invio
+    const haRitardo=storico && haCorsi && !fasceSenzaInvio.has(gg) && false; // gestito sotto
+    const inRitardo=_checkRitardo(gg,storico);
+
+    pill.className='ia-pill gray';
+    pill.innerHTML=gg+' giorni';
+    if(inRitardo){
+      pill.innerHTML+=` <span class="ia-ritardo">In ritardo</span>`;
+    }
+    // Arancione solo se è la fascia attualmente selezionata
+    if(_iaFasciaSelezionata===gg){
+      pill.classList.remove('gray');
+      pill.classList.add('amber','active-sel');
+    }
+  });
+}
+
+function _checkRitardo(gg,storico){
+  // "In ritardo" = c'erano cert in quella finestra storica ma nessun invio entro i 7gg
+  // Semplificato: controlla se esiste riga storico con fascia_{gg} null ma il corso è in _iaData
+  // Per ora: se _iaData[gg] ha corsi e non esiste storico con fascia_{gg} negli ultimi 14gg → ritardo
+  if(!storico) return false;
+  if(!_iaData[gg] || !_iaData[gg].length) return false;
+  const oggi=new Date().toISOString().slice(0,10);
+  const soglia14=new Date();soglia14.setDate(soglia14.getDate()-14);
+  const s14=soglia14.toISOString().slice(0,10);
+  const haInvioRecente=storico.some(r=>r['fascia_'+gg]&&r['fascia_'+gg]>=s14);
+  return !haInvioRecente;
+}
+
+function _checkAlertBanner(fasceSenzaInvio){
+  let banner=document.getElementById('ia-top-banner');
+  if(!fasceSenzaInvio||!fasceSenzaInvio.size){if(banner)banner.remove();return;}
+  if(!banner){
+    banner=document.createElement('div');
+    banner.id='ia-top-banner';
+    banner.style.cssText='position:fixed;top:0;left:210px;right:0;z-index:200;background:#FAECE7;border-bottom:1px solid #D85A30;padding:.55rem 1.2rem;display:flex;align-items:center;justify-content:space-between;font-size:.8rem;';
+    document.body.appendChild(banner);
+  }
+  const fasce=[...fasceSenzaInvio].sort().join(', ');
+  banner.innerHTML=`
+    <span style="color:#993C1D;font-weight:500">📧 Invii email in scadenza — fasce attive: <strong>${fasce} giorni</strong></span>
+    <button onclick="showPage('invii-alert',document.getElementById('sb-invii-alert'));document.getElementById('ia-top-banner').remove()" style="font-size:.75rem;font-weight:500;color:#993C1D;border:.5px solid #D85A30;border-radius:6px;padding:3px 12px;cursor:pointer;background:transparent;">Vai a Invii ALERT</button>
+  `;
+}
+
+function selectIaPill(gg){
+  _iaFasciaSelezionata=gg;
+  _iaCorsoSelezionato='';
+  // Resetta tutti i pill a grigio, poi colora solo quello selezionato
+  [120,90,60,30].forEach(g=>{
+    const p=document.getElementById('ia-pill-'+g);
+    if(!p) return;
+    const inRit=p.querySelector('.ia-ritardo');
+    p.className='ia-pill '+(g===gg?'amber active-sel':'gray');
+    if(inRit) p.appendChild(inRit); // mantieni badge ritardo se presente
+  });
+  // Mostra card corsi
+  const corsi=_iaData[gg]||[];
+  const wrap=document.getElementById('ia-corsi-wrap');
+  const grid=document.getElementById('ia-corsi-grid');
+  const emptyMsg=document.getElementById('ia-empty-msg');
+  document.getElementById('ia-dest-wrap').style.display='none';
+  if(!corsi.length){
+    wrap.style.display='none';
+    emptyMsg.style.display='';
+    emptyMsg.textContent='Nessun certificato in scadenza per questa fascia';
+    return;
+  }
+  emptyMsg.style.display='none';
+  document.getElementById('ia-corsi-label').textContent='Corsi — fascia '+gg+' giorni ('+corsi.length+' cors'+(corsi.length===1?'o':'i')+')';
+  const fasciaKey='fascia_'+gg;
+  grid.innerHTML=corsi.map(c=>{
+    const giàInv=new Set(_iaStoricoData.filter(r=>r.corso_tipo===c.nome_corso&&r[fasciaKey]).map(r=>String(r.matricola||'')));
+    const giàEscl=new Set(_iaEsclusData.filter(r=>r.corso_tipo===c.nome_corso&&Number(r.fascia_gg)===Number(gg)).map(r=>String(r.matricola||'')));
+    const daInviare=c.dest.filter(d=>!giàInv.has(String(d.mat||''))&&!giàEscl.has(String(d.mat||''))).length;
+    const tuttiInviati=daInviare===0;
+    return `
+    <div class="ia-corso-card" onclick="selectIaCorso('${c.nome_corso.replace(/'/g,"\\'")}') "
+      style="${tuttiInviati?'opacity:.55;':''}">
+      <div class="ia-corso-nome">${c.nome_corso}</div>
+      <div class="ia-corso-cnt">
+        ${tuttiInviati
+          ?'<span style=\"color:#3B6D11\">✓ Tutti notificati</span>'
+          :'<strong>'+daInviare+'</strong> da notificare'
+        }
+      </div>
+    </div>`;
+  }).join('');
+  wrap.style.display='';
+}
+
+async function selectIaCorso(nomeCorso){
+  _iaCorsoSelezionato=nomeCorso;
+  // Evidenzia card selezionata
+  document.querySelectorAll('.ia-corso-card').forEach(el=>{
+    el.classList.toggle('active',el.querySelector('.ia-corso-nome')&&el.querySelector('.ia-corso-nome').textContent===nomeCorso);
+  });
+  const corsi=_iaData[_iaFasciaSelezionata]||[];
+  const entry=corsi.find(c=>c.nome_corso===nomeCorso);
+  if(!entry) return;
+
+  // Ricarica esclusi aggiornati
+  try{_iaEsclusData=await sbGetAll('alert_email_esclusi','select=*&order=corso_tipo,fascia_gg,nome');}catch(e){}
+  // Escludi chi ha già ricevuto email per questa fascia+corso
+  const fasciaKey='fascia_'+_iaFasciaSelezionata;
+  const giàInviati=new Set(
+    _iaStoricoData
+      .filter(r=>r.corso_tipo===nomeCorso && r[fasciaKey])
+      .map(r=>String(r.matricola||''))
+  );
+  // Escludi anche chi è in alert_email_esclusi per questa fascia+corso
+  const giàEsclusi=new Set(
+    _iaEsclusData
+      .filter(r=>r.corso_tipo===nomeCorso && Number(r.fascia_gg)===Number(_iaFasciaSelezionata))
+      .map(r=>String(r.matricola||''))
+  );
+  const dest=entry.dest.filter(d=>!giàInviati.has(String(d.mat||''))&&!giàEsclusi.has(String(d.mat||'')));
+  const nEsclusi=entry.dest.length-dest.length;
+
+  // Render tabella
+  const wrap=document.getElementById('ia-dest-wrap');
+  wrap.style.display='';
+  let labelTxt=nomeCorso+' — '+dest.length+' destinatar'+(dest.length===1?'io':'i');
+  if(nEsclusi>0) labelTxt+=` <span style="font-size:.72rem;color:#3B6D11;margin-left:6px">✓ ${nEsclusi} già notificat${nEsclusi===1?'o':'i'} per fascia ${_iaFasciaSelezionata}gg</span>`;
+  document.getElementById('ia-dest-label').innerHTML=labelTxt;
+  document.getElementById('ia-cb-all').checked=false;
+  const tbody=document.getElementById('ia-dest-tbody');
+  if(!dest.length){
+    tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--muted)">Tutti i marittimi hanno già ricevuto l'email per la fascia ${_iaFasciaSelezionata} giorni</td></tr>`;
+    return;
+  }
+  const destOrdinati=_sortDest(dest);
+  tbody.innerHTML=destOrdinati.map((r,i)=>`
+    <tr>
+      <td><input type="checkbox" class="ia-dest-cb" data-mat="${r.mat||''}"></td>
+      <td class="td-num">${r.mat||'—'}</td>
+      <td style="font-weight:700">${r.nome||'—'}</td>
+      <td style="font-size:.82rem;color:var(--muted)">${r.qualifica||'—'}</td>
+      <td style="font-size:.82rem;text-align:center">${r.naz||'—'}</td>
+      <td style="font-size:.82rem">${r.scadenza?fmtBreve(r.scadenza):'—'}</td>
+      <td style="font-size:.82rem;color:var(--muted)">${r.sbarco?fmtBreve(r.sbarco):'—'}</td>
+    </tr>
+  `).join('');
+}
+
+function toggleAllIaDest(checked){
+  // checked=true → seleziona tutti (tutti esclusi); checked=false → deseleziona tutti (tutti ricevono)
+  document.querySelectorAll('.ia-dest-cb').forEach(cb=>cb.checked=checked);
+}
+
+function sortIaDest(tipo){
+  const btnSbarco=document.getElementById('ia-sort-sbarco');
+  const btnAlfa=document.getElementById('ia-sort-alfa');
+  if(tipo==='sbarco'){
+    if(_iaSortMode==='sbarco'){_iaSortMode='sbarco_desc';btnSbarco.textContent='⚓ Sbarco ↓';}
+    else{_iaSortMode='sbarco';btnSbarco.textContent='⚓ Sbarco ↑';}
+    btnSbarco.className='btn btn-primary';
+    btnAlfa.className='btn btn-ghost';
+    btnAlfa.textContent='🔤 A→Z';
+  } else {
+    if(_iaSortMode==='alfa'){_iaSortMode='alfa_desc';btnAlfa.textContent='🔤 Z→A';}
+    else{_iaSortMode='alfa';btnAlfa.textContent='🔤 A→Z';}
+    btnAlfa.className='btn btn-primary';
+    btnSbarco.className='btn btn-ghost';
+    btnSbarco.textContent='⚓ Sbarco';
+  }
+  // Richiama selectIaCorso per re-renderizzare con nuovo ordinamento
+  selectIaCorso(_iaCorsoSelezionato);
+}
+
+function _sortDest(dest){
+  const arr=[...dest];
+  if(_iaSortMode==='sbarco'){
+    // meno recente prima (data più vecchia = priorità)
+    arr.sort((a,b)=>(a.sbarco||'').localeCompare(b.sbarco||''));
+  } else if(_iaSortMode==='sbarco_desc'){
+    arr.sort((a,b)=>(b.sbarco||'').localeCompare(a.sbarco||''));
+  } else if(_iaSortMode==='alfa'){
+    arr.sort((a,b)=>(a.nome||'').localeCompare(b.nome||'','it'));
+  } else if(_iaSortMode==='alfa_desc'){
+    arr.sort((a,b)=>(b.nome||'').localeCompare(a.nome||'','it'));
+  }
+  return arr;
+}
+
+async function inviaAlertEmail(){
+  if(!_iaFasciaSelezionata||!_iaCorsoSelezionato){toast('Seleziona fascia e corso','error');return;}
+  const corsi=_iaData[_iaFasciaSelezionata]||[];
+  const entry=corsi.find(c=>c.nome_corso===_iaCorsoSelezionato);
+  if(!entry){toast('Nessun dato','error');return;}
+
+  // Raccoglie destinatari da inviare: DESELEZIONATI ricevono, SELEZIONATI sono esclusi
+  // Usa data-mat per abbinare checkbox → persona (indipendente dall'ordinamento)
+  const esclusiMat=new Set();
+  document.querySelectorAll('.ia-dest-cb').forEach(cb=>{if(cb.checked)esclusiMat.add(cb.dataset.mat);});
+  const fasciaKey2='fascia_'+_iaFasciaSelezionata;
+  const giàInviati2=new Set(_iaStoricoData.filter(r=>r.corso_tipo===_iaCorsoSelezionato&&r[fasciaKey2]).map(r=>String(r.matricola||'')));
+  const destVisibili=entry.dest.filter(d=>!giàInviati2.has(String(d.mat||'')));
+  const selDest=destVisibili.filter(d=>!esclusiMat.has(String(d.mat||'')));
+  if(!selDest.length){toast('Nessun destinatario selezionato','error');return;}
+
+  // Destinatari con email
+  const conEmail=selDest.filter(d=>d.email);
+  const senzaEmail=selDest.filter(d=>!d.email);
+  if(senzaEmail.length){
+    toast('⚠️ '+senzaEmail.length+' marittimi senza email in anagrafica verranno esclusi','warn');
+  }
+  if(!conEmail.length){toast('Nessun destinatario ha email in anagrafica','error');return;}
+
+  // Corpo email da template
+  const template=_emailDest['body_alert']||CFG_ALERT_BASE;
+  // Usa prima scadenza come riferimento (o scadenza del primo)
+  const primaScad=selDest[0].scadenza?fmtBreve(selDest[0].scadenza):'—';
+  const corpo=template
+    .replace(/\[NOME\]/g,'[vedere BCC]')
+    .replace(/\[CORSO\]/g,_iaCorsoSelezionato)
+    .replace(/\[SCADENZA\]/g,primaScad)
+    .replace(/\[GIORNI\]/g,String(_iaFasciaSelezionata))
+    .replace(/\[FIRMA\]/g,currentUser||'');
+
+  const alertTo=(_currentUserData&&_currentUserData.email_alert_to)||'';
+  const alertCc=(_currentUserData&&_currentUserData.email_alert_cc)||'';
+  const bcc=conEmail.map(d=>d.email).join(';');
+  const mesiLabel={120:'4 mesi',90:'3 mesi',60:'2 mesi',30:'1 mese'};
+  const oggetto=_iaCorsoSelezionato+' — Alert '+(mesiLabel[_iaFasciaSelezionata]||_iaFasciaSelezionata+' giorni');
+  let mailtoUrl='mailto:'+encodeURIComponent(alertTo)+'?';
+  const params=[];
+  if(alertCc) params.push('cc='+encodeURIComponent(alertCc));
+  if(bcc) params.push('bcc='+encodeURIComponent(bcc));
+  params.push('subject='+encodeURIComponent(oggetto));
+  params.push('body='+encodeURIComponent(corpo));
+  mailtoUrl+=params.join('&');
+  window.location.href=mailtoUrl;
+
+  // Salva esclusi (flaggati) su Supabase
+  const esclusiDaSalvare=destVisibili.filter(d=>esclusiMat.has(String(d.mat||'')));
+  if(esclusiDaSalvare.length) await _salvaEsclusi(esclusiDaSalvare,_iaCorsoSelezionato,_iaFasciaSelezionata);
+  // Salva storico su Supabase
+  await _salvaStorico(selDest,_iaCorsoSelezionato,_iaFasciaSelezionata);
+}
+
+async function _salvaStorico(dest,corsoTipo,fasciaGg){
+  try{
+    const oggi=new Date().toISOString().slice(0,10);
+    const inviataStr=oggi;
+    const fasciaKey='fascia_'+fasciaGg;
+    for(const d of dest){
+      // Upsert: cerca riga esistente per matricola+corso
+      const existing=await sbGet('alert_email_storico',
+        `matricola=eq.${encodeURIComponent(d.mat)}&corso_tipo=eq.${encodeURIComponent(corsoTipo)}&limit=1`);
+      if(existing.length){
+        const patch={};
+        patch[fasciaKey]=inviataStr;
+        patch['inviata_da_'+fasciaGg]=currentUser||'';
+        await sbPatch('alert_email_storico',existing[0].id,patch);
+      } else {
+        const row={matricola:d.mat,nome:d.nome,qualifica:d.qualifica,corso_tipo:corsoTipo};
+        row[fasciaKey]=inviataStr;
+        row['inviata_da_'+fasciaGg]=currentUser||'';
+        await sbPost('alert_email_storico',row);
+      }
+    }
+    toast('✅ Storico invio salvato ('+dest.length+' marittimi)');
+    // Ricarica storico e aggiorna UI
+    _iaStoricoData=await sbGetAll('alert_email_storico','select=*&order=matricola,corso_tipo');
+    if(document.getElementById('ia-panel-storico').style.display!=='none') renderStorico();
+    // Aggiorna card corsi con conteggi aggiornati
+    if(_iaFasciaSelezionata) selectIaPill(_iaFasciaSelezionata);
+  }catch(e){toast('⚠️ Errore salvataggio storico: '+e.message,'warn');}
+}
+
+async function loadInviiAlertPage(){
+  // Carica se non già caricato
+  if(!Object.keys(_iaData).length) await loadInviiAlert();
+  // Ricarica sempre esclusi per averli aggiornati
+  try{_iaEsclusData=await sbGetAll('alert_email_esclusi','select=*&order=corso_tipo,fascia_gg,nome');}catch(e){}
+  // Aggiorna pill storico
+  _buildStoricoPills();
+}
+
+function _buildStoricoPills(){
+  const corsi=[...new Set(_iaStoricoData.map(r=>r.corso_tipo||'').filter(Boolean))].sort();
+  const container=document.getElementById('ia-storico-pills');
+  if(!container) return;
+  if(!_iaStoricoCorso && corsi.length) _iaStoricoCorso=corsi[0];
+  container.innerHTML=corsi.map(c=>`
+    <button onclick="selectStoricoPill('${c.replace(/'/g,"\\'")}') "
+      style="border-radius:16px;padding:4px 14px;font-size:.72rem;font-weight:500;border:.5px solid var(--border);cursor:pointer;background:${_iaStoricoCorso===c?'#FAECE7':'var(--surface)'};border-color:${_iaStoricoCorso===c?'#D85A30':'var(--border)'};color:${_iaStoricoCorso===c?'#993C1D':'var(--muted)'}">
+      ${c}
+    </button>
+  `).join('');
+}
+
+function selectStoricoPill(corso){
+  _iaStoricoCorso=corso;
+  _buildStoricoPills();
+  renderStorico();
+}
+
+function renderStorico(){
+  _buildStoricoPills();
+  const search=(document.getElementById('ia-storico-search')||{}).value||'';
+  const q=search.toLowerCase().trim();
+  let rows=_iaStoricoData.filter(r=>r.corso_tipo===_iaStoricoCorso);
+  if(q) rows=rows.filter(r=>(r.matricola||'').toLowerCase().includes(q)||(r.nome||'').toLowerCase().includes(q));
+
+  const wrap=document.getElementById('ia-storico-wrap');
+  if(!wrap) return;
+  if(!rows.length){
+    wrap.innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted);font-size:.85rem">Nessun invio registrato'+(q?' per questa ricerca':'')+'</div>';
+    return;
+  }
+
+  const mkCell=(data,chi)=>{
+    if(!data) return '<td class="storico-empty">—</td>';
+    return `<td><div class="storico-data">${fmtBreve(data)}</div><div class="storico-chi">${chi||'—'}</div></td>`;
+  };
+
+  wrap.innerHTML=`
+    <table style="width:100%;min-width:640px">
+      <thead>
+        <tr>
+          <th>Matricola</th>
+          <th>Nominativo</th>
+          <th>Qualifica</th>
+          <th style="text-align:center;background:#EAF3DE;color:#3B6D11">120 gg</th>
+          <th style="text-align:center;background:#FAEEDA;color:#633806">90 gg</th>
+          <th style="text-align:center;background:#FAECE7;color:#993C1D">60 gg</th>
+          <th style="text-align:center;background:#FCEBEB;color:#791F1F">30 gg</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(r=>`
+          <tr>
+            <td class="td-num">${r.matricola||'—'}</td>
+            <td style="font-weight:700">${r.nome||'—'}</td>
+            <td style="font-size:.82rem;color:var(--muted)">${r.qualifica||'—'}</td>
+            ${mkCell(r.fascia_120,r.inviata_da_120)}
+            ${mkCell(r.fascia_90,r.inviata_da_90)}
+            ${mkCell(r.fascia_60,r.inviata_da_60)}
+            ${mkCell(r.fascia_30,r.inviata_da_30)}
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+async function esportaStoricoPDF(){
+  const rows=_iaStoricoData.filter(r=>r.corso_tipo===_iaStoricoCorso);
+  if(!rows.length){toast('Nessun dato da esportare');return;}
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  const dataOggi=new Date().toLocaleDateString('it-IT');
+  doc.setFontSize(12);doc.setFont(undefined,'bold');
+  doc.text('📧 Storico Invii ALERT — '+(_iaStoricoCorso||''),14,14);
+  doc.setFontSize(8);doc.setFont(undefined,'normal');
+  doc.text('Esportato il '+dataOggi+' · '+rows.length+' marittimi',14,20);
+  const head=[['Matricola','Nominativo','Qualifica','120 giorni','90 giorni','60 giorni','30 giorni']];
+  const body=rows.map(r=>[
+    r.matricola||'—',r.nome||'—',r.qualifica||'—',
+    r.fascia_120?(fmtBreve(r.fascia_120)+'\n'+(r.inviata_da_120||'')):'—',
+    r.fascia_90?(fmtBreve(r.fascia_90)+'\n'+(r.inviata_da_90||'')):'—',
+    r.fascia_60?(fmtBreve(r.fascia_60)+'\n'+(r.inviata_da_60||'')):'—',
+    r.fascia_30?(fmtBreve(r.fascia_30)+'\n'+(r.inviata_da_30||'')):'—',
+  ]);
+  doc.autoTable({head,body,startY:25,styles:{fontSize:7,cellPadding:2},headStyles:{fillColor:[192,86,26],textColor:255,fontStyle:'bold'},alternateRowStyles:{fillColor:[250,247,242]}});
+  doc.save('Storico_Alert_'+(_iaStoricoCorso||'').replace(/\s/g,'_')+'_'+dataOggi.replace(/\//g,'-')+'.pdf');
+}
+async function _salvaEsclusi(dest,corsoTipo,fasciaGg){
+  try{
+    const oggi=new Date().toISOString().slice(0,10);
+    for(const d of dest){
+      // Evita duplicati: controlla se esiste già
+      const existing=await sbGet('alert_email_esclusi',
+        `matricola=eq.${encodeURIComponent(d.mat)}&corso_tipo=eq.${encodeURIComponent(corsoTipo)}&fascia_gg=eq.${fasciaGg}&limit=1`);
+      if(!existing.length){
+        await sbPost('alert_email_esclusi',{
+          matricola:d.mat,
+          nome:d.nome,
+          qualifica:d.qualifica,
+          corso_tipo:corsoTipo,
+          fascia_gg:fasciaGg,
+          escluso_il:oggi,
+          escluso_da:currentUser||''
+        });
+      }
+    }
+    // Ricarica esclusi
+    _iaEsclusData=await sbGetAll('alert_email_esclusi','select=*&order=corso_tipo,fascia_gg,nome');
+    if(document.getElementById('ia-panel-esclusi').style.display!=='none') renderEsclusi();
+  }catch(e){toast('⚠️ Errore salvataggio esclusi: '+e.message,'warn');}
+}
+
+function renderEsclusi(){
+  const search=(document.getElementById('ia-esclusi-search')||{}).value||'';
+  const q=search.toLowerCase().trim();
+  let rows=_iaEsclusData;
+  if(q) rows=rows.filter(r=>(r.matricola||'').toLowerCase().includes(q)||(r.nome||'').toLowerCase().includes(q));
+  const wrap=document.getElementById('ia-esclusi-wrap');
+  if(!wrap) return;
+  if(!rows.length){
+    wrap.innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted);font-size:.85rem">Nessun marittimo escluso'+(q?' per questa ricerca':'')+'</div>';
+    return;
+  }
+  const mesiLabel={120:'4 mesi',90:'3 mesi',60:'2 mesi',30:'1 mese'};
+  wrap.innerHTML=`
+    <table style="width:100%;min-width:640px">
+      <thead>
+        <tr>
+          <th>Matricola</th>
+          <th>Nominativo</th>
+          <th>Qualifica</th>
+          <th>Corso</th>
+          <th style="text-align:center">Fascia</th>
+          <th>Escluso il</th>
+          <th>Escluso da</th>
+          <th style="text-align:center">Azioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(r=>`
+          <tr>
+            <td class="td-num">${r.matricola||'—'}</td>
+            <td style="font-weight:700">${r.nome||'—'}</td>
+            <td style="font-size:.82rem;color:var(--muted)">${r.qualifica||'—'}</td>
+            <td style="font-size:.82rem">${r.corso_tipo||'—'}</td>
+            <td style="text-align:center"><span style="font-size:.68rem;font-weight:600;border-radius:6px;padding:2px 7px;background:#FAECE7;color:#993C1D">${mesiLabel[r.fascia_gg]||r.fascia_gg+' gg'}</span></td>
+            <td style="font-size:.82rem">${r.escluso_il?fmtBreve(r.escluso_il):'—'}</td>
+            <td style="font-size:.82rem;color:var(--muted)">${r.escluso_da||'—'}</td>
+            <td style="text-align:center"><button onclick="eliminaEscluso('${r.id}')" style="font-size:.72rem;border:none;background:none;color:#E24B4A;cursor:pointer;padding:2px 6px" title="Rimuovi esclusione">✕</button></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+async function eliminaEscluso(id){
+  if(!confirm('Rimuovere l\'esclusione? Il marittimo tornerà nella lista invii.')) return;
+  try{
+    await sbDelete('alert_email_esclusi',id);
+    _iaEsclusData=_iaEsclusData.filter(r=>r.id!==id);
+    renderEsclusi();
+    toast('✅ Esclusione rimossa');
+  }catch(e){toast('Errore: '+e.message,'error');}
+}
+
+async function esportaEsclusipDF(){
+  if(!_iaEsclusData.length){toast('Nessun dato da esportare');return;}
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  const dataOggi=new Date().toLocaleDateString('it-IT');
+  doc.setFontSize(12);doc.setFont(undefined,'bold');
+  doc.text('🚫 Esclusi Invii ALERT',14,14);
+  doc.setFontSize(8);doc.setFont(undefined,'normal');
+  doc.text('Esportato il '+dataOggi+' · '+_iaEsclusData.length+' righe',14,20);
+  const mesiLabel={120:'4 mesi',90:'3 mesi',60:'2 mesi',30:'1 mese'};
+  const head=[['Matricola','Nominativo','Qualifica','Corso','Fascia','Escluso il','Escluso da']];
+  const body=_iaEsclusData.map(r=>[
+    r.matricola||'—',r.nome||'—',r.qualifica||'—',r.corso_tipo||'—',
+    mesiLabel[r.fascia_gg]||r.fascia_gg+' gg',
+    r.escluso_il?fmtBreve(r.escluso_il):'—',r.escluso_da||'—'
+  ]);
+  doc.autoTable({head,body,startY:25,styles:{fontSize:7,cellPadding:2},headStyles:{fillColor:[192,86,26],textColor:255,fontStyle:'bold'},alternateRowStyles:{fillColor:[250,247,242]}});
+  doc.save('Esclusi_Alert_'+dataOggi.replace(/\//g,'-')+'.pdf');
+}
+/* ===== FINE INVII ALERT ===== */
 
 </script>
 
