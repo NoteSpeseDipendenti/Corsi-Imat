@@ -6734,6 +6734,15 @@ function _checkRitardo(gg,storico){
   // Per ora: se _iaData[gg] ha corsi e non esiste storico con fascia_{gg} negli ultimi 14gg → ritardo
   if(!storico) return false;
   if(!_iaData[gg] || !_iaData[gg].length) return false;
+  // Non in ritardo se non ci sono destinatari reali da notificare
+  const haDestinatari=(_iaData[gg]||[]).some(corso=>
+    (corso.dest||[]).some(d=>{
+      const giaNotificato=(_iaStoricoData||[]).some(r=>r.matricola===String(d.mat||'') && r['fascia_'+gg]);
+      const escluso=(_iaEsclusData||[]).some(e=>e.matricola===String(d.mat||'') && e.corso_tipo===corso.nome_corso && Number(e.fascia_gg)===gg);
+      return !giaNotificato && !escluso;
+    })
+  );
+  if(!haDestinatari) return false;
   const oggi=new Date().toISOString().slice(0,10);
   const soglia14=new Date();soglia14.setDate(soglia14.getDate()-14);
   const s14=soglia14.toISOString().slice(0,10);
@@ -6925,12 +6934,14 @@ async function inviaAlertEmail(){
   const template=_emailDest['body_alert']||CFG_ALERT_BASE;
   // Usa prima scadenza come riferimento (o scadenza del primo)
   const primaScad=selDest[0].scadenza?fmtBreve(selDest[0].scadenza):'—';
+  const listaNomi=selDest.map(d=>(d.nome||'—')+' (Mat. '+(d.mat||'—')+')').join('\n');
   const corpo=template
     .replace(/\[NOME\]/g,'[vedere BCC]')
     .replace(/\[CORSO\]/g,_iaCorsoSelezionato)
     .replace(/\[SCADENZA\]/g,primaScad)
     .replace(/\[GIORNI\]/g,String(_iaFasciaSelezionata))
-    .replace(/\[FIRMA\]/g,currentUser||'');
+    .replace(/\[FIRMA\]/g,currentUser||'')
+    .replace(/\[LISTA_NOMI\]/g,listaNomi);
 
   const alertTo=(_currentUserData&&_currentUserData.email_alert_to)||'';
   const alertCc=(_currentUserData&&_currentUserData.email_alert_cc)||'';
