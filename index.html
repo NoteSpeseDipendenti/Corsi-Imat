@@ -665,7 +665,7 @@ if(new URLSearchParams(window.location.search).get('al')) {
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Corso</th><th>Date sessione</th><th>Centro</th><th>Posti tot.</th><th>Posti liberi</th></tr></thead>
+        <thead><tr><th>Corso</th><th>Date sessione</th><th>Convocazione</th><th>Posti tot.</th><th>Posti liberi</th></tr></thead>
         <tbody id="sess-tbody"><tr class="empty-row"><td colspan="5"><span class="spinner"></span> Caricamento…</td></tr></tbody>
       </table>
     </div>
@@ -1059,7 +1059,7 @@ if(new URLSearchParams(window.location.search).get('al')) {
       </div>
       <input type="text" id="er-cen-search" placeholder="Cerca centro o corso..." oninput="renderErCentri()" style="width:100%;padding:.5rem .8rem;border:1px solid var(--border);border-radius:8px;font-size:.82rem;margin-bottom:.8rem;background:var(--surface);color:var(--text)">
       <div class="er-table-wrap">
-        <table class="er-table"><thead><tr><th>Centro</th><th>Corso</th><th>Data inizio</th><th>Data fine</th><th>Iscritti</th><th>Stato</th><th id="er-cen-th-azione" style="text-align:center;display:none">Azione</th></tr></thead><tbody id="er-cen-tbody"></tbody></table>
+        <table class="er-table"><thead><tr><th>Centro</th><th>Corso</th><th>Data inizio</th><th>Data fine</th><th>Iscritti</th><th id="er-cen-th-stato">Stato</th><th id="er-cen-th-azione" style="text-align:center;display:none">Azione</th></tr></thead><tbody id="er-cen-tbody"></tbody></table>
       </div>
     </div>
   </div>
@@ -1613,8 +1613,9 @@ if(new URLSearchParams(window.location.search).get('al')) {
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;flex-wrap:wrap;gap:8px">
           <div style="font-size:.78rem;color:var(--muted)" id="ia-dest-label">—</div>
           <div style="display:flex;align-items:center;gap:6px">
-            <button id="ia-sort-sbarco" class="btn btn-primary" onclick="sortIaDest('sbarco')" style="font-size:.75rem;padding:4px 12px" title="Ordina per data sbarco">⚓ Sbarco ↑</button>
-            <button id="ia-sort-alfa" class="btn btn-ghost" onclick="sortIaDest('alfa')" style="font-size:.75rem;padding:4px 12px" title="Ordina alfabeticamente">🔤 A→Z</button>
+            <button id="ia-sort-sbarco" onclick="sortIaDest('sbarco')" style="font-size:.75rem;padding:4px 13px;border-radius:7px;border:1.5px solid #5C7FA3;background:#5C7FA3;color:#fff;font-weight:600;cursor:pointer" title="Ordina per data sbarco">⚓ Sbarco ↑</button>
+            <button id="ia-sort-alfa" onclick="sortIaDest('alfa')" style="font-size:.75rem;padding:4px 13px;border-radius:7px;border:1.5px solid #5C7FA3;background:var(--surface);color:#5C7FA3;font-weight:600;cursor:pointer" title="Ordina alfabeticamente">🔤 A→Z</button>
+            <div style="width:1px;height:22px;background:var(--border);margin:0 4px"></div>
             <button class="btn btn-primary" onclick="inviaAlertEmail()" style="font-size:.78rem;padding:5px 16px;display:flex;align-items:center;gap:6px">📧 Invia Email</button>
           </div>
         </div>
@@ -1644,9 +1645,12 @@ if(new URLSearchParams(window.location.search).get('al')) {
       <div style="font-size:.7rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.6rem">Filtra per corso</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem" id="ia-storico-pills"></div>
       <!-- Toolbar -->
+      <div style="margin-bottom:.9rem">
+        <input id="ia-storico-search" class="form-input" style="width:420px;max-width:100%;font-size:.9rem;padding:7px 14px;border-radius:8px;border:2px solid #6c757d;box-shadow:0 0 0 0px #6c757d40;outline:none" placeholder="Cerca nome o matricola…" oninput="renderStorico()" onfocus="this.style.borderColor='#495057';this.style.boxShadow='0 0 0 3px rgba(108,117,125,.2)'" onblur="this.style.borderColor='#6c757d';this.style.boxShadow='none'">
+      </div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;gap:8px">
-        <input id="ia-storico-search" class="form-input" style="max-width:240px;font-size:.78rem;padding:5px 10px" placeholder="Cerca matricola o nome…" oninput="renderStorico()">
-        <button class="btn btn-ghost" onclick="esportaStoricoPDF()" style="font-size:.78rem;padding:5px 12px">📄 Esporta PDF</button>
+        <span id="ia-storico-badge" style="background:#6c757d;color:#fff;border-radius:12px;padding:2px 12px;font-size:.75rem;font-weight:600">0 nominativi</span>
+        <button class="btn" onclick="esportaStoricoPDF()" style="font-size:.78rem;padding:5px 12px;background:#dc3545;color:#fff;border-color:#dc3545">📄 Esporta PDF</button>
       </div>
       <div class="table-wrap" id="ia-storico-wrap">
         <div style="text-align:center;padding:2rem;color:var(--muted);font-size:.85rem">Nessun dato disponibile</div>
@@ -1656,7 +1660,7 @@ if(new URLSearchParams(window.location.search).get('al')) {
     <!-- ===== PANNELLO ESCLUSI ===== -->
     <div id="ia-panel-esclusi" style="display:none">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;gap:8px">
-        <input id="ia-esclusi-search" class="form-input" style="max-width:240px;font-size:.78rem;padding:5px 10px" placeholder="Cerca matricola o nome…" oninput="renderEsclusi()">
+        <input id="ia-esclusi-search" class="form-input" style="max-width:280px;font-size:.82rem;padding:6px 12px;border:2px solid #6c757d;border-radius:8px;outline:none" placeholder="Cerca matricola o nome…" oninput="renderEsclusi()" onfocus="this.style.borderColor='#495057';this.style.boxShadow='0 0 0 3px rgba(108,117,125,.2)'" onblur="this.style.borderColor='#6c757d';this.style.boxShadow='none'">
         <button class="btn btn-ghost" onclick="esportaEsclusipDF()" style="font-size:.78rem;padding:5px 12px">📄 Esporta PDF</button>
       </div>
       <div class="table-wrap" id="ia-esclusi-wrap">
@@ -2461,11 +2465,15 @@ function renderSessioni(){
     const isFull=liberi===0;
     const libCls=isFull?'liberi-zero':liberi<=3?'liberi-warn':'liberi-ok';
     const nomeCorso=s.nota||s.corsi_tipologie?.nome||'—';
-    const nomeCentro=s.corsi_centri?.nome||'—';
     const dateStr=s.data_fine&&s.data_fine!==s.data_inizio?`${fmtBreve(s.data_inizio)} – ${fmtBreve(s.data_fine)}`:fmtBreve(s.data_inizio);
-    if(past)return`<tr style="opacity:.4"><td><span style="font-weight:700">${nomeCorso}</span></td><td>${dateStr}</td><td>${nomeCentro}</td><td class="td-num">${s.posti_totali||'—'}</td><td class="td-num">—</td></tr>`;
-    if(isFull)return`<tr style="opacity:.6;cursor:default"><td><div class="td-main">${nomeCorso}</div></td><td><div class="td-main">${dateStr}</div></td><td class="td-sub">${nomeCentro}</td><td class="td-num">${s.posti_totali||'—'}</td><td class="td-num liberi-zero">0 <span style="font-size:.72rem;font-weight:600">Esaurito</span></td></tr>`;
-    return`<tr class="clickable" onclick="apriIscrizione(${s.id})"><td><div class="td-main">${nomeCorso}</div></td><td><div class="td-main">${dateStr}</div></td><td class="td-sub">${nomeCentro}</td><td class="td-num">${s.posti_totali||'—'}</td><td class="td-num ${libCls}">${liberi}</td></tr>`;
+    const emailInviata=!!(s.email_inviata_at&&!past);
+    const convCell=emailInviata
+      ?`<span style="font-size:.74rem;font-weight:700;color:#185FA5;background:#E6F1FB;border:1px solid #B5D4F4;border-radius:6px;padding:2px 8px;white-space:nowrap">✉ Email inoltrata</span>`
+      :`<span style="color:var(--muted);font-size:.78rem">—</span>`;
+    if(past)return`<tr style="opacity:.4"><td><span style="font-weight:700">${nomeCorso}</span></td><td>${dateStr}</td><td>${convCell}</td><td class="td-num">${s.posti_totali||'—'}</td><td class="td-num">—</td></tr>`;
+    if(isFull&&!emailInviata)return`<tr style="opacity:.6;cursor:default"><td><div class="td-main">${nomeCorso}</div></td><td><div class="td-main">${dateStr}</div></td><td>${convCell}</td><td class="td-num">${s.posti_totali||'—'}</td><td class="td-num liberi-zero">0 <span style="font-size:.72rem;font-weight:600">Esaurito</span></td></tr>`;
+    if(emailInviata)return`<tr style="cursor:default" title="Email già inoltrata al centro — riattiva la sessione per aggiungere iscritti"><td><div class="td-main">${nomeCorso}</div></td><td><div class="td-main">${dateStr}</div></td><td>${convCell}</td><td class="td-num">${s.posti_totali||'—'}</td><td class="td-num ${libCls}">${liberi}</td></tr>`;
+    return`<tr class="clickable" onclick="apriIscrizione(${s.id})"><td><div class="td-main">${nomeCorso}</div></td><td><div class="td-main">${dateStr}</div></td><td>${convCell}</td><td class="td-num">${s.posti_totali||'—'}</td><td class="td-num ${libCls}">${liberi}</td></tr>`;
   }
   let rows='';
   if(esaurite.length){
@@ -2657,6 +2665,11 @@ function resetScheda(){
 async function salvaIscrizione(){
   const matricola=_selMarittimo?_selMarittimo.matricola:_selMatricola;
   if(!matricola){toast('Nessun marittimo selezionato','error');return;}
+  // Blocco se email già inoltrata al centro
+  const sessCorr=_sessioni.find(x=>x.id===_selSessId);
+  if(sessCorr&&sessCorr.email_inviata_at){
+    toast('✉ Email già inoltrata al centro — riattiva la sessione prima di aggiungere iscritti','error');return;
+  }
   try{
     const dup=await sbGet('corsi_iscritti',`matricola_aziendale=eq.${encodeURIComponent(matricola)}&sessione_id=eq.${_selSessId}&limit=1`);
     if(dup.length){toast('Marittimo già iscritto a questa sessione','error');return;}
@@ -3639,7 +3652,14 @@ async function invioEmailImat(){
   const to=_currentUserData?(_currentUserData.email_imat_a||''):(_emailDest.imat_to||'');const cc=_currentUserData?(_currentUserData.email_imat_cc||''):(_emailDest.imat_cc||'');
   const ccParams=cc?'cc='+cc.split(/[;,]+/).map(s=>encodeURIComponent(s.trim())).filter(Boolean).join('%3B'):'';
   setTimeout(()=>{window.location.href=`mailto:${to}?${ccParams?ccParams+'&':''}subject=${encodeURIComponent(oggetto)}&body=${encodeURIComponent(corpoEmail)}`;},600);
-  try{await sbPatch('corsi_sessioni',s.id,{email_inviata_at:new Date().toISOString()});await loadAdmin();if(document.getElementById('page-email-riepilogo').style.display!=='none')await loadEmailRiepilogo();}catch(e){}
+  try{
+    var nowIso=new Date().toISOString();
+    var oggi7p=new Date();oggi7p.setDate(oggi7p.getDate()+7);var oggi7pStr=oggi7p.toISOString().slice(0,10);
+    var patchData={email_inviata_at:nowIso};
+    if(s.data_inizio&&s.data_inizio<=oggi7pStr){patchData.forza_attiva=false;}
+    await sbPatch('corsi_sessioni',s.id,patchData);
+    await loadAdmin();if(document.getElementById('page-email-riepilogo').style.display!=='none')await loadEmailRiepilogo();
+  }catch(e){}
   setTimeout(()=>toast('✅ PDF in Download + Outlook aperto'),1200);
 }
 
@@ -3723,8 +3743,10 @@ async function salvaSessEdit(id){const di=document.getElementById(`sedit-di-${id
 async function delSessione(id){const cnt=_iscrizioni.filter(i=>i.sessione_id===id).length;if(!confirm(cnt?`Questa sessione ha ${cnt} iscrizioni. Verranno eliminate. Confermi?`:'Eliminare questa sessione?'))return;try{if(cnt){const isc=await sbGet('corsi_iscritti',`sessione_id=eq.${id}&select=id`);for(const i of isc)await sbDelete('corsi_iscritti',i.id);}await sbDelete('corsi_sessioni',id);toast('Sessione eliminata');await loadAdmin();}catch(e){toast('Errore: '+e.message,'error');}}
 async function toggleForzaAttiva(id,val){
   try{
-    await sbPatch('corsi_sessioni',id,{forza_attiva:val});
-    toast(val?'✅ Sessione riattivata':'Sessione impostata come conclusa');
+    // Se si riattiva, azzera anche email_inviata_at
+    const patch=val?{forza_attiva:true,email_inviata_at:null}:{forza_attiva:false};
+    await sbPatch('corsi_sessioni',id,patch);
+    toast(val?'✅ Sessione riattivata — convocazione azzerata':'Sessione impostata come conclusa');
     await loadAdmin();
   }catch(e){toast('Errore: '+e.message,'error');}
 }
@@ -5284,18 +5306,29 @@ function renderErCentri(){
   var q=(document.getElementById('er-cen-search').value||'').toLowerCase();
   var oggi=new Date().toISOString().slice(0,10);
   var lista=_sessioni.filter(function(s){return _iscrizioni.some(function(i){return i.sessione_id===s.id;});});
-  lista=lista.map(function(s){return Object.assign({},s,{isModificataRaw:!!(s.email_inviata_at&&s.iscritti_updated_at&&s.iscritti_updated_at>s.email_inviata_at),isModificata:!!(s.email_inviata_at&&s.iscritti_updated_at&&s.iscritti_updated_at>s.email_inviata_at&&!s.email_archiviata),nIscritti:_iscrizioni.filter(function(i){return i.sessione_id===s.id;}).length,nomeSessione:s.nota||(s.corsi_tipologie&&s.corsi_tipologie.nome)||'--',nomeCentro:(s.corsi_centri&&s.corsi_centri.nome)||'--'});});
-  lista.sort(function(a,b){if(_erCenOrd==='az')return a.nomeCentro.localeCompare(b.nomeCentro,'it');return(a.data_inizio||'9999').localeCompare(b.data_inizio||'9999');});
+  var oggi7=new Date();oggi7.setDate(oggi7.getDate()+7);var oggi7str=oggi7.toISOString().slice(0,10);
+  lista=lista.map(function(s){var nI=_iscrizioni.filter(function(i){return i.sessione_id===s.id;}).length;return Object.assign({},s,{isModificataRaw:!!(s.email_inviata_at&&s.iscritti_updated_at&&s.iscritti_updated_at>s.email_inviata_at),isModificata:!!(s.email_inviata_at&&s.iscritti_updated_at&&s.iscritti_updated_at>s.email_inviata_at&&!s.email_archiviata),nIscritti:nI,postiLiberi:Math.max(0,(s.posti_totali||0)-nI),isUrgente:!!(s.data_inizio&&s.data_inizio<=oggi7str&&!s.email_inviata_at),nomeSessione:s.nota||(s.corsi_tipologie&&s.corsi_tipologie.nome)||'--',nomeCentro:(s.corsi_centri&&s.corsi_centri.nome)||'--'});});
+  lista.sort(function(a,b){
+    if(_erCenOrd==='az')return a.nomeCentro.localeCompare(b.nomeCentro,'it');
+    // Tab inviate: decrescente; altrimenti crescente
+    var inv=_erCenFilter==='inviate';
+    var da=a.data_inizio||'9999';var db=b.data_inizio||'9999';
+    return inv?db.localeCompare(da):da.localeCompare(db);
+  });
   if(q)lista=lista.filter(function(s){return s.nomeCentro.toLowerCase().includes(q)||s.nomeSessione.toLowerCase().includes(q);});
   if(_erCenFilter==='da-inviare')lista=lista.filter(function(s){return !s.email_inviata_at;});
   else if(_erCenFilter==='modificate')lista=lista.filter(function(s){return s.isModificata;});
   else if(_erCenFilter==='inviate')lista=lista.filter(function(s){return s.email_inviata_at&&!s.isModificata;});
+  // Aggiorna intestazione colonna in base al tab
+  var thStato=document.getElementById('er-cen-th-stato');
+  if(thStato)thStato.textContent=(_erCenFilter==='da-inviare')?'Posti Liberi':'Stato';
   var tbody=document.getElementById('er-cen-tbody');
   if(!lista.length){tbody.innerHTML='<tr class="empty-row"><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--muted)">Nessun risultato</td></tr>';return;}
   var fmt=function(ts){return ts?new Date(ts).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'';}
   var fmtD=function(d){return d?d.slice(5,10).split('-').reverse().join('/'):'--';}
   tbody.innerHTML=lista.map(function(s){
-    var stato,rowCls='';
+    var stato,rowCls='',rowStyle='';
+    if(s.isUrgente){rowStyle='background:#e6f9ee;';}
     if(s.isModificata){
       rowCls=' class="er-modified"';
       var corsoIniziato=!!(s.data_inizio&&s.data_inizio<oggi);
@@ -5305,11 +5338,23 @@ function renderErCentri(){
       stato='<span class="er-pill er-pill-red">&#9888; modificata</span><div class="er-ts">inviata '+fmt(s.email_inviata_at)+'</div><div class="er-ts-warn">iscritti cambiati '+fmt(s.iscritti_updated_at)+'</div>'+archBtn;
     }
     else if(s.email_inviata_at){stato='<span class="er-pill er-pill-green">inviata</span><div class="er-ts">'+fmt(s.email_inviata_at)+'</div>';}
+    else if(_erCenFilter==='da-inviare'){
+      // Colonna Posti Liberi invece di Stato
+      var plColor=s.postiLiberi===0?'var(--red)':(s.postiLiberi<=3?'var(--orange)':'var(--green)');
+      stato='<span style="font-weight:700;font-size:.9rem;color:'+plColor+'">'+s.postiLiberi+'</span><span style="font-size:.72rem;color:var(--muted)"> / '+s.posti_totali+'</span>';
+      if(s.isUrgente)stato+='<div style="margin-top:3px"><span class="er-pill er-pill-red" style="font-size:.68rem;padding:1px 7px">\ud83d\udd34 urgente</span></div>';
+    }
     else{stato='<span class="er-pill er-pill-amber">da inviare</span>';}
+    // Toggle riattiva per AMM (solo per sessioni con forza_attiva===false che sono in "Inviate")
+    var ammToggle='';
+    if(isAdmin&&s.email_inviata_at&&s.forza_attiva===false){
+      ammToggle='<div style="margin-top:4px"><button class="er-arch-btn" onclick="erRiattivaSessione('+s.id+')" style="background:#eceffe;color:#5a6fb8;border-color:#c8d0f0">&#9654; Riattiva</button></div>';
+    }
     var bc=s.email_inviata_at?(s.isModificata?'warn':'resend'):'send';
     var bi=s.email_inviata_at?(s.isModificata?'&#9993;':'&#8635;'):'&#9993;';
     var act=isAdmin?'<td style="text-align:center"><button class="er-act-btn '+bc+'" onclick="apriModalEmail('+s.id+')" title="Email centro">'+bi+'</button></td>':'';
-    return'<tr'+rowCls+'><td style="font-weight:600">'+s.nomeCentro+'</td><td>'+s.nomeSessione+'</td><td>'+fmtD(s.data_inizio)+'</td><td>'+fmtD(s.data_fine)+'</td><td>'+s.nIscritti+'</td><td>'+stato+'</td>'+act+'</tr>';
+    var rowStyleAttr=rowStyle?(' style="'+rowStyle+'"'):'';
+    return'<tr'+rowCls+rowStyleAttr+'><td style="font-weight:600">'+s.nomeCentro+'</td><td>'+s.nomeSessione+'</td><td>'+fmtD(s.data_inizio)+'</td><td>'+fmtD(s.data_fine)+'</td><td>'+s.nIscritti+'</td><td>'+stato+ammToggle+'</td>'+act+'</tr>';
   }).join('');
 }
 async function archiviaModificaCentro(id){
@@ -5320,6 +5365,17 @@ async function archiviaModificaCentro(id){
     toast('✅ Spostata tra le Inviate');
     renderErKpiCen();
     renderErCentri();
+  }catch(e){toast('Errore: '+e.message,'error');}
+}
+async function erRiattivaSessione(id){
+  if(!isAdmin){toast('Solo AMM può riattivare una sessione','error');return;}
+  try{
+    await sbPatch('corsi_sessioni',id,{forza_attiva:true,email_inviata_at:null});
+    var s=_sessioni.find(function(x){return x.id===id;});
+    if(s){s.forza_attiva=true;s.email_inviata_at=null;}
+    toast('✅ Sessione riattivata — convocazione azzerata');
+    renderErKpiCen();renderErCentri();
+    await loadAdmin();
   }catch(e){toast('Errore: '+e.message,'error');}
 }
 // ========== MAPPING NOMI CSV ↔ SESSIONI ==========
@@ -6588,7 +6644,8 @@ let _iaFasciaSelezionata=0; // 120|90|60|30
 let _iaCorsoSelezionato=''; // nome_corso selezionato
 let _iaSortMode='sbarco'; // 'sbarco'|'sbarco_desc'|'alfa'|'alfa_desc'
 let _iaData={}; // {fascia: [{nome_corso, scadenze:[{mat,nome,qualifica,scadenza,sbarco,email}]}]}
-let _iaStoricoCorso=''; // pill storico corso selezionato
+let _iaStoricoCorso=''; // pill storico corso selezionato (legacy, non usato)
+let _iaStoricoCorsiAttivi=new Set(); // multi-select: insiemi corsi attivi nel filtro storico
 let _iaStoricoData=[]; // righe storico corrente
 let _iaEsclusData=[]; // righe esclusi
 
@@ -6874,17 +6931,19 @@ function toggleAllIaDest(checked){
 function sortIaDest(tipo){
   const btnSbarco=document.getElementById('ia-sort-sbarco');
   const btnAlfa=document.getElementById('ia-sort-alfa');
+  const sOn='font-size:.75rem;padding:4px 13px;border-radius:7px;border:1.5px solid #5C7FA3;background:#5C7FA3;color:#fff;font-weight:600;cursor:pointer';
+  const sOff='font-size:.75rem;padding:4px 13px;border-radius:7px;border:1.5px solid #5C7FA3;background:var(--surface);color:#5C7FA3;font-weight:600;cursor:pointer';
   if(tipo==='sbarco'){
     if(_iaSortMode==='sbarco'){_iaSortMode='sbarco_desc';btnSbarco.textContent='⚓ Sbarco ↓';}
     else{_iaSortMode='sbarco';btnSbarco.textContent='⚓ Sbarco ↑';}
-    btnSbarco.className='btn btn-primary';
-    btnAlfa.className='btn btn-ghost';
+    btnSbarco.style.cssText=sOn;
+    btnAlfa.style.cssText=sOff;
     btnAlfa.textContent='🔤 A→Z';
   } else {
     if(_iaSortMode==='alfa'){_iaSortMode='alfa_desc';btnAlfa.textContent='🔤 Z→A';}
     else{_iaSortMode='alfa';btnAlfa.textContent='🔤 A→Z';}
-    btnAlfa.className='btn btn-primary';
-    btnSbarco.className='btn btn-ghost';
+    btnAlfa.style.cssText=sOn;
+    btnSbarco.style.cssText=sOff;
     btnSbarco.textContent='⚓ Sbarco';
   }
   // Richiama selectIaCorso per re-renderizzare con nuovo ordinamento
@@ -6920,6 +6979,19 @@ async function inviaAlertEmail(){
   const giàInviati2=new Set(_iaStoricoData.filter(r=>r.corso_tipo===_iaCorsoSelezionato&&r[fasciaKey2]).map(r=>String(r.matricola||'')));
   const destVisibili=entry.dest.filter(d=>!giàInviati2.has(String(d.mat||'')));
   const selDest=destVisibili.filter(d=>!esclusiMat.has(String(d.mat||'')));
+  const esclusiDaFlaggo=destVisibili.filter(d=>esclusiMat.has(String(d.mat||'')));
+
+  // Se tutti flaggati (selDest vuoto) O c'è un solo destinatario visibile:
+  // salva i flaggati in Esclusi senza aprire Outlook
+  const tuttiFlag=(!selDest.length&&esclusiDaFlaggo.length>0)||(destVisibili.length===1);
+  if(tuttiFlag){
+    const daEscludere=tuttiFlag&&!selDest.length?esclusiDaFlaggo:destVisibili;
+    await _salvaEsclusi(daEscludere,_iaCorsoSelezionato,_iaFasciaSelezionata);
+    toast('Destinatar'+(daEscludere.length===1?'io salvato':'i salvati')+' in Esclusi. Nessuna email inviata.','warn');
+    if(_iaFasciaSelezionata) selectIaPill(_iaFasciaSelezionata);
+    return;
+  }
+
   if(!selDest.length){toast('Nessun destinatario selezionato','error');return;}
 
   // Destinatari con email
@@ -7007,17 +7079,20 @@ function _buildStoricoPills(){
   const corsi=[...new Set(_iaStoricoData.map(r=>r.corso_tipo||'').filter(Boolean))].sort();
   const container=document.getElementById('ia-storico-pills');
   if(!container) return;
-  if(!_iaStoricoCorso && corsi.length) _iaStoricoCorso=corsi[0];
-  container.innerHTML=corsi.map(c=>`
-    <button onclick="selectStoricoPill('${c.replace(/'/g,"\\'")}') "
-      style="border-radius:16px;padding:4px 14px;font-size:.72rem;font-weight:500;border:.5px solid var(--border);cursor:pointer;background:${_iaStoricoCorso===c?'#FAECE7':'var(--surface)'};border-color:${_iaStoricoCorso===c?'#D85A30':'var(--border)'};color:${_iaStoricoCorso===c?'#993C1D':'var(--muted)'}">
+  // Multi-select: nessun filtro attivo di default → mostra tutti
+  container.innerHTML=corsi.map(c=>{
+    const attivo=_iaStoricoCorsiAttivi.has(c);
+    return `<button onclick="selectStoricoPill('${c.replace(/'/g,"\\'")}') "
+      style="border-radius:16px;padding:4px 14px;font-size:.72rem;font-weight:500;border:.5px solid var(--border);cursor:pointer;min-width:160px;text-align:center;background:${attivo?'#FAECE7':'var(--surface)'};border-color:${attivo?'#D85A30':'var(--border)'};color:${attivo?'#993C1D':'var(--muted)'}">
       ${c}
-    </button>
-  `).join('');
+    </button>`;
+  }).join('');
 }
 
 function selectStoricoPill(corso){
-  _iaStoricoCorso=corso;
+  // Toggle multi-select
+  if(_iaStoricoCorsiAttivi.has(corso)) _iaStoricoCorsiAttivi.delete(corso);
+  else _iaStoricoCorsiAttivi.add(corso);
   _buildStoricoPills();
   renderStorico();
 }
@@ -7026,8 +7101,16 @@ function renderStorico(){
   _buildStoricoPills();
   const search=(document.getElementById('ia-storico-search')||{}).value||'';
   const q=search.toLowerCase().trim();
-  let rows=_iaStoricoData.filter(r=>r.corso_tipo===_iaStoricoCorso);
+  // Multi-select: se nessun filtro attivo mostra tutti, altrimenti filtra per corsi attivi
+  let rows=_iaStoricoCorsiAttivi.size>0
+    ? _iaStoricoData.filter(r=>_iaStoricoCorsiAttivi.has(r.corso_tipo))
+    : [..._iaStoricoData];
   if(q) rows=rows.filter(r=>(r.matricola||'').toLowerCase().includes(q)||(r.nome||'').toLowerCase().includes(q));
+  // Ordine alfabetico per nome A→Z
+  rows.sort((a,b)=>(a.nome||'').localeCompare(b.nome||'','it'));
+  // Aggiorna badge totale
+  const badge=document.getElementById('ia-storico-badge');
+  if(badge) badge.textContent=rows.length+' nominativi';
 
   const wrap=document.getElementById('ia-storico-wrap');
   if(!wrap) return;
@@ -7047,6 +7130,7 @@ function renderStorico(){
         <tr>
           <th>Matricola</th>
           <th>Nominativo</th>
+          <th style="color:var(--primary,#C0561A)">Corso</th>
           <th>Qualifica</th>
           <th style="text-align:center;background:#EAF3DE;color:#3B6D11">120 gg</th>
           <th style="text-align:center;background:#FAEEDA;color:#633806">90 gg</th>
@@ -7059,6 +7143,7 @@ function renderStorico(){
           <tr>
             <td class="td-num">${r.matricola||'—'}</td>
             <td style="font-weight:700">${r.nome||'—'}</td>
+            <td style="font-size:.75rem;font-weight:600;color:var(--primary,#C0561A)">${r.corso_tipo||'—'}</td>
             <td style="font-size:.82rem;color:var(--muted)">${r.qualifica||'—'}</td>
             ${mkCell(r.fascia_120,r.inviata_da_120)}
             ${mkCell(r.fascia_90,r.inviata_da_90)}
@@ -7072,25 +7157,29 @@ function renderStorico(){
 }
 
 async function esportaStoricoPDF(){
-  const rows=_iaStoricoData.filter(r=>r.corso_tipo===_iaStoricoCorso);
+  const rows=_iaStoricoCorsiAttivi.size>0
+    ? _iaStoricoData.filter(r=>_iaStoricoCorsiAttivi.has(r.corso_tipo))
+    : [..._iaStoricoData];
   if(!rows.length){toast('Nessun dato da esportare');return;}
   const {jsPDF}=window.jspdf;
   const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
   const dataOggi=new Date().toLocaleDateString('it-IT');
+  const corsoLabel=_iaStoricoCorsiAttivi.size>0?[..._iaStoricoCorsiAttivi].join(', '):'Tutti i corsi';
   doc.setFontSize(12);doc.setFont(undefined,'bold');
-  doc.text('📧 Storico Invii ALERT — '+(_iaStoricoCorso||''),14,14);
+  doc.text('📧 Storico Invii ALERT — '+corsoLabel,14,14);
   doc.setFontSize(8);doc.setFont(undefined,'normal');
   doc.text('Esportato il '+dataOggi+' · '+rows.length+' marittimi',14,20);
-  const head=[['Matricola','Nominativo','Qualifica','120 giorni','90 giorni','60 giorni','30 giorni']];
+  rows.sort((a,b)=>(a.nome||'').localeCompare(b.nome||'','it'));
+  const head=[['Matricola','Nominativo','Corso','Qualifica','120 giorni','90 giorni','60 giorni','30 giorni']];
   const body=rows.map(r=>[
-    r.matricola||'—',r.nome||'—',r.qualifica||'—',
+    r.matricola||'—',r.nome||'—',r.corso_tipo||'—',r.qualifica||'—',
     r.fascia_120?(fmtBreve(r.fascia_120)+'\n'+(r.inviata_da_120||'')):'—',
     r.fascia_90?(fmtBreve(r.fascia_90)+'\n'+(r.inviata_da_90||'')):'—',
     r.fascia_60?(fmtBreve(r.fascia_60)+'\n'+(r.inviata_da_60||'')):'—',
     r.fascia_30?(fmtBreve(r.fascia_30)+'\n'+(r.inviata_da_30||'')):'—',
   ]);
   doc.autoTable({head,body,startY:25,styles:{fontSize:7,cellPadding:2},headStyles:{fillColor:[192,86,26],textColor:255,fontStyle:'bold'},alternateRowStyles:{fillColor:[250,247,242]}});
-  doc.save('Storico_Alert_'+(_iaStoricoCorso||'').replace(/\s/g,'_')+'_'+dataOggi.replace(/\//g,'-')+'.pdf');
+  doc.save('Storico_Alert_'+corsoLabel.replace(/\s/g,'_')+'_'+dataOggi.replace(/\//g,'-')+'.pdf');
 }
 async function _salvaEsclusi(dest,corsoTipo,fasciaGg){
   try{
@@ -7120,7 +7209,11 @@ async function _salvaEsclusi(dest,corsoTipo,fasciaGg){
 function renderEsclusi(){
   const search=(document.getElementById('ia-esclusi-search')||{}).value||'';
   const q=search.toLowerCase().trim();
-  let rows=_iaEsclusData;
+  let rows=[..._iaEsclusData].sort((a,b)=>{
+    const nA=(a.nome||'').localeCompare(b.nome||'','it');
+    if(nA!==0) return nA;
+    return (b.fascia_gg||0)-(a.fascia_gg||0);
+  });
   if(q) rows=rows.filter(r=>(r.matricola||'').toLowerCase().includes(q)||(r.nome||'').toLowerCase().includes(q));
   const wrap=document.getElementById('ia-esclusi-wrap');
   if(!wrap) return;
