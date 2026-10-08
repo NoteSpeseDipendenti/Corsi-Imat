@@ -4832,7 +4832,7 @@ function apriCertScad(idx){
   var cutoff18m=new Date(now);cutoff18m.setMonth(cutoff18m.getMonth()-18);
   var cutoff36m=new Date(now);cutoff36m.setMonth(cutoff36m.getMonth()-36);
 
-  var prenotatiFuturi=0, corsoFattoAttesaCert=0, imbarcatiBanner=0, sbarcoPassato8m=0, noteCount=0;
+  var prenotatiFuturi=0, corsoFattoAttesaCert=0, sbarcoPassato8m=0, noteCount=0;
   var matConNota=npMatricoleConNota();
   d.records.forEach(function(c){
     var mat=c.matricola_aziendale||c.matricola||'';
@@ -4843,12 +4843,11 @@ function apriCertScad(idx){
       else{corsoFattoAttesaCert++;}
       return;
     }
-    var attualeVal=(c.attuale&&c.attuale!=='0'&&c.attuale.trim()!=='')?c.attuale.trim().toLowerCase():null;
-    if(attualeVal==='imbarcato'){imbarcatiBanner++;return;}
     var sbarcoVal=(c.data_sbarco&&c.data_sbarco!=='0'&&c.data_sbarco!=='1900-01-01')?c.data_sbarco:null;
     if(sbarcoVal&&new Date(sbarcoVal)<cutoff8m){sbarcoPassato8m++;}
   });
   var realiCount=tot-sbarcoPassato8m-corsoFattoAttesaCert-noteCount;
+  var daPrenotareCount=Math.max(0,realiCount-prenotatiFuturi);
 
   function pillBtn(tipo,num,label,tooltip,bg,tc,tc2){
     bg=bg||'#EAF3DE';tc=tc||'#27500A';tc2=tc2||'#3B6D11';
@@ -4863,9 +4862,9 @@ function apriCertScad(idx){
     +pillBtn('sbarco',sbarcoPassato8m,'sbarchi &gt;8 mesi',tooltipSbarco)
     +pillBtn('attesacert',corsoFattoAttesaCert,'corso fatto<br>attesa cert.','Sessione già svolta, certificato da aggiornare')
     +pillBtn('note',noteCount,'note<br>personali','Esclusi manualmente tramite una nota personale')
-    +pillBtn('imbarcati',imbarcatiBanner,'imbarcati','Attualmente imbarcati (nessuna prenotazione)')
     +pillBtn('reali',realiCount,'scadenze reali','Totale − sbarco passato − corso fatto/attesa cert. − note personali','#FAEEDA','#633806','#7A4413')
     +pillBtn('prenotati',prenotatiFuturi,'prenotati','Iscritti a una sessione futura (corso da fare)','#FAEEDA','#633806','#7A4413')
+    +pillBtn('daprenotare',daPrenotareCount,'da prenotare','Scadenze reali non ancora prenotate (reali − prenotati)','#E8F0FD','#1A3A7A','#2550A8')
     +'</div>';
   var hdrRowMain='<div style="display:grid;grid-template-columns:2fr 1fr 1.2fr 1fr 1fr 1.2fr 1fr 1.4fr;gap:8px;padding:5px 8px;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);margin-bottom:2px;">'
     +'<span>Nome</span><span>Matricola</span><span>Qualifica</span><span>Scadenza</span><span>Prenotazione</span><span>Attuale</span><span>Sbarco</span><span>Note</span></div>';
@@ -4920,16 +4919,16 @@ function apriPillModal(tipo){
   var cutoff8m=new Date(now);cutoff8m.setMonth(cutoff8m.getMonth()-8);
   var cutoff18m=new Date(now);cutoff18m.setMonth(cutoff18m.getMonth()-18);
   var cutoff36m=new Date(now);cutoff36m.setMonth(cutoff36m.getMonth()-36);
-  var titoli={scadenza:'In scadenza — tutti',sbarco:'Sbarchi &gt;8 mesi',attesacert:'Corso effettuato — attesa certificato',note:'Note personali',imbarcati:'Imbarcati',reali:'Scadenze reali',prenotati:'Prenotati (sessione futura)'};
+  var titoli={scadenza:'In scadenza — tutti',sbarco:'Sbarchi &gt;8 mesi',attesacert:'Corso effettuato — attesa certificato',note:'Note personali',reali:'Scadenze reali',prenotati:'Prenotati (sessione futura)',daprenotare:'Da prenotare'};
   var matConNota=npMatricoleConNota();
   var filtri={
     scadenza:function(){return d.records;},
     prenotati:function(){return d.records.filter(function(c){var mat=c.matricola_aziendale||c.matricola||'';var sess=trovaSessione(mat);return sess&&sess.data_inizio&&new Date(sess.data_inizio)>=now;});},
     attesacert:function(){return d.records.filter(function(c){var mat=c.matricola_aziendale||c.matricola||'';var sess=trovaSessione(mat);return sess&&sess.data_inizio&&new Date(sess.data_inizio)<now;});},
     note:function(){return d.records.filter(function(c){var mat=c.matricola_aziendale||c.matricola||'';return mat&&matConNota.has(mat);});},
-    imbarcati:function(){return d.records.filter(function(c){var mat=c.matricola_aziendale||c.matricola||'';var sess=trovaSessione(mat);if(sess)return false;var att=(c.attuale&&c.attuale!=='0'&&c.attuale.trim()!=='')?c.attuale.trim().toLowerCase():null;return att==='imbarcato';});},
     sbarco:function(){return d.records.filter(function(c){var mat=c.matricola_aziendale||c.matricola||'';var sess=trovaSessione(mat);if(sess)return false;var att=(c.attuale&&c.attuale!=='0'&&c.attuale.trim()!=='')?c.attuale.trim().toLowerCase():null;if(att==='imbarcato')return false;var sv=(c.data_sbarco&&c.data_sbarco!=='0'&&c.data_sbarco!=='1900-01-01')?c.data_sbarco:null;return !!sv&&new Date(sv)<cutoff8m;});},
-    reali:function(){return d.records.filter(function(c){var mat=c.matricola_aziendale||c.matricola||'';if(mat&&matConNota.has(mat))return false;var sess=trovaSessione(mat);if(sess&&sess.data_inizio&&new Date(sess.data_inizio)<now)return false;if(sess)return true;var att=(c.attuale&&c.attuale!=='0'&&c.attuale.trim()!=='')?c.attuale.trim().toLowerCase():null;if(att==='imbarcato')return true;var sv=(c.data_sbarco&&c.data_sbarco!=='0'&&c.data_sbarco!=='1900-01-01')?c.data_sbarco:null;if(!sv)return true;return new Date(sv)>=cutoff8m;});}
+    reali:function(){return d.records.filter(function(c){var mat=c.matricola_aziendale||c.matricola||'';if(mat&&matConNota.has(mat))return false;var sess=trovaSessione(mat);if(sess&&sess.data_inizio&&new Date(sess.data_inizio)<now)return false;if(sess)return true;var att=(c.attuale&&c.attuale!=='0'&&c.attuale.trim()!=='')?c.attuale.trim().toLowerCase():null;if(att==='imbarcato')return true;var sv=(c.data_sbarco&&c.data_sbarco!=='0'&&c.data_sbarco!=='1900-01-01')?c.data_sbarco:null;if(!sv)return true;return new Date(sv)>=cutoff8m;});},
+    daprenotare:function(){return d.records.filter(function(c){var mat=c.matricola_aziendale||c.matricola||'';if(mat&&matConNota.has(mat))return false;var sess=trovaSessione(mat);if(sess&&sess.data_inizio&&new Date(sess.data_inizio)<now)return false;if(sess&&sess.data_inizio&&new Date(sess.data_inizio)>=now)return false;var att=(c.attuale&&c.attuale!=='0'&&c.attuale.trim()!=='')?c.attuale.trim().toLowerCase():null;if(att==='imbarcato')return true;var sv=(c.data_sbarco&&c.data_sbarco!=='0'&&c.data_sbarco!=='1900-01-01')?c.data_sbarco:null;if(!sv)return true;return new Date(sv)>=cutoff8m;});}
   };
   var recs=(filtri[tipo]||filtri.scadenza)();
   _pillOverlayData={records:recs,corso:d.corso,mese:d.mese,tipo:tipo,titolo:titoli[tipo]||tipo,sessIds:sessIds};
